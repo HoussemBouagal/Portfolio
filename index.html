@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Houssem - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/skills.css">
+    <link rel="stylesheet" href="css/Exprience.css">
+    <link rel="stylesheet" href="css/Certificat.css">
+
+	<link rel="icon" href=" img/favicon.ico" type="image/x-icon">
+  
+</head>
+<body>
+<div id="loader">
+    <div class="spinner"></div>
+</div>
+
+    <div class="sidebar">
+        <img src="img/picture.jpg" alt="Photo de profil" class="profile-picture">
+        <h1>Houssem Bouagal</h1>
+      
+        <nav class="navbar">
+    <a href="#Home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9L12 2L21 9"/>
+            <path d="M9 22V12H15V22"/>
+            <path d="M2 22H22"/>
+          </svg>
+          Home
+    </a>
+    <a href="#About">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="7" r="5" stroke="white" stroke-width="2"/>
+            <path d="M4 20C4 16 8 14 12 14C16 14 20 16 20 20" stroke="white" stroke-width="2"/>
+        </svg>
+      About
+    </a>
+         
+    <a href="#education">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 10L12 4L21 10L12 16L3 10Z" stroke="white" stroke-width="2"/>
+            <path d="M4 12V16C4 18 6 20 8 20H16C18 20 20 18 20 16V12" stroke="white" stroke-width="2"/>
+        </svg>
+        Education
+    </a>
+    <a href="#Certificate">
+    <svg width="24" height="24" viewBox="0 0 150 50" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="2" width="146" height="46" rx="10" fill="#007BFF" stroke="#0056b3" stroke-width="4"/>
+  <text x="50%" y="50%" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle" alignment-baseline="middle">
+    Certificat
+  </text>
+</svg>
+        Certificat
+    </a>
+    <a href="#experience">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 3H21V21H3V3Z" stroke="white" stroke-width="2"/>
+            <path d="M7 12H17" stroke="white" stroke-width="2"/>
+            <path d="M7 16H17" stroke="white" stroke-width="2"/>
+        </svg>
+        Experience
+    </a>
+    <a href="#skills">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L15 8H21L16 12L18 18L12 14L6 18L8 12L3 8H9L12 2Z" stroke="white" stroke-width="2"/>
+        </svg>
+        Skills
+    </a>
+    <a href="#projects">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="3" y="3" width="7" height="7" stroke="white" stroke-width="2"/>
+            <rect x="3" y="14" width="7" height="7" stroke="white" stroke-width="2"/>
+            <rect x="14" y="3" width="7" height="7" stroke="white" stroke-width="2"/>
+            <rect x="14" y="14" width="7" height="7" stroke="white" stroke-width="2"/>
+        </svg>
+        Projects
+    </a>
+      <a href="#contact">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4H20V16H4V4Z" stroke="white" stroke-width="2"/>
+            <path d="M22 22L16 16" stroke="white" stroke-width="2"/>
+        </svg>
+        Contact
+    </a>
+</nav>
+    </div>
+
+    <main class="content">
+
+    <section id="Home">
+    <p>I'am <span id="typed" class="typed"></span></p>
+
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script>
+        const options = {
+            strings: ["Full Stack Developer 💻", "Web Developer 🌐", "AI Engineer 🤖🧠"],
+            typeSpeed: 50,
+            backSpeed: 30,
+            loop: true,
+        };
+        new Typed("#typed", options);
+    </script>
+</section>
+  <!-- قسم About -->
+<section id="About" class="about-section">
+    <div class="container">
+        <h2 class="section-title">About Me:</h2>
+        <p class="section-subtitle">Passionate Web & AI Developer | Crafting Intelligent Solutions</p>
+        <div class="about-content">
+            <div class="about-image">
+                <img src="img/picture.jpg" alt="Profile Picture" class="profile-img">
+            </div>
+            <div class="about-info">
+                <h3>Web Developer | AI Model Developer | Desktop App Developer</h3>
+                <p class="about-description">
+                    Specialized in creating dynamic, responsive web and mobile applications. Experienced in AI, 
+                    backend & frontend development, and delivering innovative solutions.
+                </p>
+
+                <!-- 📌 تنسيق البيانات الشخصية في جدول -->
+                <div class="about-details-grid">
+                    <div class="detail-item"><strong>📄 facebook page:</strong></div>
+                    <div class="detail-value"><a href="https://www.facebook.com/people/HoussemDev24/100042604513867/" target="_blank">https://www.facebook.com/people/HoussemDev24/</a></div>
+
+                    <div class="detail-item"><strong>📞 Phone:</strong></div>
+                    <div class="detail-value">+213 660 87 69 91</div>
+
+                    <div class="detail-item"><strong>📍 City:</strong></div>
+                    <div class="detail-value">Guelma, Algeria</div>
+
+                    <div class="detail-item"><strong>🎓 Degree:</strong></div>
+                    <div class="detail-value">Full Stack Developer 💻</div>
+
+                    <div class="detail-item"><strong>📧 Email:</strong></div>
+                    <div class="detail-value"><a href="mailto:mouhamedhoussem813@gmail.com">mouhamedhoussem813@gmail.com</a></div>
+
+                    <div class="detail-item"><strong>🚀 Freelance:</strong></div>
+                    <div class="detail-value">Available</div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- قسم التعليم -->
+<section id="education" class="education-section">
+    <h2>Education:</h2>
+    <div class="timeline">
+      <!-- العنصر الأول -->
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <h3>Master Of Computer Science (Information Systems)</h3>
+          <p><strong>2023 - 2025</strong></p>
+          <p><em>University 8 MAI 1945, Guelma, Algeria</em></p>
+          <p>
+            This advanced program provided me with comprehensive knowledge and hands-on
+            experience in various aspects of IT, including system architecture, deep learning, 
+            Machine learning, and software development.
+          </p>
+        </div>
+      </div>
+      <br>
+      <!-- العنصر الثاني -->
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <h3>Bachelor's Of Computer Science (Information System And Software Engineering)</h3>
+          <p><strong>2020 - 2023</strong></p>
+          <p><em>University 8 MAI 1945, Guelma, Algeria</em></p>
+          <p>
+            This comprehensive program provided me with a solid foundation in both theoretical 
+            and practical aspects of computer science, with an emphasis on network infrastructure 
+            and web technologies.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <style>
+    .timeline {
+      position: relative;
+      margin-left: 50px;
+    }
+    .timeline-item {
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      left: -10px; /* جعل الخط أقرب للدائرة */
+      top: 0;
+      width: 2px; /* عرض الخط */
+      height: 100%; /* جعل الخط يمتد على طول العنصر */
+      background-color: #007bff; /* لون الخط الأزرق */
+      z-index: -1; /* خلف الدائرة والمحتوى */
+    }
+    .timeline-marker {
+      width: 20px;
+      height: 20px;
+      background-color: white; /* اللون الأبيض داخل الدائرة */
+      border-radius: 50%;
+      border: 3px solid #007bff; /* إضافة حد أزرق حول الدائرة */
+      position: absolute;
+      left: -30px; /* Adjust this value to position the circle */
+      top: 0;
+    }
+    .timeline-content {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-left: 40px; /* Space between the circle and content */
+    }
+    .timeline h2 {
+      font-size: 2em;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .timeline-item h3 {
+      font-size: 1.5em;
+      margin-bottom: 5px;
+    }
+    .timeline-item p {
+      font-size: 1em;
+    }
+  </style>
+    
+  <!-- قسم الشهادات -->
+<section id="Certificate" class="certificate-section">
+    <h2>Certificates</h2>
+    <ul class="certificate-list">
+      <li>
+        <span class="certificate-title">AI Basics: Overview of AI</span> 
+        <span class="certificate-provider">- Huawei ICT</span>
+      </li>
+      <li>
+        <span class="certificate-title">Artificial Intelligence Technology and Applications</span> 
+        <span class="certificate-provider">- Huawei ICT</span>
+      </li>
+      <li>
+        <span class="certificate-title">Algorithm and Program Design</span> 
+        <span class="certificate-provider">- Huawei ICT</span>
+      </li>
+      <li>
+        <span class="certificate-title">Innovation Practice of IoT</span> 
+        <span class="certificate-provider">- Huawei ICT</span>
+      </li>
+      <li>
+        <span class="certificate-title">5G Network and Applications</span> 
+        <span class="certificate-provider">- Huawei ICT</span>
+      </li>
+    </ul>
+  </section>
+<!-- قسم الخبرة المهنية -->
+<section id="experience" class="experience-section">
+    <h2>Professional Experience</h2>
+    <ul class="experience-list">
+      <li>
+        <span class="experience-title">Web Applications and AI Development</span>
+        <p class="experience-description">Development of web applications and Machine Learning and Deep Learning projects.</p>
+      </li>
+      <li>
+        <span class="experience-title">Freelancing Projects</span>
+        <p class="experience-description">
+          Worked as a freelancer on several projects, creating solutions on Fiverr and collaborating in Facebook programming groups.
+        </p>
+      </li>
+    </ul>
+  </section>
+        <section id="skills">
+    <h2>SKILLS:</h2>
+    <div class="skills-grid">
+        <div class="skill">
+            <img src="Skills/html.png" alt="HTML">
+            <span>HTML</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/css.png" alt="CSS">
+            <span>CSS</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/bootstrap.png" alt="CSS">
+            <span>Bootstrap</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/JS.png" alt="JavaScript">
+            <span>Java Script</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/React.png" alt="React">
+            <span>React</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/PHP.png" alt="PHP">
+            <span>PHP</span>
+            </div>
+            <div class="skill">
+            <img src="Skills/Laravel.png" alt="Laravel">
+            <span>Laravel</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/database.png" alt="MYSQL">
+            <span>SQL</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/oracle.png" alt="Git">
+            <span>Oracle</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/Mongodb.png" alt="MONGODB">
+            <span>MONGO DB</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/typescript.png" alt="typescript">
+            <span>Type Script</span>
+        </div>
+         <div class="skill">
+            <img src="Skills/algorithm.png" alt="algorithm">
+            <span>algorithm data structure</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/problem-solving.png" alt="problem-solving">
+            <span>Problem Solving</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/C.png" alt="C">
+            <span>C</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/Python.png" alt="Python">
+            <span>Python</span>
+        </div>
+          
+        <div class="skill">
+            <img src="Skills/AI.png" alt="AI">
+            <span>Artificial Intelligence</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/google-cloud.png" alt="google-cloud">
+            <span>Google Cloud Platform</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/DevOps.png" alt="DevOps">
+            <span>DevOps</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/java.png" alt="java">
+            <span>Java</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/data-analyst.png" alt="data-analyst">
+            <span>Data Analysis </span>
+        </div>
+        <div class="skill">
+            <img src="Skills/Git.png" alt="Git">
+            <span>Git</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/Github.png" alt="Github">
+            <span>Github</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/iot.png" alt="IOT">
+            <span>IoT</span>
+        </div>
+        <div class="skill">
+            <img src="Skills/api.png" alt="api">
+            <span>API</span>
+        </div>
+        </div>
+</section>
+
+<section id="projects">
+    <h1>My Projects:</h1>
+    <div class="project-grid">
+        <div class="project-card">
+            <img src="Projects/p1.png" alt="Projet 1">
+            <div class="overlay">
+                <a href="project1-details.html" class="details-btn">See More</a>
+            </div>
+            <h3>tourist agency website</h3>
+        </div>
+        <div class="project-card">
+            <img src="Projects/p6.png" alt="Projet 1">
+            <div class="overlay">
+                <a href="project6-details.html" class="details-btn">See More</a>
+            </div>
+            <h3>Hikma Clinique website</h3>
+        </div>
+        <div class="project-card">
+            <img src="Projects/p2.png" alt="Projet 2">
+            <div class="overlay">
+                <a href="project2-details.html" class="details-btn">See more</a>
+            </div>
+            <h3>Programming Languages ​​School Website</h3>
+        </div>
+
+        <div class="project-card">
+            <img src="Projects/p3.png" alt="Projet 3">
+            <div class="overlay">
+                <a href="project3-details.html" class="details-btn">See more</a>
+            </div>
+            <h3>Facial Recognition System</h3>
+        </div>
+
+        <div class="project-card">
+            <img src="Projects/p4.png" alt="Projet 4">
+            <div class="overlay">
+                <a href="project4-details.html" class="details-btn">See more</a>
+            </div>
+            <h3>Object detector</h3>
+        </div>
+        <div class="project-card">
+            <img src="Projects/p5.png" alt="Projet 4">
+            <div class="overlay">
+                <a href="project5-details.html" class="details-btn">See more</a>
+            </div>
+            <h3>Fire detection system</h3>
+        </div>
+    </div>
+    
+</section>
+
+<section id="contact">
+    <h2> Contact: </h2>
+    <div class="contact-container">
+        <!-- معلومات الاتصال -->
+        <div class="contact-info">
+    <div class="info-item">
+        <img src="img/telephone.png" alt="Phone Icon">
+        <div>
+            <h3>Call Me:</h3>
+            <p>+213 660 87 69 91</p>
+        </div>
+    </div>
+   <br>
+    <div class="info-item">
+        <img src="img/gmail.png" alt="Email Icon">
+        <div>
+        <h3>Email Me:</h3>
+      <p>mouhamedhoussem813@gmail.com</p>
+        </div>
+    </div>
+</div>
+        <!-- نموذج الاتصال -->
+        <div class="contact-form">
+            <form method="POST" action="https://formspree.io/f/moqykkwd">
+                <label for="email">Your Email:</label>
+                <input type="email" id="email" name="_replyto" placeholder="Your email" required>
+
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" name="Sujet" placeholder="Your Subject" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" placeholder="Your message" required></textarea>
+
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </div>
+</section>
+    
+    <script>
+    window.onload = function() {
+        setTimeout(() => {
+            document.getElementById("loader").style.display = "none";
+        }, 1350); 
+    };
+</script>
+
+<footer>
+    <p><center>Designed by Houssem Bouagal.</center></p>
+    <div class="icons-container">
+        <a href="https://github.com/HoussemBouagal" target="_blank">
+            <img src="img/Github.png" alt="GitHub">
+        </a>
+        <a href="https://www.linkedin.com/in/houssem-bouagal-98025a297/" target="_blank">
+            <img src="img/linkedin.png" alt="LinkedIn">
+        </a>
+        <a href="https://www.facebook.com/houssem.algrie" target="_blank">
+            <img src="img/facebook.png" alt="Facebook">
+        </a>
+        <a href="https://www.instagram.com/houssambouagal/" target="_blank">
+            <img src="img/instagram.png" alt="instagram">
+        </a>
+    </div>
+</footer>
+</body>
+</html>

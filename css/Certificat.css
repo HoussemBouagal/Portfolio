@@ -1,0 +1,45 @@
+.certificate-section {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .certificate-section h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #222;
+    text-align: left;
+  }
+
+  .certificate-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .certificate-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .certificate-list li::before {
+    content: "\2022"; /* Unicode for bullet point */
+    color: #007bff; /* Blue color for bullet */
+    font-size: 18px;
+    margin-right: 10px;
+  }
+
+  .certificate-title {
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+  }
+
+  .certificate-provider {
+    font-style: italic;
+    color: #555;
+    font-size: 14px;
+    margin-left: 5px;
+  }
