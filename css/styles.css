@@ -214,6 +214,7 @@ footer {
     margin-right: 1rem;
 }
 
+
 .info-item h3 {
     margin: 0;
     font-size: 1.2rem;
@@ -260,6 +261,7 @@ footer {
 .contact-form button:hover {
     background-color: #0056b3;
 }
+
 
 #skills ul {
     list-style: none;
@@ -308,6 +310,8 @@ body {
     max-width: 1000px;
     margin: auto;
 }
+
+
 
 .project-card {
     position: relative;
@@ -364,7 +368,7 @@ body {
 }
 
 .details-btn:hover {
-    background-color: #007bff;
+    background-color: #0056b3;
 }
 
 #Home {
@@ -394,7 +398,6 @@ body {
     text-underline-offset: 5px;
     animation: underlineAnimation 1.5s infinite alternate;
 }
-
 @keyframes underlineAnimation {
     from {
         text-decoration-color: rgba(255, 204, 0, 0.15);
@@ -566,53 +569,6 @@ html {
     color: #222;
 }
 
-.timeline {
-    position: relative;
-    margin: 20px 0;
-    padding-left: 40px;
-}
-
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 10px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background-color: #0066ff;
-}
-
-.timeline-event {
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.timeline-event::before {
-    content: '';
-    position: absolute;
-    left: -5px;
-    top: 0;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #0066ff;
-}
-
-.timeline-event h3 {
-    font-size: 18px;
-    font-weight: bold;
-    color: #0066ff;
-}
-
-.timeline-event p {
-    font-size: 16px;
-    color: #444;
-}
-
-.timeline-event span {
-    font-size: 14px;
-    color: #888;
-}
 
 .projects-container {
     display: flex;
@@ -650,4 +606,44 @@ html {
 
 .projects-container .project a:hover {
     color: #0056b3;
+}
+.education-section {
+    font-family: Arial, sans-serif;
+}
+
+.timeline {
+    position: relative;
+    padding: 20px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+    padding-left: 40px;
+}
+
+.circle {
+    position: absolute;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    background-color: white; /* خلفية بيضاء داخل الدائرة */
+    border: 3px solid #00aaff; /* حدود زرقاء */
+    border-radius: 50%;
+}
+
+.line {
+    position: absolute;
+    left: 9px;
+    top: 20px;
+    width: 2px;
+    height: calc(100% - 20px);
+    background-color: #00aaff;
+}
+
+.content {
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
 }
