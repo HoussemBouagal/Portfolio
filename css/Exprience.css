@@ -1,0 +1,52 @@
+.experience-section {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .experience-section h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #222;
+    text-align: left;
+  }
+
+  .experience-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .experience-list li {
+    margin-bottom: 20px;
+  }
+
+  .experience-title {
+    font-weight: bold;
+    color: #222;
+    font-size: 18px;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .experience-description {
+    color: #222;
+    font-size: 14px;
+    margin: 5px 0 0 20px;
+    text-align: justify;
+  }
+
+  .experience-list li::before {
+    content: "\2713"; /* Unicode for check mark */
+    color: #007bff; /* Blue color for check mark */
+    font-size: 18px;
+    margin-right: 10px;
+    position: absolute;
+    margin-left: -20px;
+  }
+
+  .experience-list li {
+    position: relative;
+    padding-left: 30px;
+  }
