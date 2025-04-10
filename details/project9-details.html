@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor Detection</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link rel="icon" href=" ../img/brain-cancer.ico" type="image/x-icon">
+
+    <style>
+        /* General style */
+        body {
+            font-family: 'Tajawal', Arial, sans-serif;
+            text-align: center;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        /* General container */
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        /* Header */
+        h2 {
+            font-size: 28px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        /* Swiper carousel style */
+        .swiper {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* Button styles */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .buttons button:hover {
+            background-color: #218838;
+        }
+        /* Home button */
+        .home-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        .home-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Information section style */
+        .portfolio-info, .portfolio-description {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .portfolio-info ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .portfolio-info li {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #6c757d;
+        }
+        .portfolio-info li strong {
+            color: #007bff;
+            font-weight: bold;
+        }
+        /* Project description style */
+        .portfolio-description h2 {
+            font-size: 24px;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        .portfolio-description p {
+            font-size: 16px;
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        /* Media queries for responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .swiper {
+                height: 250px;
+            }
+            .buttons button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+            .home-btn {
+                font-size: 16px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Home button -->
+    <button class="home-btn" onclick="window.location.href='../index.html'">Home</button>
+<br>
+<br>
+<br>
+<br>
+    <div class="container">
+        <h2>Brain Tumor Detector</h2>
+        
+        <!-- Swiper carousel -->
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="Projet9/p1.png" alt="Image 1"></div>
+                <div class="swiper-slide"><img src="Projet9/p2.png" alt="Image 2"></div>
+                <div class="swiper-slide"><img src="Projet9/p3.png" alt="Image 3"></div>
+                <div class="swiper-slide"><img src="Projet9/p4.png" alt="Image 1"></div>
+                <div class="swiper-slide"><img src="Projet9/p5.png" alt="Image 2"></div>
+                <div class="swiper-slide"><img src="Projet9/p6.png" alt="Image 3"></div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- Project information -->
+        <div class="portfolio-info" data-aos="fade-up" data-aos-delay="200">
+            <h3>Project Information</h3>
+            <ul>
+                <li><strong>Category:</strong> Desktop Application</li>
+                <li><strong>Client:</strong> Fiverr customer</li>
+                <li><strong>Project Date:</strong>  15-03-2025</li>
+                <li><strong>Project Link:</strong> <a href="#">Not Available</a></li>
+            </ul>
+        </div>
+
+        <!-- Project description -->
+        <div class="portfolio-description" data-aos="fade-up" data-aos-delay="300">
+            <h2>Description</h2>
+            <section>
+                <h2>Brain Tumor Detection System</h2>
+                <p>
+                    The Brain Tumor Detection System is an AI-powered application designed to classify brain tumors using deep learning. 
+                    It leverages a pre-trained TensorFlow/Keras model to analyze medical images and accurately identify tumor types.
+                </p>
+            
+                <h3>Project Overview:</h3>
+                <p>
+                    This desktop application, developed with Python and Tkinter, allows users to upload an image of a brain scan. 
+                    The system processes the image and predicts whether a tumor is present, along with its classification into one of the following categories:
+                </p>
+                
+                <ul>
+                    <li><strong>Glioma</strong></li>
+                    <li><strong>Meningioma</strong></li>
+                    <li><strong>No Tumor</strong></li>
+                    <li><strong>Pituitary</strong></li>
+                </ul>
+            
+                <h3>Features:</h3>
+                <ul>
+                    <li>✅ <strong>User-Friendly Interface</strong> – Simple and intuitive GUI for easy image upload and prediction.</li>
+                    <li>✅ <strong>AI-Powered Detection</strong> – Utilizes a trained deep learning model for high-accuracy classification.</li>
+                    <li>✅ <strong>Real-Time Results</strong> – Displays the tumor type along with a confidence percentage.</li>
+                    <li>✅ <strong>Image Processing</strong> – Automatically resizes and normalizes images for optimal predictions.</li>
+                    <li>✅ <strong>Dark-Themed UI</strong> – Modern and sleek design with custom styling.</li>
+                </ul>
+            
+                <h3>Technologies Used:</h3>
+                <ul>
+                    <li>🔹 <strong>Python</strong> (for backend logic)</li>
+                    <li>🔹 <strong>TensorFlow/Keras</strong> (for AI-based predictions)</li>
+                    <li>🔹 <strong>Tkinter</strong> (for GUI development)</li>
+                    <li>🔹 <strong>NumPy, PIL</strong> (for image processing)</li>
+                </ul>
+            
+                <h3>Objective:</h3>
+                <p>
+                    This project aims to assist in early detection of brain tumors, providing a fast and efficient tool for medical professionals and researchers in the field of healthcare AI.
+                </p>
+            
+                <p>
+                    🚀 <strong>Explore more on GitHub!</strong><br>
+                    <a href="https://github.com/HoussemBouagal/Brain-Tumor-Detection" target="_blank">
+                        GitHub Repository: Brain Tumor Detection
+                    </a>
+                </p>
+            </section>
+            
+        </div>
+    </div>
+
+    <!-- Swiper script inclusion -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    </script>
+</body>
+</html>
