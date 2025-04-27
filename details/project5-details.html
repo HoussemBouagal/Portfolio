@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Cancer Detection</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link rel="icon" href=" ../img/skin-cancer.ico" type="image/x-icon">
+
+    <style>
+        /* General style */
+        body {
+            font-family: 'Tajawal', Arial, sans-serif;
+            text-align: center;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        /* General container */
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+        /* Header */
+        h2 {
+            font-size: 28px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        /* Swiper carousel style */
+        .swiper {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* Button styles */
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .buttons button:hover {
+            background-color: #218838;
+        }
+        /* Home button */
+        .home-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+        }
+        .home-btn:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Information section style */
+        .portfolio-info, .portfolio-description {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .portfolio-info ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .portfolio-info li {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #6c757d;
+        }
+        .portfolio-info li strong {
+            color: #007bff;
+            font-weight: bold;
+        }
+        /* Project description style */
+        .portfolio-description h2 {
+            font-size: 24px;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        .portfolio-description p {
+            font-size: 16px;
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        /* Media queries for responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .swiper {
+                height: 250px;
+            }
+            .buttons button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+            .home-btn {
+                font-size: 16px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Home button -->
+    <button class="home-btn" onclick="window.location.href='../index.html'">Home</button>
+<br>
+<br>
+<br>
+<br>
+    <div class="container">
+        <h2>Skin Cancer Detection</h2>
+        
+        <!-- Swiper carousel -->
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="Projet5/p1.png" alt="Image 1"></div>
+                <div class="swiper-slide"><img src="Projet5/p2.png" alt="Image 2"></div>
+                <div class="swiper-slide"><img src="Projet5/p3.png" alt="Image 3"></div>
+                <div class="swiper-slide"><img src="Projet5/p4.png" alt="Image 1"></div>
+                <div class="swiper-slide"><img src="Projet5/P5.png" alt="Image 2"></div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- Project information -->
+        <div class="portfolio-info" data-aos="fade-up" data-aos-delay="200">
+            <h3>Project Information</h3>
+            <ul>
+                <li><strong>Category:</strong> Desktop Application</li>
+                <li><strong>Client:</strong> Fiverr customer</li>
+                <li><strong>Project Date:</strong>  13-01-2025</li>
+            </ul>
+        </div>
+
+        <!-- Project description -->
+        <div class="portfolio-description" data-aos="fade-up" data-aos-delay="300">
+            <h2>Description</h2>
+            <section>
+                <h2>🧠 Skin Cancer Detection System</h2>
+                <p>
+                    This desktop application is written in Python and uses artificial intelligence (deep learning) to detect different types of skin cancer from images. The application features an easy-to-use interface built with Tkinter and leverages the TensorFlow/Keras model I trained to classify images.
+                </p>
+            
+                <h3>✨ Key Features:</h3>
+                <ul>
+                    <li>📷 <strong>Image Upload</strong>: Upload skin lesion images in .jpg, .png, or .jpeg formats.</li>
+                    <li>🧪 <strong>AI-Powered Prediction</strong>: Analyzes the image using a trained deep learning model.</li>
+                    <li>📊 <strong>Detailed Results</strong>: Displays the predicted disease name and confidence percentage.</li>
+                    <li>🖼️ <strong>Image Preview</strong>: Shows the selected image within the application.</li>
+                    <li>👨‍💻 <strong>Developer Info</strong>: Displays developer credits.</li>
+                    <li>🎨 <strong>Clean & Intuitive UI</strong>: Modern interface with real-time feedback and error handling.</li>
+                </ul>
+            
+                <h3>🔬 Detected Skin Cancer Types:</h3>
+                <ul>
+                    <li>Actinic Keratoses (AKIEC)</li>
+                    <li>Basal Cell Carcinoma (BCC)</li>
+                    <li>Benign Keratosis (BKL)</li>
+                    <li>Dermatofibroma (DF)</li>
+                    <li>Melanoma (MEL)</li>
+                    <li>Melanocytic Nevi (NV)</li>
+                    <li>Vascular Lesions (VASC)</li>
+                </ul>
+            
+                <h3>🛠️ Technologies Used:</h3>
+                <ul>
+                    <li>Python</li>
+                    <li>Tkinter (Graphical User Interface)</li>
+                    <li>TensorFlow / Keras (Deep Learning Model)</li>
+                    <li>Pillow (PIL) for image processing</li>
+                    <li>NumPy for numerical computation</li>
+                </ul>
+            
+                <h3>🎯 Goal:</h3>
+                <p>
+                    To provide a fast, accessible, and AI-powered tool for preliminary skin cancer diagnosis. 
+                    Ideal for educational use, healthcare professionals, or individuals interested in early detection.
+                </p>
+            
+                <p>
+                    🚀 <strong>Explore more on GitHub:</strong><br>
+                    <a href="https://github.com/HoussemBouagal/Skin-Cancer-Detection/tree/master" target="_blank">
+                        GitHub Repository: Skin Cancer Detection
+                    </a>
+                </p>
+            </section>
+            
+            
+        </div>
+    </div>
+
+    <!-- Swiper script inclusion -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    </script>
+</body>
+</html>
