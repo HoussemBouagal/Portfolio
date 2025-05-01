@@ -1,243 +1,368 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skin Cancer Detection</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-    <link rel="icon" href=" ../img/skin-cancer.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../img/skin-cancer.ico" type="image/x-icon">
 
     <style>
-        /* General style */
+        /* Custom styles for better ergonomics */
         body {
-            font-family: 'Tajawal', Arial, sans-serif;
-            text-align: center;
-            direction: rtl;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f9fa;
-            color: #343a40;
-        }
-        /* General container */
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
-        }
-        /* Header */
-        h2 {
-            font-size: 28px;
-            color: #007bff;
-            margin-bottom: 20px;
-        }
-
-        /* Swiper carousel style */
-        .swiper {
-            width: 100%;
-            height: 400px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
         }
         .swiper-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
+            transition: transform 0.3s ease;
         }
-
-        /* Button styles */
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
+        .swiper-slide img:hover {
+            transform: scale(1.02);
         }
-        .buttons button {
-            padding: 12px 25px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            background-color: #28a745;
-            color: white;
-            transition: background-color 0.3s ease;
+        button, .swiper-button-next, .swiper-button-prev {
+            user-select: none;
         }
-        .buttons button:hover {
-            background-color: #218838;
+        /* Focus styles for better accessibility */
+        button:focus, a:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
         }
-        /* Home button */
-        .home-btn {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background-color: #007bff;
-            padding: 10px 20px;
-            color: white;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s ease;
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
-        .home-btn:hover {
-            background-color: #0056b3;
+        /* Animations */
+        @keyframes spin-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
-        /* Information section style */
-        .portfolio-info, .portfolio-description {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
+        @keyframes spin-medium {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
         }
-        .portfolio-info ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        
+        @keyframes spin-fast {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        .portfolio-info li {
-            margin-bottom: 10px;
-            font-size: 16px;
-            color: #6c757d;
+        
+        .animate-spin-slow {
+            animation: spin-slow 2s linear infinite;
         }
-        .portfolio-info li strong {
-            color: #007bff;
+        
+        .animate-spin-medium {
+            animation: spin-medium 1.5s linear infinite;
+        }
+        
+        .animate-spin-fast {
+            animation: spin-fast 1s linear infinite;
+        }
+        
+        .animation-delay-200 {
+            animation-delay: 0.2s;
+        }
+        
+        .animation-delay-400 {
+            animation-delay: 0.4s;
+        }
+        
+        .feature-item {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .feature-item:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10B981;
             font-weight: bold;
         }
-        /* Project description style */
-        .portfolio-description h2 {
-            font-size: 24px;
-            color: #007bff;
-            margin-bottom: 15px;
+        
+        .tech-item {
+            position: relative;
+            padding-left: 1.5rem;
         }
-        .portfolio-description p {
-            font-size: 16px;
-            color: #6c757d;
-            line-height: 1.6;
-        }
-
-        /* Media queries for responsive design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            .swiper {
-                height: 250px;
-            }
-            .buttons button {
-                font-size: 14px;
-                padding: 8px 16px;
-            }
-            .home-btn {
-                font-size: 16px;
-                padding: 8px 15px;
-            }
+        
+        .tech-item:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #3B82F6;
+            font-weight: bold;
         }
     </style>
 </head>
-<body>
+<body class="dark:bg-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md">
+        Skip to content
+    </a>
 
-    <!-- Home button -->
-    <button class="home-btn" onclick="window.location.href='../index.html'">Home</button>
-<br>
-<br>
-<br>
-<br>
-    <div class="container">
-        <h2>Skin Cancer Detection</h2>
-        
-        <!-- Swiper carousel -->
-        <div class="swiper">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="Projet5/p1.png" alt="Image 1"></div>
-                <div class="swiper-slide"><img src="Projet5/p2.png" alt="Image 2"></div>
-                <div class="swiper-slide"><img src="Projet5/p3.png" alt="Image 3"></div>
-                <div class="swiper-slide"><img src="Projet5/p4.png" alt="Image 1"></div>
-                <div class="swiper-slide"><img src="Projet5/P5.png" alt="Image 2"></div>
-            </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
-        </div>
+    <!-- Home button with better ergonomic placement -->
+    <button 
+        onclick="window.location.href='../index.html'" 
+        class="fixed top-6 left-6 z-50 bg-blue-700 hover:bg-blue-800 text-white px-5 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+        aria-label="Return to home page"
+    >
+        Home
+    </button>
 
-        <!-- Project information -->
-        <div class="portfolio-info" data-aos="fade-up" data-aos-delay="200">
-            <h3>Project Information</h3>
-            <ul>
-                <li><strong>Category:</strong> Desktop Application</li>
-                <li><strong>Client:</strong> Fiverr customer</li>
-                <li><strong>Project Date:</strong>  13-01-2025</li>
-            </ul>
-        </div>
-
-        <!-- Project description -->
-        <div class="portfolio-description" data-aos="fade-up" data-aos-delay="300">
-            <h2>Description</h2>
-            <section>
-                <h2>🧠 Skin Cancer Detection System</h2>
-                <p>
-                    This desktop application is written in Python and uses artificial intelligence (deep learning) to detect different types of skin cancer from images. The application features an easy-to-use interface built with Tkinter and leverages the TensorFlow/Keras model I trained to classify images.
-                </p>
+    <!-- Dark mode loader -->
+    <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 transition-opacity duration-500">
+        <div class="relative w-24 h-24">
+            <!-- Large outer circle -->
+            <div class="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
             
-                <h3>✨ Key Features:</h3>
-                <ul>
-                    <li>📷 <strong>Image Upload</strong>: Upload skin lesion images in .jpg, .png, or .jpeg formats.</li>
-                    <li>🧪 <strong>AI-Powered Prediction</strong>: Analyzes the image using a trained deep learning model.</li>
-                    <li>📊 <strong>Detailed Results</strong>: Displays the predicted disease name and confidence percentage.</li>
-                    <li>🖼️ <strong>Image Preview</strong>: Shows the selected image within the application.</li>
-                    <li>👨‍💻 <strong>Developer Info</strong>: Displays developer credits.</li>
-                    <li>🎨 <strong>Clean & Intuitive UI</strong>: Modern interface with real-time feedback and error handling.</li>
-                </ul>
+            <!-- Medium circle -->
+            <div class="absolute inset-3 border-4 border-purple-500 border-b-transparent rounded-full animate-spin-medium animation-delay-200"></div>
             
-                <h3>🔬 Detected Skin Cancer Types:</h3>
-                <ul>
-                    <li>Actinic Keratoses (AKIEC)</li>
-                    <li>Basal Cell Carcinoma (BCC)</li>
-                    <li>Benign Keratosis (BKL)</li>
-                    <li>Dermatofibroma (DF)</li>
-                    <li>Melanoma (MEL)</li>
-                    <li>Melanocytic Nevi (NV)</li>
-                    <li>Vascular Lesions (VASC)</li>
-                </ul>
+            <!-- Small inner circle -->
+            <div class="absolute inset-6 border-4 border-pink-500 border-l-transparent rounded-full animate-spin-fast animation-delay-400"></div>
             
-                <h3>🛠️ Technologies Used:</h3>
-                <ul>
-                    <li>Python</li>
-                    <li>Tkinter (Graphical User Interface)</li>
-                    <li>TensorFlow / Keras (Deep Learning Model)</li>
-                    <li>Pillow (PIL) for image processing</li>
-                    <li>NumPy for numerical computation</li>
-                </ul>
-            
-                <h3>🎯 Goal:</h3>
-                <p>
-                    To provide a fast, accessible, and AI-powered tool for preliminary skin cancer diagnosis. 
-                    Ideal for educational use, healthcare professionals, or individuals interested in early detection.
-                </p>
-            
-                <p>
-                    🚀 <strong>Explore more on GitHub:</strong><br>
-                    <a href="https://github.com/HoussemBouagal/Skin-Cancer-Detection/tree/master" target="_blank">
-                        GitHub Repository: Skin Cancer Detection
-                    </a>
-                </p>
-            </section>
-            
-            
+            <!-- Central dot -->
+            <div class="absolute inset-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full"></div>
         </div>
     </div>
 
-    <!-- Swiper script inclusion -->
+    <main id="main-content" class="container mx-auto px-4 py-20 max-w-6xl">
+        <!-- Page heading with proper semantic hierarchy -->
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-12 text-blue-400">
+            Skin Cancer Detection System
+        </h1>
+        
+        <!-- Swiper carousel with enhanced ergonomics -->
+        <div class="relative group">
+            <div class="swiper rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img 
+                            src="Projet5/p1.png" 
+                            alt="Skin Cancer Detection screenshot 1" 
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="swiper-slide">
+                        <img 
+                            src="Projet5/p2.png" 
+                            alt="Skin Cancer Detection screenshot 2" 
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="swiper-slide">
+                        <img 
+                            src="Projet5/p3.png" 
+                            alt="Skin Cancer Detection screenshot 3" 
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="swiper-slide">
+                        <img 
+                            src="Projet5/p4.png" 
+                            alt="Skin Cancer Detection screenshot 4" 
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="swiper-slide">
+                        <img 
+                            src="Projet5/p5.png" 
+                            alt="Skin Cancer Detection screenshot 5" 
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        >
+                    </div>
+                </div>
+                <!-- Custom navigation buttons with better visibility -->
+                <div class="swiper-button-next bg-white/30 text-gray-900 backdrop-blur-sm rounded-full w-12 h-12 transition-all hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-white"></div>
+                <div class="swiper-button-prev bg-white/30 text-gray-900 backdrop-blur-sm rounded-full w-12 h-12 transition-all hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-white"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        <!-- Project information with semantic markup -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 my-12">
+            <article class="bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-400">Project Information</h2>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <strong class="w-32 flex-shrink-0 font-medium text-gray-300">Category:</strong>
+                        <span class="text-gray-400">Desktop Application</span>
+                    </li>
+                    <li class="flex items-start">
+                        <strong class="w-32 flex-shrink-0 font-medium text-gray-300">Client:</strong>
+                        <span class="text-gray-400">Fiverr Customer</span>
+                    </li>
+                    <li class="flex items-start">
+                        <strong class="w-32 flex-shrink-0 font-medium text-gray-300">Project Date:</strong>
+                        <span class="text-gray-400">January 13, 2025</span>
+                    </li>
+                    <li class="flex items-start">
+                        <strong class="w-32 flex-shrink-0 font-medium text-gray-300">Project Link:</strong>
+                        <a href="https://github.com/HoussemBouagal/Skin-Cancer-Detection/tree/master" class="text-blue-400 hover:underline focus:underline focus:outline-none" target="_blank">GitHub Repository</a>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-400">Project Description</h2>
+                <p class="text-gray-400 leading-relaxed mb-4">
+                    A Python-based desktop application using artificial intelligence (deep learning) to detect different types of skin cancer from images. Features an intuitive Tkinter interface and leverages a custom-trained TensorFlow/Keras model for accurate image classification.
+                </p>
+                <div class="flex justify-center mt-4">
+                    <span class="inline-block bg-blue-900 text-blue-300 px-3 py-1 rounded-full text-sm font-medium">AI-Powered</span>
+                    <span class="inline-block bg-purple-900 text-purple-300 px-3 py-1 rounded-full text-sm font-medium ml-2">Medical Technology</span>
+                    <span class="inline-block bg-green-900 text-green-300 px-3 py-1 rounded-full text-sm font-medium ml-2">Deep Learning</span>
+                </div>
+            </article>
+        </section>
+
+        <!-- Key Features section -->
+        <section class="my-12 bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h2 class="text-2xl font-semibold mb-6 text-blue-400">Key Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">Image Upload</h3>
+                    <p class="text-gray-400">Upload skin lesion images in .jpg, .png, or .jpeg formats for analysis.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">AI-Powered Prediction</h3>
+                    <p class="text-gray-400">Analyzes images using a trained deep learning model with high accuracy.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">Detailed Results</h3>
+                    <p class="text-gray-400">Displays predicted disease name with confidence percentage.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">Image Preview</h3>
+                    <p class="text-gray-400">Shows selected image within the application interface.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">Intuitive UI</h3>
+                    <p class="text-gray-400">Modern interface with real-time feedback and error handling.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">Multiple Cancer Types</h3>
+                    <p class="text-gray-400">Detects 7 different types of skin cancer and lesions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detected Cancer Types section -->
+        <section class="my-12 bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h2 class="text-2xl font-semibold mb-6 text-blue-400">Detected Skin Cancer Types</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="p-3 bg-gray-700 rounded-lg flex items-center">
+                    <div class="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                    <span class="text-gray-300">Actinic Keratoses (AKIEC)</span>
+                </div>
+                <div class="p-3 bg-gray-700 rounded-lg flex items-center">
+                    <div class="w-3 h-3 bg-orange-500 rounded-full mr-3"></div>
+                    <span class="text-gray-300">Basal Cell Carcinoma (BCC)</span>
+                </div>
+                <div class="p-3 bg-gray-700 rounded-lg flex items-center">
+                    <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
+                    <span class="text-gray-300">Benign Keratosis (BKL)</span>
+                </div>
+                <div class="p-3 bg-gray-700 rounded-lg flex items-center">
+                    <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                    <span class="text-gray-300">Dermatofibroma (DF)</span>
+                </div>
+                <div class="p-3 bg-gray-700 rounded-lg flex items-center">
+                    <div class="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                    <span class="text-gray-300">Melanoma (MEL)</span>
+                </div>
+                <div class="p-3 bg-gray-700 rounded-lg flex items-center">
+                    <div class="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
+                    <span class="text-gray-300">Melanocytic Nevi (NV)</span>
+                </div>
+                <div class="p-3 bg-gray-700 rounded-lg flex items-center md:col-span-2 lg:col-span-1">
+                    <div class="w-3 h-3 bg-pink-500 rounded-full mr-3"></div>
+                    <span class="text-gray-300">Vascular Lesions (VASC)</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technologies section -->
+        <section class="my-12 bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h2 class="text-2xl font-semibold mb-6 text-blue-400">Technologies Used</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="flex flex-col items-center p-4 bg-gray-700 rounded-lg">
+                    <div class="w-16 h-16 bg-blue-900 rounded-full flex items-center justify-center mb-2">
+                        <span class="text-2xl font-bold text-blue-300">Py</span>
+                    </div>
+                    <span class="text-gray-300 mt-2">Python</span>
+                </div>
+                <div class="flex flex-col items-center p-4 bg-gray-700 rounded-lg">
+                    <div class="w-16 h-16 bg-green-900 rounded-full flex items-center justify-center mb-2">
+                        <span class="text-2xl font-bold text-green-300">TF</span>
+                    </div>
+                    <span class="text-gray-300 mt-2">TensorFlow</span>
+                </div>
+                <div class="flex flex-col items-center p-4 bg-gray-700 rounded-lg">
+                    <div class="w-16 h-16 bg-yellow-900 rounded-full flex items-center justify-center mb-2">
+                        <span class="text-2xl font-bold text-yellow-300">TK</span>
+                    </div>
+                    <span class="text-gray-300 mt-2">Tkinter</span>
+                </div>
+                <div class="flex flex-col items-center p-4 bg-gray-700 rounded-lg">
+                    <div class="w-16 h-16 bg-red-900 rounded-full flex items-center justify-center mb-2">
+                        <span class="text-2xl font-bold text-red-300">CV</span>
+                    </div>
+                    <span class="text-gray-300 mt-2">OpenCV</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- GitHub link section -->
+        <section class="my-12 bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h2 class="text-2xl font-semibold mb-6 text-blue-400">Project Repository</h2>
+            <div class="flex flex-col items-center">
+                <p class="text-gray-400 mb-6 text-center max-w-2xl">
+                    This project is open-source and available on GitHub. Feel free to explore the code, contribute, or use it for educational purposes.
+                </p>
+                <a href="https://github.com/HoussemBouagal/Skin-Cancer-Detection/tree/master" target="_blank" 
+                   class="inline-flex items-center px-6 py-3 bg-gray-700 hover:bg-gray-600 text-blue-400 rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                    </svg>
+                    View on GitHub
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer with semantic markup -->
+    <footer class="bg-gray-950 text-gray-400 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="mb-4">© 2025 Skin Cancer Detection Project. All rights reserved.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="hover:text-white transition-colors focus:outline-none focus:underline" aria-label="Privacy Policy">Privacy</a>
+                <a href="#" class="hover:text-white transition-colors focus:outline-none focus:underline" aria-label="Terms of Service">Terms</a>
+                <a href="#" class="hover:text-white transition-colors focus:outline-none focus:underline" aria-label="Contact">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <script>
+        // Initialize Swiper with ergonomic settings
         const swiper = new Swiper('.swiper', {
             loop: true,
             autoplay: {
-                delay: 3000,
+                delay: 5000,
                 disableOnInteraction: false,
+                pauseOnMouseEnter: true, // Better UX
             },
+            effect: 'slide',
+            speed: 600,
+            grabCursor: true, // Shows grab cursor for better affordance
             navigation: {
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
@@ -245,7 +370,39 @@
             pagination: {
                 el: '.swiper-pagination',
                 clickable: true,
+                dynamicBullets: true, // Better visibility
             },
+            a11y: {
+                prevSlideMessage: 'Previous slide',
+                nextSlideMessage: 'Next slide',
+                paginationBulletMessage: 'Go to slide {{index}}',
+            },
+            keyboard: {
+                enabled: true,
+                onlyInViewport: true,
+            },
+        });
+
+        // Add reduced motion preference
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (mediaQuery.matches) {
+            swiper.params.autoplay.disableOnInteraction = true;
+            swiper.params.autoplay.delay = 0;
+            swiper.params.speed = 300;
+            swiper.update();
+        }
+
+        // Loader animation
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            
+            // Hide loader smoothly after page load
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1000);
         });
     </script>
 </body>
