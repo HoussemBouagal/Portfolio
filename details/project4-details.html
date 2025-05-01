@@ -1,236 +1,339 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Object Detector</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-  <link rel="icon" href="../img/Recognition.ico" type="image/x-icon">
-  <style>
-    body {
-      font-family: 'Tajawal', Arial, sans-serif;
-      text-align: center;
-      direction: rtl;
-      margin: 0;
-      padding: 0;
-      background-color: #f8f9fa;
-      color: #343a40;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object Detector</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../img/Recognition.ico" type="image/x-icon">
 
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    h2 {
-      font-size: 28px;
-      color: #007bff;
-      margin-bottom: 20px;
-    }
-
-    .swiper {
-      width: 100%;
-      height: 400px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .swiper-slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .buttons button {
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #28a745;
-      color: white;
-      transition: background-color 0.3s ease;
-    }
-
-    .buttons button:hover {
-      background-color: #218838;
-    }
-
-    .home-btn {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      background-color: #007bff;
-      padding: 10px 20px;
-      color: white;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 18px;
-      transition: background-color 0.3s ease;
-    }
-
-    .home-btn:hover {
-      background-color: #0056b3;
-    }
-
-    .portfolio-info, .portfolio-description {
-      background-color: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
-    }
-
-    .portfolio-info ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .portfolio-info li {
-      margin-bottom: 10px;
-      font-size: 16px;
-      color: #6c757d;
-    }
-
-    .portfolio-info li strong {
-      color: #007bff;
-      font-weight: bold;
-    }
-
-    .portfolio-description h2 {
-      font-size: 24px;
-      color: #007bff;
-      margin-bottom: 15px;
-    }
-
-    .portfolio-description p {
-      font-size: 16px;
-      color: #6c757d;
-      line-height: 1.6;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 10px;
-      }
-
-      .swiper {
-        height: 250px;
-      }
-
-      .buttons button {
-        font-size: 14px;
-        padding: 8px 16px;
-      }
-
-      .home-btn {
-        font-size: 16px;
-        padding: 8px 15px;
-      }
-    }
-  </style>
+    <style>
+        /* Custom styles for better ergonomics */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827;
+        }
+        .swiper-slide img {
+            transition: transform 0.3s ease;
+        }
+        .swiper-slide img:hover {
+            transform: scale(1.02);
+        }
+        button, .swiper-button-next, .swiper-button-prev {
+            user-select: none;
+        }
+        /* Focus styles for better accessibility */
+        button:focus, a:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Animations */
+        @keyframes spin-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes spin-medium {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+        
+        @keyframes spin-fast {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .animate-spin-slow {
+            animation: spin-slow 2s linear infinite;
+        }
+        
+        .animate-spin-medium {
+            animation: spin-medium 1.5s linear infinite;
+        }
+        
+        .animate-spin-fast {
+            animation: spin-fast 1s linear infinite;
+        }
+        
+        .animation-delay-200 {
+            animation-delay: 0.2s;
+        }
+        
+        .animation-delay-400 {
+            animation-delay: 0.4s;
+        }
+    </style>
 </head>
-<body>
+<body class="dark:bg-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md">
+        Skip to content
+    </a>
 
-  <button class="home-btn" onclick="window.location.href='../index.html'">Home</button>
-  <br><br><br><br>
+    <!-- Home button with better ergonomic placement -->
+    <button 
+        onclick="window.location.href='../index.html'" 
+        class="fixed top-6 left-6 z-50 bg-blue-700 hover:bg-blue-800 text-white px-5 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+        aria-label="Return to home page"
+    >
+        Home
+    </button>
 
-  <div class="container">
-    <h2>Object Detector</h2>
-
-    <div class="swiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide"><img src="projet4/p1.png" alt="Image 1"></div>
-        <div class="swiper-slide"><img src="Projet4/p2.png" alt="Image 2"></div>
-        <div class="swiper-slide"><img src="Projet4/p3.png" alt="Image 3"></div>
-        <div class="swiper-slide"><img src="Projet4/p4.png" alt="Image 4"></div>
-        <div class="swiper-slide"><img src="Projet4/p5.png" alt="Image 1"></div>
-      </div>
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-pagination"></div>
+    <!-- Dark mode loader -->
+    <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 transition-opacity duration-500">
+        <div class="relative w-24 h-24">
+            <!-- Large outer circle -->
+            <div class="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
+            
+            <!-- Medium circle -->
+            <div class="absolute inset-3 border-4 border-purple-500 border-b-transparent rounded-full animate-spin-medium animation-delay-200"></div>
+            
+            <!-- Small inner circle -->
+            <div class="absolute inset-6 border-4 border-pink-500 border-l-transparent rounded-full animate-spin-fast animation-delay-400"></div>
+            
+            <!-- Central dot -->
+            <div class="absolute inset-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full"></div>
+        </div>
     </div>
 
-    <div class="portfolio-info">
-      <h3>Project Information</h3>
-      <ul>
-        <li><strong>Category:</strong> Desktop Application</li>
-        <li><strong>Client:</strong> Fiverr Client</li>
-        <li><strong>Project Date:</strong> 14-04-2024</li>
-        <li><strong>Project Link:</strong> <a href="#">Not Available</a></li>
-      </ul>
-    </div>
+    <main id="main-content" class="container mx-auto px-4 py-20 max-w-6xl">
+        <!-- Page heading with proper semantic hierarchy -->
+        <h1 class="text-3xl md:text-4xl font-bold text-center mb-12 text-blue-400">
+            Object Detector Project
+        </h1>
+        
+        <!-- Swiper carousel with enhanced ergonomics -->
+        <div class="relative group">
+            <div class="swiper rounded-xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img 
+                            src="projet4/p1.png" 
+                            alt="Object Detector screenshot 1" 
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="swiper-slide">
+                        <img 
+                            src="Projet4/p2.png" 
+                            alt="Object Detector screenshot 2" 
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="swiper-slide">
+                        <img 
+                            src="Projet4/p3.png" 
+                            alt="Object Detector screenshot 3" 
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="swiper-slide">
+                        <img 
+                            src="Projet4/p4.png" 
+                            alt="Object Detector screenshot 4" 
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        >
+                    </div>
+                    <div class="swiper-slide">
+                        <img 
+                            src="Projet4/p5.png" 
+                            alt="Object Detector screenshot 5" 
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                        >
+                    </div>
+                </div>
+                <!-- Custom navigation buttons with better visibility -->
+                <div class="swiper-button-next bg-white/30 text-gray-900 backdrop-blur-sm rounded-full w-12 h-12 transition-all hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-white"></div>
+                <div class="swiper-button-prev bg-white/30 text-gray-900 backdrop-blur-sm rounded-full w-12 h-12 transition-all hover:bg-white/50 focus:outline-none focus:ring-2 focus:ring-white"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        <!-- Project information with semantic markup -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 my-12">
+            <article class="bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-400">Project Information</h2>
+                <ul class="space-y-3">
+                    <li class="flex items-start">
+                        <strong class="w-32 flex-shrink-0 font-medium text-gray-300">Category:</strong>
+                        <span class="text-gray-400">Desktop Application</span>
+                    </li>
+                    <li class="flex items-start">
+                        <strong class="w-32 flex-shrink-0 font-medium text-gray-300">Client:</strong>
+                        <span class="text-gray-400">Fiverr Client</span>
+                    </li>
+                    <li class="flex items-start">
+                        <strong class="w-32 flex-shrink-0 font-medium text-gray-300">Project Date:</strong>
+                        <span class="text-gray-400">April 14, 2024</span>
+                    </li>
+                    <li class="flex items-start">
+                        <strong class="w-32 flex-shrink-0 font-medium text-gray-300">Project Link:</strong>
+                        <a href="#" class="text-blue-400 hover:underline focus:underline focus:outline-none">Not Available</a>
+                    </li>
+                </ul>
+            </article>
 
-    <div class="portfolio-description">
-      <h2>Description</h2>
+            <article class="bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+                <h2 class="text-2xl font-semibold mb-4 text-blue-400">Project Description</h2>
+                <p class="text-gray-400 leading-relaxed">
+                    A smart AI-based object detection system built using YOLOv3 and Python. This desktop application detects and classifies multiple objects in images or real-time video streams with high accuracy. Features include real-time detection, support for custom models, bounding boxes with labels, and an intuitive user interface.
+                </p>
+            </article>
+        </section>
 
-      <h3>Smart Object Detection System</h3>
-      <p>
-        This desktop application is a smart AI-based object detection system built using <strong>YOLOv3</strong> and Python.
-        It allows users to detect and classify multiple objects in images or real-time video streams with high accuracy.
-      </p>
+        <!-- Additional details section -->
+        <section class="my-12 bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h2 class="text-2xl font-semibold mb-6 text-blue-400">Key Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">Real-Time Detection</h3>
+                    <p class="text-gray-400">Detects multiple objects in real-time using webcam or video input with high accuracy.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">Custom Models</h3>
+                    <p class="text-gray-400">Supports switching between pre-trained models or using custom trained models.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">Bounding Boxes</h3>
+                    <p class="text-gray-400">Displays object names and confidence scores directly on the image/video.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">Intuitive UI</h3>
+                    <p class="text-gray-400">Clean user interface with dark theme support for better user experience.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">Cross-platform</h3>
+                    <p class="text-gray-400">Works smoothly on both Windows and Linux operating systems.</p>
+                </div>
+                <div class="p-4 bg-gray-700 rounded-lg">
+                    <h3 class="font-medium text-lg mb-2 text-gray-200">High Performance</h3>
+                    <p class="text-gray-400">Optimized for efficient object detection with minimal resource usage.</p>
+                </div>
+            </div>
+        </section>
 
-      <h3>Features:</h3>
-      <ul>
-        <li>✅ <strong>Real-Time Object Detection</strong> – Detects multiple objects in real-time using a webcam or video input.</li>
-        <li>✅ <strong>Support for Custom Models</strong> – Easily switch between pre-trained models or use your own.</li>
-        <li>✅ <strong>Bounding Boxes & Labels</strong> – Displays object names and confidence scores directly on the image/video.</li>
-        <li>✅ <strong>Intuitive UI</strong> – Simple and clean user interface with dark theme support.</li>
-        <li>✅ <strong>Cross-platform</strong> – Works smoothly on Windows/Linux systems.</li>
-      </ul>
+        <!-- Technologies section -->
+        <section class="my-12 bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h2 class="text-2xl font-semibold mb-6 text-blue-400">Technologies Used</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold">P</span>
+                    </div>
+                    <span class="text-gray-300">Python</span>
+                </div>
+                <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg">
+                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold">Y</span>
+                    </div>
+                    <span class="text-gray-300">YOLOv3</span>
+                </div>
+                <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg">
+                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold">C</span>
+                    </div>
+                    <span class="text-gray-300">OpenCV</span>
+                </div>
+                <div class="flex items-center space-x-3 p-3 bg-gray-700 rounded-lg">
+                    <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold">T</span>
+                    </div>
+                    <span class="text-gray-300">Tkinter</span>
+                </div>
+            </div>
+        </section>
 
-      <h3>Technologies Used:</h3>
-      <ul>
-        <li>🔹 <strong>Python</strong> (core programming)</li>
-        <li>🔹 <strong>YOLOv3</strong> (Ultralytics Object Detection Model)</li>
-        <li>🔹 <strong>OpenCV</strong> (for image and video processing)</li>
-        <li>🔹 <strong>Tkinter</strong> (for the desktop GUI)</li>
-      </ul>
+        <!-- GitHub link section -->
+        <section class="my-12 bg-gray-800 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow">
+            <h2 class="text-2xl font-semibold mb-4 text-blue-400">Project Repository</h2>
+            <div class="flex items-center justify-center">
+                <a href="https://github.com/HoussemBouagal/Object-Detector" target="_blank" 
+                   class="inline-flex items-center px-6 py-3 bg-gray-700 hover:bg-gray-600 text-blue-400 rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                    </svg>
+                    View on GitHub
+                </a>
+            </div>
+        </section>
+    </main>
 
-      <h3>Objective:</h3>
-      <p>
-        The goal of this project is to create a lightweight, efficient, and user-friendly object detection system that can be used
-        for educational, security, or analytical purposes across various domains.
-      </p>
+    <!-- Footer with semantic markup -->
+    <footer class="bg-gray-950 text-gray-400 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="mb-4">© 2024 Object Detector Project. All rights reserved.</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="hover:text-white transition-colors focus:outline-none focus:underline" aria-label="Privacy Policy">Privacy</a>
+                <a href="#" class="hover:text-white transition-colors focus:outline-none focus:underline" aria-label="Terms of Service">Terms</a>
+            </div>
+        </div>
+    </footer>
 
-      <p>
-        🚀 <strong>Explore more on GitHub!</strong><br>
-        <a href="https://github.com/HoussemBouagal/Object-Detector" target="_blank">
-          GitHub Repository: Object Detector
-        </a>
-      </p>
-    </div>
-  </div>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper with ergonomic settings
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true, // Better UX
+            },
+            effect: 'slide',
+            speed: 600,
+            grabCursor: true, // Shows grab cursor for better affordance
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                dynamicBullets: true, // Better visibility
+            },
+            a11y: {
+                prevSlideMessage: 'Previous slide',
+                nextSlideMessage: 'Next slide',
+                paginationBulletMessage: 'Go to slide {{index}}',
+            },
+            keyboard: {
+                enabled: true,
+                onlyInViewport: true,
+            },
+        });
 
-  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-  <script>
-    const swiper = new Swiper('.swiper', {
-      loop: true,
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-    });
-  </script>
+        // Add reduced motion preference
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (mediaQuery.matches) {
+            swiper.params.autoplay.disableOnInteraction = true;
+            swiper.params.autoplay.delay = 0;
+            swiper.params.speed = 300;
+            swiper.update();
+        }
+
+        // Loader animation
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            
+            // Hide loader smoothly after page load
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
