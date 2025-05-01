@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -579,48 +580,54 @@
     </section>
     
   <!-- Contact Section - Dark Mode -->
-<section id="contact" class="py-20 px-4 max-w-4xl mx-auto section-animate">
-  <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-gray-200">Contact Me</h2>
+  <section id="contact" class="py-20 px-4 max-w-4xl mx-auto section-animate">
+    <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center text-gray-200">Contact Me</h2>
   
-  <form id="myForm" action="https://formsubmit.co/mouhamedhoussem813@gmail.com" method="POST" 
-        class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg space-y-6 border border-gray-700">
-    
-    <input type="hidden" name="_template" value="box">
-    <input type="hidden" name="_subject" value="New Contact Form Submission">
-    
-    <div>
-      <label class="block mb-2 font-semibold text-gray-300">Your Name</label>
-      <input type="text" name="name" required placeholder="Enter your full name" 
-             class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none 
-                    focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400">
-    </div>
-    
-    <div>
-      <label class="block mb-2 font-semibold text-gray-300">Your Email</label>
-      <input type="email" name="email" required placeholder="Enter your email address" 
-             class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none 
-                    focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400">
-    </div>
-    
-    <div>
-      <label class="block mb-2 font-semibold text-gray-300">Message</label>
-      <textarea name="message" rows="5" required placeholder="Type your message here..." 
-                class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none 
-                       focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400"></textarea>
-    </div>
-    
-    <button type="submit" 
-            class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 
-                   transition-colors duration-300 flex items-center justify-center">
-      <i class="bi bi-send mr-2"></i> Send Message
-    </button>
-  </form>
+    <p class="text-gray-300 mb-6 text-center">
+      Please contact me directly at <a href="mailto:mouhamedhoussem813@gmail.com" class="text-blue-400 underline">mouhamedhoussem813@gmail.com</a>
+      or through this form:
+    </p>
   
-  <!-- Success message - Dark Mode -->
-  <div id="successMessage" class="hidden mt-6 p-4 bg-green-900 text-green-200 rounded-lg text-center border border-green-700">
-    <i class="bi bi-check-circle-fill mr-2"></i> Your message has been sent successfully!
-  </div>
-</section>
+    <form id="myForm" action="https://formsubmit.co/mouhamedhoussem813@gmail.com" method="POST"
+          class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg space-y-6 border border-gray-700">
+      
+      <input type="hidden" name="_template" value="box">
+      <input type="hidden" name="_subject" value="New Contact Form Submission">
+  
+      <div>
+        <label for="name" class="block mb-2 font-semibold text-gray-300">Your Name</label>
+        <input id="name" type="text" name="name" required placeholder="Enter your full name"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none 
+                      focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400">
+      </div>
+      
+      <div>
+        <label for="email" class="block mb-2 font-semibold text-gray-300">Your Email</label>
+        <input id="email" type="email" name="email" required placeholder="Enter your email address"
+               class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none 
+                      focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400">
+      </div>
+      
+      <div>
+        <label for="message" class="block mb-2 font-semibold text-gray-300">Message</label>
+        <textarea id="message" name="message" rows="5" required placeholder="Type your message here..."
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none 
+                         focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400"></textarea>
+      </div>
+      
+      <button type="submit"
+              class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 
+                     transition-colors duration-300 flex items-center justify-center">
+        <i class="bi bi-send mr-2"></i> Send Message
+      </button>
+    </form>
+  
+    <div id="successMessage"
+         class="hidden mt-6 p-4 bg-green-900 text-green-200 rounded-lg text-center border border-green-700">
+      <i class="bi bi-check-circle-fill mr-2"></i> Your message has been sent successfully!
+    </div>
+  </section>
+  
   </main>
 
   <!-- Footer -->
