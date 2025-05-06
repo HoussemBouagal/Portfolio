@@ -1,7 +1,7 @@
     // Initialize Typed.js
     document.addEventListener('DOMContentLoaded', function() {
       new Typed("#typed2", {
-        strings: ["Web Developer 🌐", "Machine Learning Engineer 🤖🧠", "Data Scientist 📊📈"],
+        strings: ["Freelancer 👨‍💻", "Data Scientist 📊📈", "Machine Learning Engineer 🤖🧠"],
         typeSpeed: 50,
         backSpeed: 30,
         loop: true
