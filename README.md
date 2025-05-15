@@ -26,12 +26,16 @@ Welcome to my personal portfolio website! This is a modern, responsive, and inte
 
 ```
 project/
-│
-├── img/                  # Images (profile photo, icons, etc.)
-├── CSS/
-│   └── styles.css        # Custom styles
-├── index.html            # Main HTML file
-└── README.md             # Project documentation
+── index.html # Main homepage
+├── CSS/ # All stylesheets
+├── JS/ # JavaScript functionality
+├── img/ # Images and assets
+├── certificates/ # Certification files
+├── files/ # CV and downloadable files
+├── details/ # About, Contact, etc.
+├── Projects/ # Subfolders for each project
+├── Skills/ # Skills overview pages
+└── README.md # This file
 ```
 
 ## 🔧 Setup Instructions
