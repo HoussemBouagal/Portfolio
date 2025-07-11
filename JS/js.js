@@ -39,7 +39,7 @@ class PortfolioApp {
 
     try {
       new Typed(typedElement, {
-        strings: ["Freelancer 👨‍💻", "Machine Learning Engineer 🤖, "Data Scientist 📊📈"],
+        strings: ["Freelancer 👨‍💻", "Machine Learning Engineer 🤖", "Data Scientist 📊📈"],
         typeSpeed: 50,
         backSpeed: 30,
         loop: true,
@@ -62,7 +62,9 @@ class PortfolioApp {
     const currentYear = new Date().getFullYear();
     
     yearElements.forEach(element => {
-      element.textContent = currentYear;
+      if (element.textContent !== currentYear.toString()) {
+        element.textContent = currentYear;
+      }
     });
   }
 
@@ -84,6 +86,16 @@ class PortfolioApp {
       sidebar.classList.toggle('-translate-x-full');
       menuToggle.textContent = isExpanded ? '≡' : '×';
     });
+
+    // Close menu when clicking on nav items
+    const navItems = document.querySelectorAll('#sidebar nav a');
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        if (menuToggle.getAttribute('aria-expanded') === 'true') {
+          menuToggle.click();
+        }
+      });
+    });
   }
 
   /**
@@ -102,6 +114,7 @@ class PortfolioApp {
     }, 100);
 
     window.addEventListener('scroll', scrollHandler);
+    scrollHandler(); // Initial check
     
     scrollToTopBtn.addEventListener('click', () => {
       window.scrollTo({
@@ -129,6 +142,7 @@ class PortfolioApp {
           if (entry.target.id === 'About' && counters.length > 0) {
             setTimeout(() => this.animateCounters(counters), 500);
           }
+          observer.unobserve(entry.target); // Stop observing after animation
         }
       });
     }, {
@@ -155,10 +169,10 @@ class PortfolioApp {
       counters.forEach(counter => {
         const target = +counter.dataset.target || 0;
         const current = +counter.textContent.replace(/\D/g, '') || 0;
-        const increment = target / speed;
+        const increment = Math.max(1, Math.floor(target / speed)); // Ensure at least 1 increment
         
         if (current < target) {
-          counter.textContent = Math.ceil(current + increment).toLocaleString();
+          counter.textContent = Math.min(current + increment, target).toLocaleString();
           allComplete = false;
         } else {
           counter.textContent = target.toLocaleString();
@@ -201,7 +215,7 @@ class PortfolioApp {
       const trigger = e.target.closest('[data-certificate]');
       if (trigger) {
         e.preventDefault();
-        this.showCertificate(modal, trigger.dataset.certificate);
+        this.showCertificate(modal, trigger.dataset.certificate, trigger.dataset.title || 'Certificate');
       }
     });
   }
@@ -210,13 +224,18 @@ class PortfolioApp {
    * Show certificate modal
    * @param {HTMLElement} modal - Modal element
    * @param {string} imageSrc - Image source to display
+   * @param {string} title - Title for the certificate
    */
-  showCertificate(modal, imageSrc) {
+  showCertificate(modal, imageSrc, title) {
     const img = modal.querySelector('#certificateImg');
+    const titleElement = modal.querySelector('#certificateTitle');
+    
     if (!img) return;
 
     img.src = imageSrc;
-    img.alt = 'Certificate preview';
+    img.alt = `${title} preview`;
+    if (titleElement) titleElement.textContent = title;
+    
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
     document.documentElement.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`;
@@ -253,6 +272,10 @@ class PortfolioApp {
       submitButton.textContent = 'Sending...';
       submitButton.setAttribute('aria-busy', 'true');
 
+      // Hide previous messages
+      if (successMessage) successMessage.classList.add('hidden');
+      if (errorMessage) errorMessage.classList.add('hidden');
+
       try {
         const formData = new FormData(form);
         const response = await fetch(form.action, {
@@ -274,6 +297,7 @@ class PortfolioApp {
         console.error('Form submission error:', error);
         
         if (errorMessage) {
+          errorMessage.textContent = 'There was an error submitting your form. Please try again later.';
           errorMessage.classList.remove('hidden');
           errorMessage.setAttribute('aria-live', 'assertive');
           setTimeout(() => errorMessage.classList.add('hidden'), 5000);
@@ -296,6 +320,10 @@ class PortfolioApp {
     const loader = document.getElementById('loader');
     if (!loader) return;
 
+    // Ensure loader is visible initially
+    loader.style.display = 'flex';
+    loader.style.opacity = '1';
+
     window.addEventListener('load', () => {
       loader.style.transition = 'opacity 0.5s ease';
       loader.style.opacity = '0';
@@ -304,6 +332,15 @@ class PortfolioApp {
         loader.style.display = 'none';
       }, 500);
     });
+
+    // Fallback in case load event doesn't fire
+    setTimeout(() => {
+      if (loader.style.opacity === '1') {
+        loader.style.transition = 'opacity 0.5s ease';
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 500);
+      }
+    }, 3000);
   }
 }
 
@@ -316,25 +353,29 @@ class PortfolioApp {
 function throttle(func, limit) {
   let lastFunc;
   let lastRan;
+  let timeout;
   
   return function() {
     const context = this;
     const args = arguments;
+    const now = Date.now();
     
     if (!lastRan) {
       func.apply(context, args);
-      lastRan = Date.now();
+      lastRan = now;
     } else {
-      clearTimeout(lastFunc);
-      lastFunc = setTimeout(() => {
-        if ((Date.now() - lastRan) >= limit) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        if ((now - lastRan) >= limit) {
           func.apply(context, args);
-          lastRan = Date.now();
+          lastRan = now;
         }
-      }, limit - (Date.now() - lastRan));
+      }, Math.max(limit - (now - lastRan), 0));
     }
   };
 }
 
 // Initialize application
-new PortfolioApp();
+document.addEventListener('DOMContentLoaded', () => {
+  new PortfolioApp();
+});
