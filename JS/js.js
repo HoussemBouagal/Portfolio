@@ -39,7 +39,7 @@ class PortfolioApp {
 
     try {
       new Typed(typedElement, {
-        strings: ["Freelancer 👨‍💻", "Software Engineer 🧑‍💻", "Data Scientist 📊📈"],
+        strings: ["Freelancer 👨‍💻", "Machine Learning Engineer 🤖, "Data Scientist 📊📈"],
         typeSpeed: 50,
         backSpeed: 30,
         loop: true,
