@@ -18,7 +18,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
           colors: {
@@ -58,7 +57,6 @@
     body {
       font-family: 'Poppins', sans-serif;
       scroll-behavior: smooth;
-      transition: background-color 0.3s ease, color 0.3s ease;
     }
     
     .section-padding {
@@ -110,59 +108,47 @@
       }
     }
 
-    /* Dark mode transitions */
-    .transition-colors {
-      transition-property: background-color, border-color, color, fill, stroke;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      transition-duration: 150ms;
-    }
-
     /* Dark mode specific styles */
-    .dark .bg-gray-50 {
+    .bg-gray-50 {
       background-color: #111827 !important;
     }
 
-    .dark .bg-white {
+    .bg-white {
       background-color: #1F2937 !important;
     }
 
-    .dark .text-gray-800 {
+    .text-gray-800 {
       color: #F3F4F6 !important;
     }
 
-    .dark .text-gray-600 {
+    .text-gray-600 {
       color: #D1D5DB !important;
     }
 
-    .dark .border-gray-200 {
+    .border-gray-200 {
       border-color: #374151 !important;
     }
 
-    .dark .bg-gray-100 {
+    .bg-gray-100 {
       background-color: #374151 !important;
     }
 
-    .dark .text-gray-500 {
+    .text-gray-500 {
       color: #9CA3AF !important;
     }
 
-    .dark .shadow-md {
+    .shadow-md {
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important;
     }
 
-    .dark .shadow-lg {
+    .shadow-lg {
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
     }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased relative dark:bg-gray-900 dark:text-gray-200">
-  <!-- Dark Mode Toggle -->
-  <button id="darkModeToggle" class="fixed top-6 left-6 z-50 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 p-3 rounded-full shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-label="Toggle dark mode">
-    <i id="darkModeIcon" class="bi bi-moon-fill"></i>
-  </button>
-
+<body class="bg-gray-900 text-gray-200 font-sans antialiased relative">
   <!-- Loading Spinner -->
-  <div id="loader" class="fixed inset-0 bg-white dark:bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 transition-opacity duration-500">
+  <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 transition-opacity duration-500">
     <div class="relative w-24 h-24">
       <!-- Outer circle -->
       <div class="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
@@ -245,7 +231,7 @@
        </div>
     </section>
      <!-- About Section -->
-    <section id="about" class="bg-white dark:bg-gray-800 section-padding">
+    <section id="about" class="bg-gray-800 section-padding">
       <div class="container mx-auto px-4">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold mb-2">About Me</h2>
@@ -256,23 +242,23 @@
         <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
           <div class="w-full lg:w-1/3 flex justify-center">
             <div class="relative">
-              <img src="img/picture.jpeg" alt="Houssem Eddine Bouagal" class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-lg shadow-xl border-4 border-blue-100 dark:border-gray-600">
-              <div class="absolute -inset-4 border-2 border-blue-300 dark:border-gray-500 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+              <img src="img/picture.jpeg" alt="Houssem Eddine Bouagal" class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-lg shadow-xl border-4 border-gray-600">
+              <div class="absolute -inset-4 border-2 border-gray-500 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
             </div>
           </div>
           
           <div class="w-full lg:w-2/3">
             <h3 class="text-2xl md:text-3xl font-semibold mb-4">Software Engineer | AI Model Developer | Data Scientist</h3>
-            <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+            <p class="text-gray-300 mb-6 leading-relaxed">
               Specialized in creating dynamic, responsive web and mobile applications with a strong focus on user experience and performance. 
               Experienced in developing AI models and data analysis solutions to solve complex problems. Passionate about leveraging technology 
               to create innovative solutions that make a real impact.
             </p>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-600 dark:text-gray-300">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-300">
               <div class="flex items-start">
                 <i class="bi bi-facebook text-blue-500 mr-2 mt-1"></i>
-                <a href="https://www.facebook.com/people/HoussemDev24/100042604513867/" target="_blank" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Facebook Page</a>
+                <a href="https://www.facebook.com/people/HoussemDev24/100042604513867/" target="_blank" class="hover:text-blue-400 transition-colors duration-200">Facebook Page</a>
               </div>
               <div class="flex items-start">
                 <i class="bi bi-telephone text-blue-500 mr-2 mt-1"></i>
@@ -288,7 +274,7 @@
               </div>
               <div class="flex items-start">
                 <i class="bi bi-envelope text-blue-500 mr-2 mt-1"></i>
-                <a href="mailto:mouhamedhoussem813@gmail.com" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">Email Me</a>
+                <a href="mailto:mouhamedhoussem813@gmail.com" class="hover:text-blue-400 transition-colors duration-200">Email Me</a>
               </div>
               <div class="flex items-start">
                 <i class="bi bi-rocket text-blue-500 mr-2 mt-1"></i>
@@ -300,40 +286,40 @@
 
         <!-- Stats Section -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-16">
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center border border-gray-200 dark:border-gray-600">
-            <div class="w-16 h-16 bg-blue-100 dark:bg-gray-600 rounded-full flex items-center justify-center mb-4">
-              <i class="bi bi-emoji-smile text-blue-500 dark:text-blue-400 text-2xl"></i>
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center border border-gray-600">
+            <div class="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center mb-4">
+              <i class="bi bi-emoji-smile text-blue-400 text-2xl"></i>
             </div>
-            <h2 class="counter text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2" data-target="15">0</h2>
-            <p class="text-gray-600 dark:text-gray-300">Happy Clients</p>
+            <h2 class="counter text-4xl font-bold text-blue-400 mb-2" data-target="15">0</h2>
+            <p class="text-gray-300">Happy Clients</p>
           </div>
 
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center border border-gray-200 dark:border-gray-600">
-            <div class="w-16 h-16 bg-blue-100 dark:bg-gray-600 rounded-full flex items-center justify-center mb-4">
-              <i class="bi bi-folder text-blue-500 dark:text-blue-400 text-2xl"></i>
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center border border-gray-600">
+            <div class="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center mb-4">
+              <i class="bi bi-folder text-blue-400 text-2xl"></i>
             </div>
-            <h2 class="counter text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2" data-target="18">0</h2>
-            <p class="text-gray-600 dark:text-gray-300">Projects</p>
+            <h2 class="counter text-4xl font-bold text-blue-400 mb-2" data-target="18">0</h2>
+            <p class="text-gray-300">Projects</p>
           </div>
 
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center border border-gray-200 dark:border-gray-600">
-            <div class="w-16 h-16 bg-blue-100 dark:bg-gray-600 rounded-full flex items-center justify-center mb-4">
-              <i class="bi bi-trophy text-blue-500 dark:text-blue-400 text-2xl"></i>
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center border border-gray-600">
+            <div class="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center mb-4">
+              <i class="bi bi-trophy text-blue-400 text-2xl"></i>
             </div>
-            <h2 class="counter text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2" data-target="3">0</h2>
-            <p class="text-gray-600 dark:text-gray-300">Awards</p>
+            <h2 class="counter text-4xl font-bold text-blue-400 mb-2" data-target="3">0</h2>
+            <p class="text-gray-300">Awards</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Resume Section -->
-    <section id="resume" class="bg-gray-50 dark:bg-gray-800 section-padding">
+    <section id="resume" class="bg-gray-800 section-padding">
       <div class="container mx-auto px-4 max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold mb-2">Resume</h2>
           <div class="w-20 h-1 bg-blue-600 mx-auto mb-4"></div>
-          <p class="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+          <p class="text-gray-300 mb-8 leading-relaxed">
             Dedicated to achieving outstanding results while constantly refining my skills. Skilled in overcoming complex challenges and developing creative solutions. 
             Motivated by a deep passion for technology and a commitment to excellence.
           </p>
@@ -345,7 +331,7 @@
     </section>
 
     <!-- Education Section -->
-    <section id="education" class="bg-white dark:bg-gray-800 section-padding">
+    <section id="education" class="bg-gray-800 section-padding">
       <div class="container mx-auto px-4 max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold mb-2">Education</h2>
@@ -353,28 +339,28 @@
         </div>
         
         <div class="space-y-8">
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-start border border-gray-200 dark:border-gray-600">
-            <div class="bg-blue-100 dark:bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
-              <i class="bi bi-mortarboard text-blue-500 dark:text-blue-400 text-xl"></i>
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-start border border-gray-600">
+            <div class="bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
+              <i class="bi bi-mortarboard text-blue-400 text-xl"></i>
             </div>
             <div>
               <h3 class="text-xl md:text-2xl font-semibold mb-1">Master of Computer Science (Information Systems)</h3>
-              <p class="text-gray-500 dark:text-gray-400 mb-2"><strong>2021 - 2023</strong> | University 8 MAI 1945, Guelma, Algeria</p>
-              <p class="text-gray-600 dark:text-gray-300">
+              <p class="text-gray-400 mb-2"><strong>2021 - 2023</strong> | University 8 MAI 1945, Guelma, Algeria</p>
+              <p class="text-gray-300">
                 This advanced program provided me with comprehensive knowledge and hands-on experience in various aspects of IT, including system architecture, 
                 deep learning, machine learning, and software development. Focused on both theoretical foundations and practical applications.
               </p>
             </div>
           </div>
           
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-start border border-gray-200 dark:border-gray-600">
-            <div class="bg-blue-100 dark:bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
-              <i class="bi bi-mortarboard text-blue-500 dark:text-blue-400 text-xl"></i>
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-start border border-gray-600">
+            <div class="bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
+              <i class="bi bi-mortarboard text-blue-400 text-xl"></i>
             </div>
             <div>
               <h3 class="text-xl md:text-2xl font-semibold mb-1">Bachelor's of Computer Science (Information Systems and Software Engineering)</h3>
-              <p class="text-gray-500 dark:text-gray-400 mb-2"><strong>2018 - 2021</strong> | University 8 MAI 1945, Guelma, Algeria</p>
-              <p class="text-gray-600 dark:text-gray-300">
+              <p class="text-gray-400 mb-2"><strong>2018 - 2021</strong> | University 8 MAI 1945, Guelma, Algeria</p>
+              <p class="text-gray-300">
                 This comprehensive program provided me with a solid foundation in both theoretical and practical aspects of computer science, 
                 with an emphasis on network infrastructure and web technologies. Developed strong problem-solving skills and technical expertise.
               </p>
@@ -385,7 +371,7 @@
     </section>
     
     <!-- Certificates Section -->
-    <section id="certificates" class="bg-gray-50 dark:bg-gray-800 section-padding">
+    <section id="certificates" class="bg-gray-800 section-padding">
       <div class="container mx-auto px-4 max-w-6xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold mb-2">Certificates</h2>
@@ -394,75 +380,75 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <!-- Certificate 1 -->
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-600">
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
             <div class="flex items-center mb-4">
-              <div class="bg-blue-100 dark:bg-gray-600 p-2 rounded-full mr-3">
-                <i class="bi bi-award-fill text-blue-500 dark:text-blue-400"></i>
+              <div class="bg-gray-600 p-2 rounded-full mr-3">
+                <i class="bi bi-award-fill text-blue-400"></i>
               </div>
               <h3 class="text-xl font-bold">AI Basics: Overview of AI</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 mb-4">Huawei ICT</p>
-            <a href="certificates/AI Basic.png" target="_blank" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
+            <p class="text-gray-400 mb-4">Huawei ICT</p>
+            <a href="certificates/AI Basic.png" target="_blank" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
               <span>View Certificate</span>
               <i class="bi bi-box-arrow-up-right"></i>
             </a>
           </div>
 
           <!-- Certificate 2 -->
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-600">
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
             <div class="flex items-center mb-4">
-              <div class="bg-blue-100 dark:bg-gray-600 p-2 rounded-full mr-3">
-                <i class="bi bi-award-fill text-blue-500 dark:text-blue-400"></i>
+              <div class="bg-gray-600 p-2 rounded-full mr-3">
+                <i class="bi bi-award-fill text-blue-400"></i>
               </div>
               <h3 class="text-xl font-bold">Huawei Certified ICT Associate - AI</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 mb-4">Huawei ICT</p>
-            <a href="certificates/hcia_ai.jpg" target="_blank" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
+            <p class="text-gray-400 mb-4">Huawei ICT</p>
+            <a href="certificates/hcia_ai.jpg" target="_blank" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
               <span>View Certificate</span>
               <i class="bi bi-box-arrow-up-right"></i>
             </a>
           </div>
 
           <!-- Certificate 3 -->
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-600">
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
             <div class="flex items-center mb-4">
-              <div class="bg-blue-100 dark:bg-gray-600 p-2 rounded-full mr-3">
-                <i class="bi bi-award-fill text-blue-500 dark:text-blue-400"></i>
+              <div class="bg-gray-600 p-2 rounded-full mr-3">
+                <i class="bi bi-award-fill text-blue-400"></i>
               </div>
               <h3 class="text-xl font-bold">AI Technology and Applications</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 mb-4">Huawei ICT</p>
-            <a href="certificates/photo.png" target="_blank" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
+            <p class="text-gray-400 mb-4">Huawei ICT</p>
+            <a href="certificates/photo.png" target="_blank" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
               <span>View Certificate</span>
               <i class="bi bi-box-arrow-up-right"></i>
             </a>
           </div>
 
           <!-- Certificate 4 -->
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-600">
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
             <div class="flex items-center mb-4">
-              <div class="bg-blue-100 dark:bg-gray-600 p-2 rounded-full mr-3">
-                <i class="bi bi-award-fill text-blue-500 dark:text-blue-400"></i>
+              <div class="bg-gray-600 p-2 rounded-full mr-3">
+                <i class="bi bi-award-fill text-blue-400"></i>
               </div>
               <h3 class="text-xl font-bold">Algorithm and Program Design</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 mb-4">Huawei ICT</p>
-            <a href="certificates/algo.png" target="_blank" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
+            <p class="text-gray-400 mb-4">Huawei ICT</p>
+            <a href="certificates/algo.png" target="_blank" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
               <span>View Certificate</span>
               <i class="bi bi-box-arrow-up-right"></i>
             </a>
           </div>
 
           <!-- Certificate 5 -->
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-600">
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
             <div class="flex items-center mb-4">
-              <div class="bg-blue-100 dark:bg-gray-600 p-2 rounded-full mr-3">
-                <i class="bi bi-award-fill text-blue-500 dark:text-blue-400"></i>
+              <div class="bg-gray-600 p-2 rounded-full mr-3">
+                <i class="bi bi-award-fill text-blue-400"></i>
               </div>
               <h3 class="text-xl font-bold">Internet of Things Technology and Applications</h3>
             </div>
-            <p class="text-gray-500 dark:text-gray-400 mb-4">Huawei ICT</p>
-            <a href="certificates/IoT.png" target="_blank" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
+            <p class="text-gray-400 mb-4">Huawei ICT</p>
+            <a href="certificates/IoT.png" target="_blank" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
               <span>View Certificate</span>
               <i class="bi bi-box-arrow-up-right"></i>
             </a>
@@ -472,7 +458,7 @@
     </section>
 
     <!-- Experience Section -->
-    <section id="experience" class="bg-white dark:bg-gray-800 section-padding">
+    <section id="experience" class="bg-gray-800 section-padding">
       <div class="container mx-auto px-4 max-w-4xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold mb-2">Experience</h2>
@@ -481,15 +467,15 @@
 
         <div class="space-y-8">
           <!-- Experience 1 -->
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-600">
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
             <div class="flex items-start">
-              <div class="bg-blue-100 dark:bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
-                <i class="bi bi-laptop text-blue-500 dark:text-blue-400 text-xl"></i>
+              <div class="bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
+                <i class="bi bi-laptop text-blue-400 text-xl"></i>
               </div>
               <div>
                 <h3 class="text-xl md:text-2xl font-semibold mb-1">Freelance & AI Developer</h3>
-                <p class="text-gray-500 dark:text-gray-400 mb-2"><strong>2023 – Present</strong></p>
-                <p class="text-gray-600 dark:text-gray-300">
+                <p class="text-gray-400 mb-2"><strong>2023 – Present</strong></p>
+                <p class="text-gray-300">
                   Designed and developed websites while implementing AI models such as predictive analytics and recommendation systems for various clients.
                   Specialized in responsive web application development and seamless integration of machine learning solutions. Worked with clients across
                   various industries to deliver customized technical solutions.
@@ -499,15 +485,15 @@
           </div>
 
           <!-- Experience 2 -->
-          <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-600">
+          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
             <div class="flex items-start">
-              <div class="bg-blue-100 dark:bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
-                <i class="bi bi-briefcase text-blue-500 dark:text-blue-400 text-xl"></i>
+              <div class="bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
+                <i class="bi bi-briefcase text-blue-400 text-xl"></i>
               </div>
               <div>
                 <h3 class="text-xl md:text-2xl font-semibold mb-1">Freelance – Software Engineer</h3>
-                <p class="text-gray-500 dark:text-gray-400 mb-2"><strong>2021 – Present</strong></p>
-                <p class="text-gray-600 dark:text-gray-300">
+                <p class="text-gray-400 mb-2"><strong>2021 – Present</strong></p>
+                <p class="text-gray-300">
                   Participated in full-stack web development projects using HTML, CSS, Tailwind CSS, Bootstrap, JavaScript, and React, with backend frameworks like Django and Laravel.
                   Acquired solid experience in agile development, team collaboration, and best practices in software engineering. Delivered high-quality code
                   with emphasis on performance, security, and maintainability.
@@ -520,7 +506,7 @@
     </section>
     
     <!-- Skills Section -->
-    <section id="skills" class="bg-gray-50 dark:bg-gray-800 section-padding">
+    <section id="skills" class="bg-gray-800 section-padding">
       <div class="container mx-auto px-4 max-w-7xl">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold mb-2">Skills</h2>
@@ -529,96 +515,95 @@
         
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
           <!-- Technical Skills -->
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/algorithm.png" alt="Algorithms" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">Algorithms</span>
           </div>
 
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/problem-solving.png" alt="Problem Solving" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">Problem Solving</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/html.png" alt="HTML" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">HTML</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/css.png" alt="CSS" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">CSS</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/bootstrap.png" alt="Bootstrap" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">Bootstrap</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/JS.png" alt="JavaScript" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">JavaScript</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/React.png" alt="React" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">React</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/PHP.png" alt="PHP" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">PHP</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/Laravel.png" alt="Laravel" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">Laravel</span>
           </div>
         
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/C.png" alt="C" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">C</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/Python.png" alt="Python" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">Python</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/java.png" alt="Java" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">Java</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/AI.png" alt="AI" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">AI</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/google-cloud.png" alt="Google Cloud" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">Google Cloud</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/AWS.png" alt="AWS" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">AWS</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/DevOps.png" alt="DevOps" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">DevOps</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/data-analyst.png" alt="Data Analysis" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">Data Analysis</span>
           </div>
           
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
+          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
             <img src="Skills/data-science.png" alt="Data Science" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">Data Science</span>
           </div>
-          
           <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
             <img src="Skills/database.png" alt="SQL" class="w-12 h-12 mb-2 skill-icon">
             <span class="text-center font-medium">SQL</span>
@@ -689,7 +674,6 @@
                 <a href="project3-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
                   View Details <i class="bi bi-arrow-right ml-1"></i>
                 </a>
-                <span class="text-sm bg-blue-100 dark:bg-gray-600 text-blue-800 dark:text-blue-400 px-2 py-1 rounded">AI</span>
               </div>
             </div>
           </div>
@@ -706,7 +690,6 @@
                 <a href="details/project4-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
                   View Details <i class="bi bi-arrow-right ml-1"></i>
                 </a>
-                <span class="text-sm bg-blue-100 dark:bg-gray-600 text-blue-800 dark:text-blue-400 px-2 py-1 rounded">Computer Vision</span>
               </div>
             </div>
           </div>
@@ -723,7 +706,6 @@
                 <a href="project5-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
                   View Details <i class="bi bi-arrow-right ml-1"></i>
                 </a>
-                <span class="text-sm bg-blue-100 dark:bg-gray-600 text-blue-800 dark:text-blue-400 px-2 py-1 rounded">Safety</span>
               </div>
             </div>
           </div>
@@ -740,7 +722,6 @@
                 <a href="details/project9-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
                   View Details <i class="bi bi-arrow-right ml-1"></i>
                 </a>
-                <span class="text-sm bg-blue-100 dark:bg-gray-600 text-blue-800 dark:text-blue-400 px-2 py-1 rounded">Healthcare</span>
               </div>
             </div>
           </div>
@@ -757,7 +738,6 @@
                 <a href="details/project5-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
                   View Details <i class="bi bi-arrow-right ml-1"></i>
                 </a>
-                <span class="text-sm bg-blue-100 dark:bg-gray-600 text-blue-800 dark:text-blue-400 px-2 py-1 rounded">Medical AI</span>
               </div>
             </div>
           </div>
@@ -774,7 +754,6 @@
                 <a href="details/project6-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
                   View Details <i class="bi bi-arrow-right ml-1"></i>
                 </a>
-                <span class="text-sm bg-blue-100 dark:bg-gray-600 text-blue-800 dark:text-blue-400 px-2 py-1 rounded">E-commerce</span>
               </div>
             </div>
           </div>
@@ -1015,33 +994,9 @@
           }
         });
       });
-
-      // Dark mode toggle
-      const darkModeToggle = document.getElementById('darkModeToggle');
-      const darkModeIcon = document.getElementById('darkModeIcon');
-      const html = document.documentElement;
-
-      // Check for saved user preference or use system preference
-      const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const savedMode = localStorage.getItem('darkMode');
-
-      if (savedMode === 'dark' || (!savedMode && userPrefersDark)) {
-        html.classList.add('dark');
-        darkModeIcon.classList.replace('bi-moon-fill', 'bi-sun-fill');
-      }
-
-      darkModeToggle.addEventListener('click', () => {
-        html.classList.toggle('dark');
-        
-        if (html.classList.contains('dark')) {
-          darkModeIcon.classList.replace('bi-moon-fill', 'bi-sun-fill');
-          localStorage.setItem('darkMode', 'dark');
-        } else {
-          darkModeIcon.classList.replace('bi-sun-fill', 'bi-moon-fill');
-          localStorage.setItem('darkMode', 'light');
-        }
+      
       });
-    });
+    
   </script>
 </body>
 </html>
