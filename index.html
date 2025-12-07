@@ -1,504 +1,727 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Professional portfolio of Houssem Eddine Bouagal - Software Engineer & AI Developer">
-  <meta name="keywords" content="portfolio, software engineer, AI developer, web developer, data scientist">
   <title>Houssem - Portfolio</title>
-  <link rel="icon" href="img/favicon.ico" type="image/x-icon">
-  
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-  
-  <!-- Tailwind CSS -->
+  <link rel="icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACgQAARYGKO1VnM0AAAAASUVORK5CYII=" type="image/x-icon">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#3B82F6',
-            secondary: '#8B5CF6',
-            dark: '#1F2937',
-            darker: '#111827',
-            light: '#F3F4F6',
-            lighter: '#F9FAFB'
-          },
-          animation: {
-            'spin-slow': 'spin 8s linear infinite',
-            'spin-medium': 'spin 5s linear infinite',
-            'spin-fast': 'spin 2s linear infinite',
-            'fade-in': 'fadeIn 1s ease-in-out',
-            'slide-up': 'slideUp 0.5s ease-out'
-          },
-          keyframes: {
-            fadeIn: {
-              '0%': { opacity: '0' },
-              '100%': { opacity: '1' }
-            },
-            slideUp: {
-              '0%': { transform: 'translateY(20px)', opacity: '0' },
-              '100%': { transform: 'translateY(0)', opacity: '1' }
-            }
-          }
-        }
-      }
-    }
-  </script>
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon">
   <style>
+    /* ==================== */
+    /* FIXES AND OVERRIDES */
+    /* ==================== */
     body {
-      font-family: 'Poppins', sans-serif;
-      scroll-behavior: smooth;
-    }
-    
-    .section-padding {
-      padding: 5rem 0;
-    }
-    
-    .skill-icon {
-      transition: transform 0.3s ease;
-    }
-    
-    .skill:hover .skill-icon {
-      transform: scale(1.1);
-    }
-    
-    .project-card {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    .project-card:hover {
-      transform: translateY(-5px);
-    }
-    
-    .nav-link {
-      position: relative;
-    }
-    
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: #3B82F6;
-      transition: width 0.3s ease;
-    }
-    
-    .nav-link:hover::after {
-      width: 100%;
-    }
-    
-    .active-nav::after {
-      width: 100%;
-    }
-    
-    @media (max-width: 768px) {
-      .section-padding {
-        padding: 3rem 0;
-      }
-    }
-
-    /* Dark mode specific styles */
-    .bg-gray-50 {
+      opacity: 1 !important;
+      visibility: visible !important;
       background-color: #111827 !important;
     }
 
+    main {
+      opacity: 1 !important;
+      display: block !important;
+    }
+
+    .section-animate {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    /* ==================== */
+    /* SCROLLBAR CUSTOMIZATION */
+    /* ==================== */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #111827;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #4b5563;
+      border-radius: 5px;
+      border: 2px solid #111827;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6b7280;
+    }
+
+    /* ==================== */
+    /* CORE STYLES */
+    /* ==================== */
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      background-color: #111827;
+      color: #e5e7eb;
+      min-height: 100vh;
+      line-height: 1.6;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* ==================== */
+    /* SECTION ANIMATIONS */
+    /* ==================== */
+    .section-animate {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: 
+        opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .section-show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==================== */
+    /* LOADER ANIMATIONS */
+    /* ==================== */
+    @keyframes spin-slow {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes spin-medium {
+      to { transform: rotate(-360deg); }
+    }
+
+    @keyframes spin-fast {
+      to { transform: rotate(360deg); }
+    }
+
+    .animate-spin-slow {
+      animation: spin-slow 3s linear infinite;
+    }
+
+    .animate-spin-medium {
+      animation: spin-medium 2s linear infinite;
+    }
+
+    .animate-spin-fast {
+      animation: spin-fast 1s linear infinite;
+    }
+
+    .animation-delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .animation-delay-400 {
+      animation-delay: 0.4s;
+    }
+
+    /* ==================== */
+    /* DARK THEME OVERRIDES */
+    /* ==================== */
     .bg-white {
-      background-color: #1F2937 !important;
+      background-color: #1f2937 !important;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
-    .text-gray-800 {
-      color: #F3F4F6 !important;
+    .bg-gray-100 {
+      background-color: #1f2937 !important;
     }
 
+    .text-gray-700, 
     .text-gray-600 {
-      color: #D1D5DB !important;
+      color: #d1d5db !important;
+    }
+
+    .bg-blue-100 {
+      background-color: #1e3a8a !important;
+    }
+
+    .text-blue-500 {
+      color: #93c5fd !important;
     }
 
     .border-gray-200 {
       border-color: #374151 !important;
     }
 
-    .bg-gray-100 {
-      background-color: #374151 !important;
+    a {
+      color: #93c5fd;
+      transition: color 0.2s ease;
     }
 
-    .text-gray-500 {
-      color: #9CA3AF !important;
+    a:hover {
+      color: #60a5fa;
+      text-decoration: none;
     }
 
-    .shadow-md {
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important;
+    /* ==================== */
+    /* FORM ELEMENTS */
+    /* ==================== */
+    input,
+    textarea,
+    select {
+      background-color: #1f2937;
+      border: 1px solid #374151;
+      color: #f3f4f6;
+      border-radius: 0.375rem;
+      padding: 0.5rem 1rem;
+      width: 100%;
+      transition: 
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
-    .shadow-lg {
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3) !important;
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #60a5fa;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* ==================== */
+    /* UTILITY ENHANCEMENTS */
+    /* ==================== */
+    .hover\:bg-blue-500:hover {
+      background-color: #3b82f6 !important;
+      transition: background-color 0.2s ease;
+    }
+
+    #scrollToTopBtn {
+      transition: 
+        opacity 0.3s ease,
+        visibility 0.3s ease;
+    }
+
+    #menu-toggle {
+      transition: transform 0.3s ease;
+    }
+
+    /* ==================== */
+    /* RESPONSIVE ADJUSTMENTS */
+    /* ==================== */
+    @media (max-width: 768px) {
+      main {
+        padding: 1rem;
+      }
+      
+      section {
+        padding: 3rem 1rem;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      h2 {
+        font-size: 2rem;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .animate-fadeIn {
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    /* Image fallbacks */
+    img {
+      background-color: #374151;
+    }
+
+    .skill img {
+      background: transparent;
+    }
+
+    /* ==================== */
+    /* ACCESSIBILITY ENHANCEMENTS */
+    /* ==================== */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      .section-animate {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    .focus-visible:focus {
+      outline: 2px solid #60a5fa;
+      outline-offset: 2px;
+    }
+
+    /* ==================== */
+    /* HIGH CONTRAST SUPPORT */
+    /* ==================== */
+    @media (prefers-contrast: high) {
+      .bg-white {
+        background-color: #000000 !important;
+        border: 1px solid #ffffff !important;
+      }
+      
+      .text-gray-300 {
+        color: #ffffff !important;
+      }
+    }
+
+    /* ==================== */
+    /* LOADING STATES */
+    /* ==================== */
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .btn-loading {
+      position: relative;
+      color: transparent !important;
+    }
+
+    .btn-loading::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 50%;
+      left: 50%;
+      margin-left: -8px;
+      margin-top: -8px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-right-color: transparent;
+      animation: spin-fast 0.75s linear infinite;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
   </style>
 </head>
-<body class="bg-gray-900 text-gray-200 font-sans antialiased relative">
-  <!-- Loading Spinner -->
-  <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 transition-opacity duration-500">
-    <div class="relative w-24 h-24">
-      <!-- Outer circle -->
-      <div class="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
-      <!-- Middle circle -->
-      <div class="absolute inset-3 border-4 border-purple-500 border-b-transparent rounded-full animate-spin-medium"></div>
-      <!-- Inner circle -->
-      <div class="absolute inset-6 border-4 border-pink-500 border-l-transparent rounded-full animate-spin-fast"></div>
-      <!-- Center dot -->
-      <div class="absolute inset-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full"></div>
-    </div>
-  </div>
+<body class="min-h-screen bg-gray-900 text-gray-100">
+  <!-- Skip to main content link for accessibility -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded-lg z-50">Skip to main content</a>
 
   <!-- Mobile Menu Button -->
-  <button id="menu-toggle" class="md:hidden fixed top-6 right-6 z-50 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-label="Toggle menu">
-    <i class="bi bi-list text-xl"></i>
+  <button 
+    id="menu-toggle" 
+    class="md:hidden fixed top-4 right-4 z-50 bg-blue-600 text-white p-3 rounded-lg shadow-md focus-visible"
+    aria-label="Toggle navigation menu"
+    aria-expanded="false"
+    aria-controls="sidebar"
+  >
+    ≡
   </button>
 
   <!-- Sidebar Navigation -->
-  <aside id="sidebar" class="bg-gray-800 text-white w-64 fixed top-0 left-0 h-screen shadow-xl transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto z-40">
+  <aside 
+    id="sidebar" 
+    class="bg-[#335] text-white w-64 fixed top-0 left-0 h-screen shadow-xl transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out overflow-y-auto z-40"
+    aria-label="Main navigation"
+  >
     <div class="flex flex-col items-center py-8 px-4">
-      <img src="img/profil.jpg" alt="Houssem Eddine Bouagal Profile Photo" class="rounded-full w-32 h-32 object-cover mb-4 border-4 border-purple-500">
+      <img 
+        src="img/profil.jpg" 
+        alt="Photo de profil de Bouagal Houssem Eddine" 
+        class="rounded-full w-36 h-36 object-cover mb-4 border-4 border-purple-500"
+      >
       <h1 class="text-xl font-bold text-center">Bouagal Houssem Eddine</h1>
-          <div class="flex justify-center space-x-4 mt-4">
-        <a href="https://github.com/HoussemBouagal" target="_blank" class="hover:opacity-80 transition-opacity" aria-label="GitHub profile">
-          <i class="bi bi-github text-xl"></i>
+      <div class="flex justify-center space-x-4 mt-4" aria-label="Social media links">
+        <a 
+          href="https://github.com/HoussemBouagal" 
+          target="_blank" 
+          class="hover:opacity-80 transition-opacity focus-visible p-1 rounded"
+          aria-label="GitHub profile"
+        >
+          <img src="img/Github.png" alt="GitHub" class="w-6 h-6">
         </a>
-        <a href="https://www.linkedin.com/in/houssem-eddine-bouagal-98025a297" target="_blank" class="hover:opacity-80 transition-opacity" aria-label="LinkedIn profile">
-          <i class="bi bi-linkedin text-xl"></i>
+        <a 
+          href="https://www.linkedin.com/in/houssem-eddine-bouagal-98025a297" 
+          target="_blank" 
+          class="hover:opacity-80 transition-opacity focus-visible p-1 rounded"
+          aria-label="LinkedIn profile"
+        >
+          <img src="img/linkedin.png" alt="LinkedIn" class="w-6 h-6">
         </a>
-        <a href="https://www.facebook.com/houssem.algrie" target="_blank" class="hover:opacity-80 transition-opacity" aria-label="Facebook profile">
-          <i class="bi bi-facebook text-xl"></i>
+        <a 
+          href="https://www.facebook.com/houssem.algrie" 
+          target="_blank" 
+          class="hover:opacity-80 transition-opacity focus-visible p-1 rounded"
+          aria-label="Facebook profile"
+        >
+          <img src="img/facebook.png" alt="Facebook" class="w-6 h-6">
         </a>
-        <a href="https://www.instagram.com/houssambouagal/" target="_blank" class="hover:opacity-80 transition-opacity" aria-label="Instagram profile">
-          <i class="bi bi-instagram text-xl"></i>
+        <a 
+          href="https://www.instagram.com/houssambouagal/" 
+          target="_blank" 
+          class="hover:opacity-80 transition-opacity focus-visible p-1 rounded"
+          aria-label="Instagram profile"
+        >
+          <img src="img/instagram.png" alt="Instagram" class="w-6 h-6">
         </a>
       </div>
-      
-      <nav class="flex flex-col mt-8 space-y-2 w-full px-4">
-        <a href="#home" class="nav-link flex items-center py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-          <i class="bi bi-house-door mr-3"></i> Home
+      <nav class="flex flex-col mt-8 space-y-3 w-full px-4" aria-label="Main menu">
+        <a 
+          href="#Home" 
+          class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 focus-visible"
+        >
+          <i class="bi bi-house-door mr-3" aria-hidden="true"></i> Home
         </a>
-        <a href="#about" class="nav-link flex items-center py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-          <i class="bi bi-person mr-3"></i> About
+        <a 
+          href="#About" 
+          class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 focus-visible"
+        >
+          <i class="bi bi-person mr-3" aria-hidden="true"></i> About
         </a>
-        <a href="#resume" class="nav-link flex items-center py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-          <i class="bi bi-file-earmark-text mr-3"></i> Resume
+        <a 
+          href="#Resume" 
+          class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 focus-visible"
+        >
+          <i class="bi bi-file-earmark-text mr-3" aria-hidden="true"></i> Resume
         </a>
-        <a href="#education" class="nav-link flex items-center py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-          <i class="bi bi-mortarboard mr-3"></i> Education
+        <a 
+          href="#education" 
+          class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 focus-visible"
+        >
+          <i class="bi bi-mortarboard mr-3" aria-hidden="true"></i> Education
         </a>
-        <a href="#certificates" class="nav-link flex items-center py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-          <i class="bi bi-award mr-3"></i> Certificates
+        <a 
+          href="#Certificate" 
+          class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 focus-visible"
+        >
+          <i class="bi bi-award mr-3" aria-hidden="true"></i> Certificate
         </a>
-        <a href="#experience" class="nav-link flex items-center py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-          <i class="bi bi-briefcase mr-3"></i> Experience
+        <a 
+          href="#experience" 
+          class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 focus-visible"
+        >
+          <i class="bi bi-briefcase mr-3" aria-hidden="true"></i> Experience
         </a>
-        <a href="#skills" class="nav-link flex items-center py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-          <i class="bi bi-tools mr-3"></i> Skills
+        <a 
+          href="#skills" 
+          class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 focus-visible"
+        >
+          <i class="bi bi-tools mr-3" aria-hidden="true"></i> Skills
         </a>
-        <a href="#projects" class="nav-link flex items-center py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-          <i class="bi bi-folder mr-3"></i> Projects
+        <a 
+          href="#projects" 
+          class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 focus-visible"
+        >
+          <i class="bi bi-folder mr-3" aria-hidden="true"></i> Projects
         </a>
-        <a href="#contact" class="nav-link flex items-center py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-200">
-          <i class="bi bi-envelope mr-3"></i> Contact
+        <a 
+          href="#contact" 
+          class="flex items-center py-2 px-4 rounded-lg hover:bg-blue-500 hover:text-white transition-colors duration-200 focus-visible"
+        >
+          <i class="bi bi-envelope mr-3" aria-hidden="true"></i> Contact
         </a>
       </nav>
     </div>
   </aside>
   
   <!-- Main Content -->
-  <main class="md:ml-64 transition-all duration-300">
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center bg-gradient-to-r from-gray-800 to-gray-900 text-white px-4 py-20 section-padding">
-      <div class="max-w-4xl mx-auto animate-fadeIn">
-        <h1 class="text-4xl md:text-6xl font-bold mb-6">Bouagal Houssem Eddine</h1>
-        <p class="text-xl md:text-2xl mb-8">
-          <span class="font-bold text-blue-300">I'm</span> 
-          <span id="typed-text" class="font-bold text-blue-300"></span>
-        </p>
-       </div>
+  <main id="main-content" class="md:ml-64 p-4 md:p-8 transition-all duration-300" role="main">
+    <!-- Home Section -->
+    <section 
+      id="Home" 
+      class="min-h-screen flex flex-col items-center justify-center text-center bg-gradient-to-r from-gray-800 to-gray-900 text-white px-4 section-animate"
+      aria-labelledby="home-heading"
+    >
+      <h1 id="home-heading" class="text-4xl md:text-6xl font-bold mb-6 animate-fadeIn">Bouagal Houssem Eddine</h1>
+      <p class="text-xl md:text-2xl mb-8">
+        <span class="font-bold text-blue-200">I'm</span> 
+        <span id="typed2" class="font-bold text-blue-200" aria-live="polite"></span>
+      </p>
     </section>
-     <!-- About Section -->
-    <section id="about" class="bg-gray-800 section-padding">
-      <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-2">About Me</h2>
-          <div class="w-20 h-1 bg-blue-600 mx-auto mb-4"></div>
-          <p class="text-blue-500 text-lg md:text-xl">Software Engineer | AI Developer | Crafting Intelligent Solutions</p>
+    
+    <!-- About Section -->
+    <section 
+      id="About" 
+      class="py-20 px-4 max-w-7xl mx-auto section-animate"
+      aria-labelledby="about-heading"
+    >
+      <div class="text-center mb-12">
+        <h2 id="about-heading" class="text-3xl md:text-4xl font-bold mb-2">About Me</h2>
+        <p class="text-blue-500 text-lg md:text-xl">Software Engineer | AI Developer | Crafting Intelligent Solutions</p>
+      </div>
+      
+      <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
+        <div class="w-full lg:w-1/3 flex justify-center">
+          <img 
+            src="img/picture.jpeg" 
+            alt="Portrait de Bouagal Houssem Eddine" 
+            class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-lg shadow-xl border-4 border-blue-100"
+          >
         </div>
         
-        <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-          <div class="w-full lg:w-1/3 flex justify-center">
-            <div class="relative">
-              <img src="img/picture.jpeg" alt="Houssem Eddine Bouagal" class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-lg shadow-xl border-4 border-gray-600">
-              <div class="absolute -inset-4 border-2 border-gray-500 rounded-lg opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-            </div>
-          </div>
+        <div class="w-full lg:w-2/3">
+          <h3 class="text-2xl md:text-3xl font-semibold mb-4">Software Engineer | AI Model Developer | Data Scientist</h3>
+          <p class="text-gray-300 mb-6 leading-relaxed">
+            Specialized in creating dynamic, responsive web and mobile applications with a strong focus on user experience and performance. 
+            Experienced in developing AI models and data analysis solutions to solve complex problems.
+          </p>
           
-          <div class="w-full lg:w-2/3">
-            <h3 class="text-2xl md:text-3xl font-semibold mb-4">Software Engineer | AI Model Developer | Data Scientist</h3>
-            <p class="text-gray-300 mb-6 leading-relaxed">
-              Specialized in creating dynamic, responsive web and mobile applications with a strong focus on user experience and performance. 
-              Experienced in developing AI models and data analysis solutions to solve complex problems. Passionate about leveraging technology 
-              to create innovative solutions that make a real impact.
-            </p>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-300">
-              <div class="flex items-start">
-                <i class="bi bi-facebook text-blue-500 mr-2 mt-1"></i>
-                <a href="https://www.facebook.com/people/HoussemDev24/100042604513867/" target="_blank" class="hover:text-blue-400 transition-colors duration-200">Facebook Page</a>
-              </div>
-              <div class="flex items-start">
-                <i class="bi bi-telephone text-blue-500 mr-2 mt-1"></i>
-                <span>+213 660 87 69 91</span>
-              </div>
-              <div class="flex items-start">
-                <i class="bi bi-geo-alt text-blue-500 mr-2 mt-1"></i>
-                <span>Guelma, Algeria</span>
-              </div>
-              <div class="flex items-start">
-                <i class="bi bi-mortarboard text-blue-500 mr-2 mt-1"></i>
-                <span>Software Engineer</span>
-              </div>
-              <div class="flex items-start">
-                <i class="bi bi-envelope text-blue-500 mr-2 mt-1"></i>
-                <a href="mailto:mouhamedhoussem813@gmail.com" class="hover:text-blue-400 transition-colors duration-200">Email Me</a>
-              </div>
-              <div class="flex items-start">
-                <i class="bi bi-rocket text-blue-500 mr-2 mt-1"></i>
-                <span>Freelance: Available</span>
-              </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-300" role="list" aria-label="Personal information">
+            <div class="flex items-start" role="listitem">
+              <i class="bi bi-facebook text-blue-500 mr-2 mt-1" aria-hidden="true"></i>
+              <a href="https://www.facebook.com/people/HoussemDev24/100042604513867/" target="_blank" class="text-blue-500 hover:underline focus-visible rounded">Facebook Page</a>
+            </div>
+            <div class="flex items-start" role="listitem">
+              <i class="bi bi-telephone text-blue-500 mr-2 mt-1" aria-hidden="true"></i>
+              <span>+213 660 87 69 91</span>
+            </div>
+            <div class="flex items-start" role="listitem">
+              <i class="bi bi-geo-alt text-blue-500 mr-2 mt-1" aria-hidden="true"></i>
+              <span>Guelma, Algeria</span>
+            </div>
+            <div class="flex items-start" role="listitem">
+              <i class="bi bi-mortarboard text-blue-500 mr-2 mt-1" aria-hidden="true"></i>
+              <span>Software Engineer</span>
+            </div>
+            <div class="flex items-start" role="listitem">
+              <i class="bi bi-envelope text-blue-500 mr-2 mt-1" aria-hidden="true"></i>
+              <a href="mailto:mouhamedhoussem813@gmail.com" class="text-blue-500 hover:underline focus-visible rounded">Email Me</a>
+            </div>
+            <div class="flex items-start" role="listitem">
+              <i class="bi bi-rocket text-blue-500 mr-2 mt-1" aria-hidden="true"></i>
+              <span>Freelance: Available</span>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Stats Section -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-16">
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center border border-gray-600">
-            <div class="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center mb-4">
-              <i class="bi bi-emoji-smile text-blue-400 text-2xl"></i>
-            </div>
-            <h2 class="counter text-4xl font-bold text-blue-400 mb-2" data-target="15">0</h2>
-            <p class="text-gray-300">Happy Clients</p>
+      <!-- Stats Section -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-16" role="list" aria-label="Achievement statistics">
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center" role="listitem">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4" aria-hidden="true">
+            <i class="bi bi-emoji-smile text-blue-500 text-2xl"></i>
           </div>
+          <h2 class="counter text-4xl font-bold text-blue-600 mb-2" data-target="15" aria-live="polite">0</h2>
+          <p class="text-gray-300">Happy Clients</p>
+        </div>
 
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center border border-gray-600">
-            <div class="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center mb-4">
-              <i class="bi bi-folder text-blue-400 text-2xl"></i>
-            </div>
-            <h2 class="counter text-4xl font-bold text-blue-400 mb-2" data-target="18">0</h2>
-            <p class="text-gray-300">Projects</p>
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center" role="listitem">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4" aria-hidden="true">
+            <i class="bi bi-folder text-blue-500 text-2xl"></i>
           </div>
+          <h2 class="counter text-4xl font-bold text-blue-600 mb-2" data-target="18" aria-live="polite">0</h2>
+          <p class="text-gray-300">Projects</p>
+        </div>
 
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center border border-gray-600">
-            <div class="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center mb-4">
-              <i class="bi bi-trophy text-blue-400 text-2xl"></i>
-            </div>
-            <h2 class="counter text-4xl font-bold text-blue-400 mb-2" data-target="3">0</h2>
-            <p class="text-gray-300">Awards</p>
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center" role="listitem">
+          <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4" aria-hidden="true">
+            <i class="bi bi-trophy text-blue-500 text-2xl"></i>
           </div>
+          <h2 class="counter text-4xl font-bold text-blue-600 mb-2" data-target="3" aria-live="polite">0</h2>
+          <p class="text-gray-300">Awards</p>
         </div>
       </div>
     </section>
 
     <!-- Resume Section -->
-    <section id="resume" class="bg-gray-800 section-padding">
-      <div class="container mx-auto px-4 max-w-4xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-2">Resume</h2>
-          <div class="w-20 h-1 bg-blue-600 mx-auto mb-4"></div>
-          <p class="text-gray-300 mb-8 leading-relaxed">
-            Dedicated to achieving outstanding results while constantly refining my skills. Skilled in overcoming complex challenges and developing creative solutions. 
-            Motivated by a deep passion for technology and a commitment to excellence.
-          </p>
-          <a href="files/Houssem_Eddine_Bouagal_CV.pdf" download class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-300 shadow-md hover:shadow-lg inline-flex items-center">
-            <i class="bi bi-download mr-2"></i>Download my CV
-          </a>
-        </div>
-      </div>
+    <section 
+      id="Resume" 
+      class="py-20 px-4 max-w-4xl mx-auto text-center section-animate"
+      aria-labelledby="resume-heading"
+    >
+      <h2 id="resume-heading" class="text-3xl md:text-4xl font-bold mb-4">Resume</h2>
+      <p class="text-gray-300 mb-8 leading-relaxed">
+        Dedicated to achieving outstanding results while constantly refining my skills. Skilled in overcoming complex challenges and developing creative solutions. 
+        Motivated by a deep passion for technology and a commitment to excellence.
+      </p>
+      <a 
+        href="files/Houssem_Eddine_Bouagal_CV.pdf" 
+        download 
+        class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 shadow-md focus-visible"
+      >
+        <i class="bi bi-download mr-2" aria-hidden="true"></i>Download my CV
+      </a>
     </section>
 
     <!-- Education Section -->
-    <section id="education" class="bg-gray-800 section-padding">
-      <div class="container mx-auto px-4 max-w-4xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-2">Education</h2>
-          <div class="w-20 h-1 bg-blue-600 mx-auto mb-4"></div>
+    <section 
+      id="education" 
+      class="py-20 px-4 max-w-4xl mx-auto section-animate"
+      aria-labelledby="education-heading"
+    >
+      <h2 id="education-heading" class="text-3xl md:text-4xl font-bold mb-12 text-center">Education</h2>
+      
+      <div class="space-y-8" role="list" aria-label="Education history">
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex items-start" role="listitem">
+          <div class="bg-blue-100 p-3 rounded-full mr-4" aria-hidden="true">
+            <i class="bi bi-mortarboard text-blue-500 text-xl"></i>
+          </div>
+          <div>
+            <h3 class="text-xl md:text-2xl font-semibold mb-1">Master of Computer Science (Information Systems)</h3>
+            <p class="text-gray-400 mb-2"><strong>2021 - 2023</strong> | University 8 MAI 1945, Guelma, Algeria</p>
+            <p class="text-gray-300">
+              This advanced program provided me with comprehensive knowledge and hands-on experience in various aspects of IT, including system architecture, 
+              deep learning, machine learning, and software development.
+            </p>
+          </div>
         </div>
         
-        <div class="space-y-8">
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-start border border-gray-600">
-            <div class="bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
-              <i class="bi bi-mortarboard text-blue-400 text-xl"></i>
-            </div>
-            <div>
-              <h3 class="text-xl md:text-2xl font-semibold mb-1">Master of Computer Science (Information Systems)</h3>
-              <p class="text-gray-400 mb-2"><strong>2021 - 2023</strong> | University 8 MAI 1945, Guelma, Algeria</p>
-              <p class="text-gray-300">
-                This advanced program provided me with comprehensive knowledge and hands-on experience in various aspects of IT, including system architecture, 
-                deep learning, machine learning, and software development. Focused on both theoretical foundations and practical applications.
-              </p>
-            </div>
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex items-start" role="listitem">
+          <div class="bg-blue-100 p-3 rounded-full mr-4" aria-hidden="true">
+            <i class="bi bi-mortarboard text-blue-500 text-xl"></i>
           </div>
-          
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex items-start border border-gray-600">
-            <div class="bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
-              <i class="bi bi-mortarboard text-blue-400 text-xl"></i>
-            </div>
-            <div>
-              <h3 class="text-xl md:text-2xl font-semibold mb-1">Bachelor's of Computer Science (Information Systems and Software Engineering)</h3>
-              <p class="text-gray-400 mb-2"><strong>2018 - 2021</strong> | University 8 MAI 1945, Guelma, Algeria</p>
-              <p class="text-gray-300">
-                This comprehensive program provided me with a solid foundation in both theoretical and practical aspects of computer science, 
-                with an emphasis on network infrastructure and web technologies. Developed strong problem-solving skills and technical expertise.
-              </p>
-            </div>
+          <div>
+            <h3 class="text-xl md:text-2xl font-semibold mb-1">Bachelor's of Computer Science (Information Systems and Software Engineering)</h3>
+            <p class="text-gray-400 mb-2"><strong>2018 - 2021</strong> | University 8 MAI 1945, Guelma, Algeria</p>
+            <p class="text-gray-300">
+              This comprehensive program provided me with a solid foundation in both theoretical and practical aspects of computer science, 
+              with an emphasis on network infrastructure and web technologies.
+            </p>
           </div>
         </div>
       </div>
     </section>
     
     <!-- Certificates Section -->
-    <section id="certificates" class="bg-gray-800 section-padding">
-      <div class="container mx-auto px-4 max-w-6xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-2">Certificates</h2>
-          <div class="w-20 h-1 bg-blue-600 mx-auto mb-4"></div>
+    <section 
+      id="Certificate" 
+      class="py-20 px-4 max-w-6xl mx-auto section-animate"
+      aria-labelledby="certificates-heading"
+    >
+      <h2 id="certificates-heading" class="text-3xl md:text-4xl font-bold mb-12 text-center">Certificates</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Certificates list">
+        
+        <!-- Certificate 1 -->
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300" role="listitem">
+          <h3 class="text-xl font-bold mb-2 text-gray-200">AI Basics: Overview of AI</h3>
+          <p class="text-gray-400 mb-4">Huawei ICT</p>
+          <a 
+            href="certificates/AI Basic.png" 
+            target="_blank" 
+            class="text-blue-400 hover:text-blue-600 font-medium inline-flex items-center space-x-1 focus-visible rounded"
+          >
+            <span>View Certificate</span>
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+          </a>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Certificate 1 -->
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
-            <div class="flex items-center mb-4">
-              <div class="bg-gray-600 p-2 rounded-full mr-3">
-                <i class="bi bi-award-fill text-blue-400"></i>
-              </div>
-              <h3 class="text-xl font-bold">AI Basics: Overview of AI</h3>
-            </div>
-            <p class="text-gray-400 mb-4">Huawei ICT</p>
-            <a href="certificates/AI Basic.png" target="_blank" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
-              <span>View Certificate</span>
-              <i class="bi bi-box-arrow-up-right"></i>
-            </a>
-          </div>
+        <!-- Certificate 2 -->
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300" role="listitem">
+          <h3 class="text-xl font-bold mb-2 text-gray-200">Huawei Certified ICT Associate - AI</h3>
+          <p class="text-gray-400 mb-4">Huawei ICT</p>
+          <a 
+            href="certificates/hcia_ai.jpg" 
+            target="_blank" 
+            class="text-blue-400 hover:text-blue-600 font-medium inline-flex items-center space-x-1 focus-visible rounded"
+          >
+            <span>View Certificate</span>
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+          </a>
+        </div>
 
-          <!-- Certificate 2 -->
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
-            <div class="flex items-center mb-4">
-              <div class="bg-gray-600 p-2 rounded-full mr-3">
-                <i class="bi bi-award-fill text-blue-400"></i>
-              </div>
-              <h3 class="text-xl font-bold">Huawei Certified ICT Associate - AI</h3>
-            </div>
-            <p class="text-gray-400 mb-4">Huawei ICT</p>
-            <a href="certificates/hcia_ai.jpg" target="_blank" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
-              <span>View Certificate</span>
-              <i class="bi bi-box-arrow-up-right"></i>
-            </a>
-          </div>
+        <!-- Certificate 3 -->
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300" role="listitem">
+          <h3 class="text-xl font-bold mb-2 text-gray-200">AI Technology and Applications</h3>
+          <p class="text-gray-400 mb-4">Huawei ICT</p>
+          <a 
+            href="certificates/photo.png" 
+            target="_blank" 
+            class="text-blue-400 hover:text-blue-600 font-medium inline-flex items-center space-x-1 focus-visible rounded"
+          >
+            <span>View Certificate</span>
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+          </a>
+        </div>
 
-          <!-- Certificate 3 -->
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
-            <div class="flex items-center mb-4">
-              <div class="bg-gray-600 p-2 rounded-full mr-3">
-                <i class="bi bi-award-fill text-blue-400"></i>
-              </div>
-              <h3 class="text-xl font-bold">AI Technology and Applications</h3>
-            </div>
-            <p class="text-gray-400 mb-4">Huawei ICT</p>
-            <a href="certificates/photo.png" target="_blank" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
-              <span>View Certificate</span>
-              <i class="bi bi-box-arrow-up-right"></i>
-            </a>
-          </div>
+        <!-- Certificate 4 -->
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300" role="listitem">
+          <h3 class="text-xl font-bold mb-2 text-gray-200">Algorithm and Program Design</h3>
+          <p class="text-gray-400 mb-4">Huawei ICT</p>
+          <a 
+            href="certificates/algo.png" 
+            target="_blank" 
+            class="text-blue-400 hover:text-blue-600 font-medium inline-flex items-center space-x-1 focus-visible rounded"
+          >
+            <span>View Certificate</span>
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+          </a>
+        </div>
 
-          <!-- Certificate 4 -->
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
-            <div class="flex items-center mb-4">
-              <div class="bg-gray-600 p-2 rounded-full mr-3">
-                <i class="bi bi-award-fill text-blue-400"></i>
-              </div>
-              <h3 class="text-xl font-bold">Algorithm and Program Design</h3>
-            </div>
-            <p class="text-gray-400 mb-4">Huawei ICT</p>
-            <a href="certificates/algo.png" target="_blank" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
-              <span>View Certificate</span>
-              <i class="bi bi-box-arrow-up-right"></i>
-            </a>
-          </div>
-
-          <!-- Certificate 5 -->
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
-            <div class="flex items-center mb-4">
-              <div class="bg-gray-600 p-2 rounded-full mr-3">
-                <i class="bi bi-award-fill text-blue-400"></i>
-              </div>
-              <h3 class="text-xl font-bold">Internet of Things Technology and Applications</h3>
-            </div>
-            <p class="text-gray-400 mb-4">Huawei ICT</p>
-            <a href="certificates/IoT.png" target="_blank" class="text-blue-400 hover:text-blue-300 font-medium inline-flex items-center space-x-1 transition-colors duration-200">
-              <span>View Certificate</span>
-              <i class="bi bi-box-arrow-up-right"></i>
-            </a>
-          </div>
+        <!-- Certificate 5 -->
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300" role="listitem">
+          <h3 class="text-xl font-bold mb-2 text-gray-200">Internet of Things Technology and Applications</h3>
+          <p class="text-gray-400 mb-4">Huawei ICT</p>
+          <a 
+            href="certificates/IoT.png" 
+            target="_blank" 
+            class="text-blue-400 hover:text-blue-600 font-medium inline-flex items-center space-x-1 focus-visible rounded"
+          >
+            <span>View Certificate</span>
+            <i class="bi bi-box-arrow-up-right" aria-hidden="true"></i>
+          </a>
         </div>
       </div>
     </section>
 
     <!-- Experience Section -->
-    <section id="experience" class="bg-gray-800 section-padding">
-      <div class="container mx-auto px-4 max-w-4xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-2">Experience</h2>
-          <div class="w-20 h-1 bg-blue-600 mx-auto mb-4"></div>
-        </div>
+    <section 
+      id="experience" 
+      class="py-20 px-4 max-w-4xl mx-auto section-animate"
+      aria-labelledby="experience-heading"
+    >
+      <h2 id="experience-heading" class="text-3xl md:text-4xl font-bold mb-12 text-center">Experience</h2>
 
-        <div class="space-y-8">
-          <!-- Experience 1 -->
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
-            <div class="flex items-start">
-              <div class="bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
-                <i class="bi bi-laptop text-blue-400 text-xl"></i>
-              </div>
-              <div>
-                <h3 class="text-xl md:text-2xl font-semibold mb-1">Freelance & AI Developer</h3>
-                <p class="text-gray-400 mb-2"><strong>2023 – Present</strong></p>
-                <p class="text-gray-300">
-                  Designed and developed websites while implementing AI models such as predictive analytics and recommendation systems for various clients.
-                  Specialized in responsive web application development and seamless integration of machine learning solutions. Worked with clients across
-                  various industries to deliver customized technical solutions.
-                </p>
-              </div>
+      <div class="space-y-8" role="list" aria-label="Work experience">
+        <!-- Experience 1 -->
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300" role="listitem">
+          <div class="flex items-start">
+            <div class="bg-blue-100 p-3 rounded-full mr-4" aria-hidden="true">
+              <i class="bi bi-laptop text-blue-500 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-xl md:text-2xl font-semibold mb-1 text-gray-200">Freelance & AI Developer</h3>
+              <p class="text-gray-400 mb-2"><strong>2023 – Present</strong></p>
+              <p class="text-gray-300">
+                Designed and developed websites while implementing AI models such as predictive analytics and recommendation systems for various clients.
+                Specialized in responsive web application development and seamless integration of machine learning solutions.
+              </p>
             </div>
           </div>
+        </div>
 
-          <!-- Experience 2 -->
-          <div class="bg-gray-700 p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-600">
-            <div class="flex items-start">
-              <div class="bg-gray-600 p-3 rounded-full mr-4 flex-shrink-0">
-                <i class="bi bi-briefcase text-blue-400 text-xl"></i>
-              </div>
-              <div>
-                <h3 class="text-xl md:text-2xl font-semibold mb-1">Freelance – Software Engineer</h3>
-                <p class="text-gray-400 mb-2"><strong>2021 – Present</strong></p>
-                <p class="text-gray-300">
-                  Participated in full-stack web development projects using HTML, CSS, Tailwind CSS, Bootstrap, JavaScript, and React, with backend frameworks like Django and Laravel.
-                  Acquired solid experience in agile development, team collaboration, and best practices in software engineering. Delivered high-quality code
-                  with emphasis on performance, security, and maintainability.
-                </p>
-              </div>
+        <!-- Experience 2 -->
+        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300" role="listitem">
+          <div class="flex items-start">
+            <div class="bg-blue-100 p-3 rounded-full mr-4" aria-hidden="true">
+              <i class="bi bi-briefcase text-blue-500 text-xl"></i>
+            </div>
+            <div>
+              <h3 class="text-xl md:text-2xl font-semibold mb-1 text-gray-200">Freelance – Software Engineer</h3>
+              <p class="text-gray-400 mb-2"><strong>2021 – Present</strong></p>
+              <p class="text-gray-300">
+                Participated in full-stack web development projects using HTML, CSS, Tailwind CSS, Bootstrap, JavaScript, and React, with backend frameworks like Django and Laravel.
+                Acquired solid experience in agile development, team collaboration, and best practices in software engineering.
+              </p>
             </div>
           </div>
         </div>
@@ -506,497 +729,717 @@
     </section>
     
     <!-- Skills Section -->
-    <section id="skills" class="bg-gray-800 section-padding">
-      <div class="container mx-auto px-4 max-w-7xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-2">Skills</h2>
-          <div class="w-20 h-1 bg-blue-600 mx-auto mb-4"></div>
+    <section 
+      id="skills" 
+      class="py-20 px-4 max-w-7xl mx-auto section-animate"
+      aria-labelledby="skills-heading"
+    >
+      <h2 id="skills-heading" class="text-3xl md:text-4xl font-bold mb-12 text-center">Skills</h2>
+      
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4" role="list" aria-label="Technical skills">
+        <!-- Technical Skills -->
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/algorithm.png" alt="Algorithms" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Algorithms</span>
+        </div>
+
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/problem-solving.png" alt="Problem Solving" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Problem Solving</span>
         </div>
         
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-          <!-- Technical Skills -->
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/algorithm.png" alt="Algorithms" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Algorithms</span>
-          </div>
-
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/problem-solving.png" alt="Problem Solving" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Problem Solving</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/html.png" alt="HTML" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">HTML</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/css.png" alt="CSS" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">CSS</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/bootstrap.png" alt="Bootstrap" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Bootstrap</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/JS.png" alt="JavaScript" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">JavaScript</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/React.png" alt="React" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">React</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/PHP.png" alt="PHP" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">PHP</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/Laravel.png" alt="Laravel" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Laravel</span>
-          </div>
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/html.png" alt="HTML" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">HTML</span>
+        </div>
         
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/C.png" alt="C" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">C</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/Python.png" alt="Python" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Python</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/java.png" alt="Java" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Java</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/AI.png" alt="AI" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">AI</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/google-cloud.png" alt="Google Cloud" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Google Cloud</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/AWS.png" alt="AWS" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">AWS</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/DevOps.png" alt="DevOps" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">DevOps</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/data-analyst.png" alt="Data Analysis" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Data Analysis</span>
-          </div>
-          
-          <div class="skill bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-600">
-            <img src="Skills/data-science.png" alt="Data Science" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Data Science</span>
-          </div>
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
-            <img src="Skills/database.png" alt="SQL" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">SQL</span>
-          </div>
-          
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
-            <img src="Skills/postgre.png" alt="PostgreSQL" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">PostgreSQL</span>
-          </div>
-          
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
-            <img src="Skills/oracle.png" alt="Oracle" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Oracle</span>
-          </div>
-          
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
-            <img src="Skills/Mongodb.png" alt="MongoDB" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">MongoDB</span>
-          </div>
-          
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
-            <img src="Skills/Git.png" alt="Git" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Git</span>
-          </div>
-          
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
-            <img src="Skills/Github.png" alt="GitHub" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">GitHub</span>
-          </div>
-          
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
-            <img src="Skills/iot.png" alt="IoT" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">IoT</span>
-          </div>
-          
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
-            <img src="Skills/api.png" alt="API" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">API</span>
-          </div>
-          
-          <div class="skill bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center border border-gray-200 dark:border-gray-600">
-            <img src="Skills/docker.png" alt="Docker" class="w-12 h-12 mb-2 skill-icon">
-            <span class="text-center font-medium">Docker</span>
-          </div>
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/css.png" alt="CSS" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">CSS</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/bootstrap.png" alt="Bootstrap" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Bootstrap</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/JS.png" alt="JavaScript" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">JavaScript</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/React.png" alt="React" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">React</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/PHP.png" alt="PHP" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">PHP</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/Laravel.png" alt="Laravel" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Laravel</span>
+        </div>
+      
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/C.png" alt="C Programming" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">C</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/Python.png" alt="Python" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Python</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/java.png" alt="Java" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Java</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/AI.png" alt="Artificial Intelligence" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">AI</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/google-cloud.png" alt="Google Cloud" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Google Cloud</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/AWS.png" alt="Amazon Web Services" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">AWS</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/DevOps.png" alt="DevOps" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">DevOps</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/data-analyst.png" alt="Data Analysis" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Data Analysis</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/data-science.png" alt="Data Science" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Data Science</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/database.png" alt="SQL" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">SQL</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/postgre.png" alt="PostgreSQL" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">PostgreSQL</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/oracle.png" alt="Oracle" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Oracle</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/Mongodb.png" alt="MongoDB" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">MongoDB</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/Git.png" alt="Git" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Git</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/Github.png" alt="GitHub" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">GitHub</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/iot.png" alt="Internet of Things" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">IoT</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/api.png" alt="API" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">API</span>
+        </div>
+        
+        <div class="skill bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center" role="listitem">
+          <img src="Skills/docker.png" alt="Docker" class="w-12 h-12 mb-2">
+          <span class="text-center font-medium text-gray-200">Docker</span>
         </div>
       </div>
     </section>
     
     <!-- Projects Section -->
-    <section id="projects" class="bg-white dark:bg-gray-800 section-padding">
-      <div class="container mx-auto px-4 max-w-7xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-2">My Projects</h2>
-          <div class="w-20 h-1 bg-blue-600 mx-auto mb-4"></div>
-          <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">A selection of my recent projects showcasing my skills in software development and AI solutions</p>
-        </div>
+    <section 
+      id="projects" 
+      class="py-20 px-4 bg-gray-800 section-animate"
+      aria-labelledby="projects-heading"
+    >
+      <div class="max-w-7xl mx-auto">
+        <h1 id="projects-heading" class="text-3xl md:text-4xl font-bold text-center mb-12">My Projects</h1>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" role="list" aria-label="Projects list">
+
           <!-- Project 1 -->
-          <div class="project-card bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl border border-gray-200 dark:border-gray-600">
-            <div class="h-48 bg-gray-100 dark:bg-gray-600 flex items-center justify-center p-4">
-              <img src="Projects/p1.png" alt="Facial Recognition System" class="max-h-full max-w-full object-contain">
-            </div>
+          <div class="relative group bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" role="listitem">
+            <img src="Projects/p1.png" alt="Facial Recognition System interface" class="w-full h-48 object-contain bg-white">
             <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">Facial Recognition System</h3>
-              <p class="text-gray-600 dark:text-gray-300 mb-4">AI-powered facial recognition for security applications.</p>
-              <div class="flex justify-between items-center">
-                <a href="project3-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
-                  View Details <i class="bi bi-arrow-right ml-1"></i>
-                </a>
-              </div>
+              <h3 class="text-xl font-semibold mb-2 text-white">Facial Recognition System</h3>
+              <p class="text-gray-300 mb-4">AI-powered facial recognition for security applications.</p>
+              <a href="project3-details.html" class="inline-flex items-center text-blue-400 hover:text-blue-600 focus-visible rounded">
+                See More <i class="bi bi-arrow-right ml-1" aria-hidden="true"></i>
+              </a>
             </div>
           </div>
 
           <!-- Project 2 -->
-          <div class="project-card bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl border border-gray-200 dark:border-gray-600">
-            <div class="h-48 bg-gray-100 dark:bg-gray-600 flex items-center justify-center p-4">
-              <img src="Projects/p2.png" alt="Object Detector" class="max-h-full max-w-full object-contain">
-            </div>
+          <div class="relative group bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" role="listitem">
+            <img src="Projects/p2.png" alt="Object Detector interface" class="w-full h-48 object-contain bg-white">
             <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">Object Detector</h3>
-              <p class="text-gray-600 dark:text-gray-300 mb-4">Real-time object detection using computer vision.</p>
-              <div class="flex justify-between items-center">
-                <a href="details/project4-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
-                  View Details <i class="bi bi-arrow-right ml-1"></i>
-                </a>
-              </div>
+              <h3 class="text-xl font-semibold mb-2 text-white">Object Detector</h3>
+              <p class="text-gray-300 mb-4">Real-time object detection using computer vision.</p>
+              <a href="details/project4-details.html" class="inline-flex items-center text-blue-400 hover:text-blue-600 focus-visible rounded">
+                See More <i class="bi bi-arrow-right ml-1" aria-hidden="true"></i>
+              </a>
             </div>
           </div>
 
           <!-- Project 3 -->
-          <div class="project-card bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl border border-gray-200 dark:border-gray-600">
-            <div class="h-48 bg-gray-100 dark:bg-gray-600 flex items-center justify-center p-4">
-              <img src="Projects/p3.png" alt="Fire Detection System" class="max-h-full max-w-full object-contain">
-            </div>
+          <div class="relative group bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" role="listitem">
+            <img src="Projects/p3.png" alt="Fire Detection System interface" class="w-full h-48 object-contain bg-white">
             <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">Fire Detection System</h3>
-              <p class="text-gray-600 dark:text-gray-300 mb-4">AI system for early fire detection in buildings.</p>
-              <div class="flex justify-between items-center">
-                <a href="project5-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
-                  View Details <i class="bi bi-arrow-right ml-1"></i>
-                </a>
-              </div>
+              <h3 class="text-xl font-semibold mb-2 text-white">Fire Detection System</h3>
+              <p class="text-gray-300 mb-4">AI system for early fire detection in buildings.</p>
+              <a href="project5-details.html" class="inline-flex items-center text-blue-400 hover:text-blue-600 focus-visible rounded">
+                See More <i class="bi bi-arrow-right ml-1" aria-hidden="true"></i>
+              </a>
             </div>
           </div>
 
           <!-- Project 4 -->
-          <div class="project-card bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl border border-gray-200 dark:border-gray-600">
-            <div class="h-48 bg-gray-100 dark:bg-gray-600 flex items-center justify-center p-4">
-              <img src="Projects/p4.png" alt="Brain Tumor Detection" class="max-h-full max-w-full object-contain">
-            </div>
+          <div class="relative group bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" role="listitem">
+            <img src="Projects/p4.png" alt="Brain Tumor Detection interface" class="w-full h-48 object-contain bg-white">
             <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">Brain Tumor Detection</h3>
-              <p class="text-gray-600 dark:text-gray-300 mb-4">Medical AI for detecting brain tumors in MRI scans.</p>
-              <div class="flex justify-between items-center">
-                <a href="details/project9-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
-                  View Details <i class="bi bi-arrow-right ml-1"></i>
-                </a>
-              </div>
+              <h3 class="text-xl font-semibold mb-2 text-white">Brain Tumor Detection</h3>
+              <p class="text-gray-300 mb-4">Medical AI for detecting brain tumors in MRI scans.</p>
+              <a href="details/project9-details.html" class="inline-flex items-center text-blue-400 hover:text-blue-600 focus-visible rounded">
+                See More <i class="bi bi-arrow-right ml-1" aria-hidden="true"></i>
+              </a>
             </div>
           </div>
 
           <!-- Project 5 -->
-          <div class="project-card bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl border border-gray-200 dark:border-gray-600">
-            <div class="h-48 bg-gray-100 dark:bg-gray-600 flex items-center justify-center p-4">
-              <img src="Projects/p5.png" alt="Skin Cancer Detection" class="max-h-full max-w-full object-contain">
-            </div>
+          <div class="relative group bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" role="listitem">
+            <img src="Projects/p5.png" alt="Skin Cancer Detection interface" class="w-full h-48 object-contain bg-white">
             <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">Skin Cancer Detection</h3>
-              <p class="text-gray-600 dark:text-gray-300 mb-4">AI model for early detection of skin cancer.</p>
-              <div class="flex justify-between items-center">
-                <a href="details/project5-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
-                  View Details <i class="bi bi-arrow-right ml-1"></i>
-                </a>
-              </div>
+              <h3 class="text-xl font-semibold mb-2 text-white">Skin Cancer Detection</h3>
+              <p class="text-gray-300 mb-4">AI model for early detection of skin cancer.</p>
+              <a href="details/project5-details.html" class="inline-flex items-center text-blue-400 hover:text-blue-600 focus-visible rounded">
+                See More <i class="bi bi-arrow-right ml-1" aria-hidden="true"></i>
+              </a>
             </div>
           </div>
 
           <!-- Project 6 -->
-          <div class="project-card bg-white dark:bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-xl border border-gray-200 dark:border-gray-600">
-            <div class="h-48 bg-gray-100 dark:bg-gray-600 flex items-center justify-center p-4">
-              <img src="Projects/p6.png" alt="Amazon Recommender" class="max-h-full max-w-full object-contain">
-            </div>
+          <div class="relative group bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" role="listitem">
+            <img src="Projects/p6.png" alt="Amazon Recommendation System interface" class="w-full h-48 object-contain bg-white">
             <div class="p-6">
-              <h3 class="text-xl font-semibold mb-2">Amazon Recommendation System</h3>
-              <p class="text-gray-600 dark:text-gray-300 mb-4">My Final Year Project for the Master's Degree.</p>
-              <div class="flex justify-between items-center">
-                <a href="details/project6-details.html" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium inline-flex items-center transition-colors duration-200">
-                  View Details <i class="bi bi-arrow-right ml-1"></i>
-                </a>
-              </div>
+              <h3 class="text-xl font-semibold mb-2 text-white">Amazon Recommendation System</h3>
+              <p class="text-gray-300 mb-4">My Final Year Project for the Master's Degree.</p>
+              <a href="details/project6-details.html" class="inline-flex items-center text-blue-400 hover:text-blue-600 focus-visible rounded">
+                See More <i class="bi bi-arrow-right ml-1" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Project 7 -->
+          <div class="relative group bg-gray-700 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300" role="listitem">
+            <img src="Projects/p7.png" alt="Emotion Recognition System interface" class="w-full h-48 object-contain bg-white">
+            <div class="p-6">
+              <h3 class="text-xl font-semibold mb-2 text-white">Emotion Recognition System</h3>
+              <p class="text-gray-300 mb-4">Detects human emotions from facial expressions.</p>
+              <a href="details/project7-details.html" class="inline-flex items-center text-blue-400 hover:text-blue-600 focus-visible rounded">
+                See More <i class="bi bi-arrow-right ml-1" aria-hidden="true"></i>
+              </a>
             </div>
           </div>
         </div>
 
-        <div class="text-center mt-12">
-          <a href="https://github.com/HoussemBouagal" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium transition-colors duration-200">
-            <i class="bi bi-github mr-2"></i> View all projects on GitHub
-          </a>
-        </div>
+        <p class="text-center mt-12 text-gray-400">
+          <i class="bi bi-info-circle mr-2" aria-hidden="true"></i>Note: Visit my GitHub profile to see all projects.
+        </p>
       </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="bg-gray-800 text-white section-padding">
-      <div class="container mx-auto px-4 max-w-4xl">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold mb-2">Contact Me</h2>
-          <div class="w-20 h-1 bg-blue-400 mx-auto mb-4"></div>
+    <section 
+      id="contact" 
+      class="py-20 px-4 max-w-4xl mx-auto section-animate"
+      aria-labelledby="contact-heading"
+    >
+      <h2 id="contact-heading" class="text-3xl md:text-4xl font-bold mb-12 text-center text-gray-200">Contact Me</h2>
+    
+      <p class="text-gray-300 mb-6 text-center">
+        Please contact me directly at <a href="mailto:mouhamedhoussem813@gmail.com" class="text-blue-400 underline focus-visible rounded">mouhamedhoussem813@gmail.com</a>
+        or through this form:
+      </p>
+    
+      <form 
+        id="myForm" 
+        action="#" 
+        method="POST"
+        class="bg-gray-800 p-6 md:p-8 rounded-xl shadow-lg space-y-6 border border-gray-700"
+        aria-labelledby="contact-heading"
+      >
+        
+        <div>
+          <label for="name" class="block mb-2 font-semibold text-gray-300">Your Name</label>
+          <input 
+            id="name" 
+            type="text" 
+            name="name" 
+            required 
+            placeholder="Enter your full name"
+            class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none 
+                  focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400 focus-visible"
+          >
         </div>
-      
-        <p class="text-gray-300 mb-6 text-center max-w-2xl mx-auto">
-          I'm currently available for freelance work and full-time opportunities. If you have a project that needs my expertise or just want to say hi, feel free to reach out!
-        </p>
-             
-          <div class="md:w-1/2 mx-auto">
-            <form id="contactForm" action="https://formsubmit.co/mouhamedhoussem813@gmail.com" method="POST" class="bg-gray-700 p-6 rounded-xl shadow-lg">
-              <input type="hidden" name="_template" value="box">
-              <input type="hidden" name="_subject" value="New Contact Form Submission">
-              <input type="hidden" name="_next" value="https://yourdomain.com/thank-you.html">
-              <input type="hidden" name="_captcha" value="false">
-          
-              <div class="mb-4">
-                <label for="name" class="block mb-2 font-medium">Your Name</label>
-                <input id="name" type="text" name="name" required placeholder="Enter your name"
-                       class="w-full bg-gray-600 border border-gray-500 rounded-lg p-3 focus:outline-none 
-                              focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400 transition-colors duration-200">
-              </div>
-              
-              <div class="mb-4">
-                <label for="email" class="block mb-2 font-medium">Your Email</label>
-                <input id="email" type="email" name="email" required placeholder="Enter your email"
-                       class="w-full bg-gray-600 border border-gray-500 rounded-lg p-3 focus:outline-none 
-                              focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400 transition-colors duration-200">
-              </div>
-              
-              <div class="mb-4">
-                <label for="subject" class="block mb-2 font-medium">Subject</label>
-                <input id="subject" type="text" name="subject" placeholder="Subject of your message"
-                       class="w-full bg-gray-600 border border-gray-500 rounded-lg p-3 focus:outline-none 
-                              focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400 transition-colors duration-200">
-              </div>
-              
-              <div class="mb-4">
-                <label for="message" class="block mb-2 font-medium">Message</label>
-                <textarea id="message" name="message" rows="5" required placeholder="Your message here..."
-                          class="w-full bg-gray-600 border border-gray-500 rounded-lg p-3 focus:outline-none 
-                                 focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-400 transition-colors duration-200"></textarea>
-              </div>
-              
-              <button type="submit"
-                      class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 
-                             transition-colors duration-300 flex items-center justify-center">
-                <i class="bi bi-send mr-2"></i> Send Message
-              </button>
-            </form>
-          
-            <div id="successMessage"
-                 class="hidden mt-4 p-4 bg-green-900 text-green-200 rounded-lg text-center border border-green-700">
-              <i class="bi bi-check-circle-fill mr-2"></i> Your message has been sent successfully!
-            </div>
-          </div>
+        
+        <div>
+          <label for="email" class="block mb-2 font-semibold text-gray-300">Your Email</label>
+          <input 
+            id="email" 
+            type="email" 
+            name="email" 
+            required 
+            placeholder="Enter your email address"
+            class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none 
+                  focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400 focus-visible"
+          >
+        </div>
+        
+        <div>
+          <label for="message" class="block mb-2 font-semibold text-gray-300">Message</label>
+          <textarea 
+            id="message" 
+            name="message" 
+            rows="5" 
+            required 
+            placeholder="Type your message here..."
+            class="w-full bg-gray-700 border border-gray-600 rounded-lg p-3 focus:outline-none 
+                  focus:ring-2 focus:ring-blue-500 text-gray-200 placeholder-gray-400 focus-visible"
+          ></textarea>
+        </div>
+        
+        <button 
+          type="submit"
+          class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 
+                transition-colors duration-300 flex items-center justify-center focus-visible"
+        >
+          <i class="bi bi-send mr-2" aria-hidden="true"></i> Send Message
+        </button>
+      </form>
+    
+      <div 
+        id="successMessage"
+        class="hidden mt-6 p-4 bg-green-900 text-green-200 rounded-lg text-center border border-green-700"
+        role="alert"
+        aria-live="polite"
+      >
+        <i class="bi bi-check-circle-fill mr-2" aria-hidden="true"></i> Your message has been sent successfully!
       </div>
     </section>
   </main>
 
   <!-- Scroll to Top Button -->
-  <button id="scrollToTopBtn" class="fixed bottom-8 right-8 bg-blue-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-lg hover:bg-blue-700 transition-all duration-300 opacity-0 invisible z-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-label="Scroll to top">
-    <i class="bi bi-arrow-up text-xl"></i>
+  <button
+    id="scrollToTopBtn"
+    class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-blue-700 focus-visible z-40"
+    aria-label="Scroll to top"
+  >
+    <i class="bi bi-chevron-up" aria-hidden="true"></i>
   </button>
 
   <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-400 py-8">
-    <div class="container mx-auto px-4 text-center">
-      <p class="mb-2">© <span id="currentYear"></span> Bouagal Houssem Eddine. All rights reserved.</p>
-      <p class="text-sm">Designed and developed with <i class="bi bi-heart-fill text-red-500"></i> by Houssem</p>
-    </div>
+  <footer class="py-8 px-4 text-center text-gray-300 bg-gray-800 border-t border-gray-700" role="contentinfo">
+    <p>Designed by Bouagal Houssem Eddine.</p>
   </footer>
 
-  <!-- Bootstrap JS Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <!-- Typed.js for typing animation -->
-  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-  
   <script>
-    // Wait for the DOM to be fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
-      // Hide loader when page is loaded
-      setTimeout(function() {
-        document.getElementById('loader').style.opacity = '0';
-        setTimeout(function() {
-          document.getElementById('loader').style.display = 'none';
-        }, 500);
-      }, 1000);
-      
-      // Mobile menu toggle
-      const menuToggle = document.getElementById('menu-toggle');
-      const sidebar = document.getElementById('sidebar');
-      
-      menuToggle.addEventListener('click', function() {
-        sidebar.classList.toggle('-translate-x-full');
-      });
-      
-      // Close mobile menu when clicking on a nav link
-      const navLinks = document.querySelectorAll('.nav-link');
-      navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-          if (window.innerWidth < 768) {
-            sidebar.classList.add('-translate-x-full');
-          }
+    /**
+     * Portfolio Application - Customized for Houssem's Portfolio
+     * Enhanced with accessibility features
+     */
+    class PortfolioApp {
+      constructor() {
+        this.init();
+      }
+
+      /**
+       * Initialize all application components
+       */
+      init() {
+        this.setupDOMReadyHandlers();
+      }
+
+      /**
+       * Setup handlers for DOMContentLoaded event
+       */
+      setupDOMReadyHandlers() {
+        document.addEventListener('DOMContentLoaded', () => {
+          this.initTypedJS();
+          this.setupMobileMenu();
+          this.setupScrollToTop();
+          this.setupIntersectionObserver();
+          this.setupFormSubmission();
+          this.setupSmoothScrolling();
+          this.setupAccessibility();
+          this.setupCounterAnimation(); // Add counter animation
         });
-      });
-      
-      // Scroll to top button
-      const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-      
-      window.addEventListener('scroll', function() {
-        if (window.pageYOffset > 300) {
-          scrollToTopBtn.classList.remove('opacity-0', 'invisible');
-          scrollToTopBtn.classList.add('opacity-100', 'visible');
-        } else {
-          scrollToTopBtn.classList.remove('opacity-100', 'visible');
-          scrollToTopBtn.classList.add('opacity-0', 'invisible');
+      }
+
+      /**
+       * Initialize Typed.js animation for the home section
+       */
+      initTypedJS() {
+        const typedElement = document.getElementById('typed2');
+        if (!typedElement || !window.Typed) {
+          // Fallback if Typed.js fails
+          const professions = ["Freelancer 👨‍💻", "AI Developer 🤖", "Data Scientist 📊", "Software Engineer 💻"];
+          let current = 0;
+          setInterval(() => {
+            typedElement.textContent = professions[current];
+            current = (current + 1) % professions.length;
+          }, 2000);
+          return;
         }
-      });
-      
-      scrollToTopBtn.addEventListener('click', function() {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
+
+        try {
+          new Typed(typedElement, {
+            strings: [
+              "Freelancer 👨‍💻", 
+              "AI Developer 🤖", 
+              "Data Scientist 📊",
+              "Software Engineer 💻"
+            ],
+            typeSpeed: 50,
+            backSpeed: 30,
+            loop: true,
+            smartBackspace: true,
+            cursorChar: '|'
+          });
+        } catch (error) {
+          console.error('Typed.js initialization failed:', error);
+          typedElement.textContent = "Professional Developer";
+        }
+      }
+
+      /**
+       * Setup mobile menu toggle functionality with ARIA support
+       */
+      setupMobileMenu() {
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (!menuToggle || !sidebar) return;
+
+        const updateMenuState = (isExpanded) => {
+          menuToggle.setAttribute('aria-expanded', isExpanded);
+          menuToggle.textContent = isExpanded ? '×' : '≡';
+        };
+
+        menuToggle.addEventListener('click', () => {
+          const isExpanded = sidebar.classList.toggle('-translate-x-full');
+          updateMenuState(!isExpanded);
         });
-      });
-      
-      // Typed.js initialization
-      const typed = new Typed('#typed-text', {
-        strings: [
-          'a Software Engineer',
-          'an AI Developer',
-          'a Data Scientist',
-          'a Problem Solver'
-        ],
-        typeSpeed: 50,
-        backSpeed: 30,
-        loop: true,
-        showCursor: true,
-        cursorChar: '|'
-      });
-      
-      // Counter animation
-      const counters = document.querySelectorAll('.counter');
-      const speed = 200;
-      
-      function animateCounters() {
-        counters.forEach(counter => {
-          const target = +counter.getAttribute('data-target');
-          const count = +counter.innerText;
-          const increment = target / speed;
-          
-          if (count < target) {
-            counter.innerText = Math.ceil(count + increment);
-            setTimeout(animateCounters, 1);
-          } else {
-            counter.innerText = target;
+
+        // Close menu when clicking on nav items (mobile only)
+        if (window.innerWidth < 768) {
+          const navItems = document.querySelectorAll('#sidebar nav a');
+          navItems.forEach(item => {
+            item.addEventListener('click', () => {
+              sidebar.classList.add('-translate-x-full');
+              updateMenuState(false);
+            });
+          });
+        }
+
+        // Close menu when pressing Escape key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && !sidebar.classList.contains('-translate-x-full')) {
+            sidebar.classList.add('-translate-x-full');
+            updateMenuState(false);
+            menuToggle.focus();
           }
         });
       }
-      
-      // Intersection Observer for counter animation
-      const counterSection = document.querySelector('#about');
-      
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            animateCounters();
-            observer.unobserve(entry.target);
+
+      /**
+       * Setup scroll-to-top button with smooth behavior
+       */
+      setupScrollToTop() {
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        if (!scrollToTopBtn) return;
+
+        const toggleScrollButton = () => {
+          if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.remove('opacity-0', 'invisible');
+            scrollToTopBtn.classList.add('opacity-100', 'visible');
+          } else {
+            scrollToTopBtn.classList.add('opacity-0', 'invisible');
+            scrollToTopBtn.classList.remove('opacity-100', 'visible');
           }
+        };
+
+        window.addEventListener('scroll', toggleScrollButton);
+
+        scrollToTopBtn.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
         });
-      }, { threshold: 0.5 });
-      
-      observer.observe(counterSection);
-      
-      // Form submission
-      const contactForm = document.getElementById('contactForm');
-      const successMessage = document.getElementById('successMessage');
-      
-      if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+      }
+
+      /**
+       * Setup intersection observer for animated sections
+       */
+      setupIntersectionObserver() {
+        const animatedSections = document.querySelectorAll('.section-animate');
+        if (!animatedSections.length) return;
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('section-show');
+            }
+          });
+        }, {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        });
+
+        animatedSections.forEach(section => observer.observe(section));
+      }
+
+      /**
+       * Setup counter animation for statistics
+       */
+      setupCounterAnimation() {
+        const counters = document.querySelectorAll('.counter');
+        if (!counters.length) return;
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.animateCounter(entry.target);
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.5 });
+
+        counters.forEach(counter => observer.observe(counter));
+      }
+
+      /**
+       * Animate counter from 0 to target value
+       */
+      animateCounter(counter) {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const duration = 2000; // 2 seconds
+        const step = target / (duration / 16); // 60fps
+        let current = 0;
+
+        const updateCounter = () => {
+          current += step;
+          if (current < target) {
+            counter.textContent = Math.floor(current);
+            requestAnimationFrame(updateCounter);
+          } else {
+            counter.textContent = target;
+          }
+        };
+
+        updateCounter();
+      }
+
+      /**
+       * Setup smooth scrolling for anchor links with focus management
+       */
+      setupSmoothScrolling() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+              const targetPosition = targetElement.offsetTop - 20;
+              
+              window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+              });
+            }
+          });
+        });
+      }
+
+      /**
+       * Setup form submission with AJAX and accessibility
+       */
+      setupFormSubmission() {
+        const form = document.getElementById('myForm');
+        if (!form) return;
+
+        const successMessage = document.getElementById('successMessage');
+        
+        form.addEventListener('submit', async (e) => {
           e.preventDefault();
           
-          // Simulate form submission (in a real scenario, you would use AJAX)
-          setTimeout(function() {
-            contactForm.reset();
-            successMessage.classList.remove('hidden');
-            successMessage.classList.add('block');
+          const submitButton = form.querySelector('button[type="submit"]');
+          const originalText = submitButton.innerHTML;
+          
+          // Show loading state with accessibility
+          submitButton.disabled = true;
+          submitButton.classList.add('btn-loading');
+          form.classList.add('loading');
+
+          try {
+            // Simulate form submission
+            await new Promise(resolve => setTimeout(resolve, 2000));
             
-            setTimeout(function() {
-              successMessage.classList.remove('block');
-              successMessage.classList.add('hidden');
+            form.reset();
+            if (successMessage) {
+              successMessage.classList.remove('hidden');
+              successMessage.focus(); // Move focus to success message
+              
+              setTimeout(() => {
+                successMessage.classList.add('hidden');
+              }, 5000);
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            // Show error message for accessibility
+            const errorAlert = document.createElement('div');
+            errorAlert.className = 'mt-4 p-4 bg-red-900 text-red-200 rounded-lg text-center border border-red-700';
+            errorAlert.setAttribute('role', 'alert');
+            errorAlert.innerHTML = '<i class="bi bi-exclamation-triangle mr-2" aria-hidden="true"></i> There was an error submitting your form. Please try again later.';
+            form.parentNode.insertBefore(errorAlert, form.nextSibling);
+            
+            setTimeout(() => {
+              errorAlert.remove();
             }, 5000);
-          }, 1000);
+          } finally {
+            submitButton.disabled = false;
+            submitButton.classList.remove('btn-loading');
+            submitButton.innerHTML = originalText;
+            form.classList.remove('loading');
+          }
         });
       }
-      
-      // Set current year in footer
-      document.getElementById('currentYear').textContent = new Date().getFullYear();
-      
-      // Highlight active nav link on scroll
-      const sections = document.querySelectorAll('section');
-      const navItems = document.querySelectorAll('.nav-link');
-      
-      window.addEventListener('scroll', function() {
-        let current = '';
+
+      /**
+       * Setup accessibility features
+       */
+      setupAccessibility() {
+        // Add focus management for modals and interactive elements
+        this.manageFocus();
         
-        sections.forEach(section => {
-          const sectionTop = section.offsetTop;
-          const sectionHeight = section.clientHeight;
+        // Add keyboard navigation for skill items
+        this.setupKeyboardNavigation();
+        
+        // Reduce motion support
+        this.handleReducedMotion();
+      }
+
+      /**
+       * Manage focus for better accessibility
+       */
+      manageFocus() {
+        // Trap focus in mobile menu when open
+        const sidebar = document.getElementById('sidebar');
+        const menuToggle = document.getElementById('menu-toggle');
+        
+        if (sidebar && menuToggle) {
+          const focusableElements = sidebar.querySelectorAll('a, button, [tabindex]:not([tabindex="-1"])');
+          const firstFocusable = focusableElements[0];
+          const lastFocusable = focusableElements[focusableElements.length - 1];
           
-          if (pageYOffset >= (sectionTop - 300)) {
-            current = section.getAttribute('id');
-          }
-        });
+          sidebar.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+              if (e.shiftKey) {
+                if (document.activeElement === firstFocusable) {
+                  e.preventDefault();
+                  lastFocusable.focus();
+                }
+              } else {
+                if (document.activeElement === lastFocusable) {
+                  e.preventDefault();
+                  firstFocusable.focus();
+                }
+              }
+            }
+          });
+        }
+      }
+
+      /**
+       * Setup keyboard navigation for skill items
+       */
+      setupKeyboardNavigation() {
+        const skillItems = document.querySelectorAll('.skill');
         
-        navItems.forEach(item => {
-          item.classList.remove('active-nav');
-          if (item.getAttribute('href') === `#${current}`) {
-            item.classList.add('active-nav');
-          }
+        skillItems.forEach((skill, index) => {
+          skill.setAttribute('tabindex', '0');
+          skill.setAttribute('role', 'button');
+          
+          skill.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              skill.click();
+            }
+            
+            if (e.key === 'ArrowRight' && index < skillItems.length - 1) {
+              e.preventDefault();
+              skillItems[index + 1].focus();
+            }
+            
+            if (e.key === 'ArrowLeft' && index > 0) {
+              e.preventDefault();
+              skillItems[index - 1].focus();
+            }
+          });
         });
-      });
-      
-      });
-    
+      }
+
+      /**
+       * Handle reduced motion preferences
+       */
+      handleReducedMotion() {
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        
+        if (reducedMotion.matches) {
+          // Disable all animations
+          document.querySelectorAll('.section-animate').forEach(section => {
+            section.style.transition = 'none';
+            section.style.opacity = '1';
+            section.style.transform = 'none';
+          });
+        }
+      }
+    }
+
+    // Initialize the application
+    new PortfolioApp();
   </script>
 </body>
 </html>
