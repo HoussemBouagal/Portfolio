@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Web AI Application for Amazon Review Sentiment Analysis using Bidirectional LSTM">
+    <meta name="keywords" content="sentiment analysis, Amazon reviews, LSTM, deep learning, NLP, text classification, machine learning">
+    <title>Amazon Review Sentiment Analyzer | AI-Powered Web Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../img/chart.ico" type="image/x-icon">
+
+    <style>
+        /* Amazon-inspired color scheme */
+        :root {
+            --amazon-orange: #ff9900;
+            --amazon-orange-dark: #e68a00;
+            --amazon-blue: #146eb4;
+            --positive-green: #10b981;
+            --negative-red: #ef4444;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f3f4f6;
+            --text-secondary: #d1d5db;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Amazon gradient */
+        .amazon-gradient {
+            background: linear-gradient(90deg, var(--amazon-orange) 0%, var(--amazon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .amazon-bg-gradient {
+            background: linear-gradient(135deg, rgba(255, 153, 0, 0.1) 0%, rgba(20, 110, 180, 0.1) 100%);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--amazon-orange);
+            border-radius: 4px;
+        }
+
+        /* Feature items */
+        .feature-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-item:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--positive-green);
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        /* Review box styling */
+        .review-box {
+            border-left: 4px solid var(--amazon-orange);
+            background: rgba(255, 153, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .review-box:hover {
+            background: rgba(255, 153, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        /* Sentiment badges */
+        .sentiment-badge {
+            transition: all 0.3s ease;
+            border-radius: 20px;
+        }
+
+        .sentiment-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseRating {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-pulse-rating {
+            animation: pulseRating 2s ease-in-out infinite;
+        }
+
+        /* Progress bar styling */
+        .confidence-bar {
+            transition: width 1s ease-in-out;
+        }
+
+        /* Star ratings */
+        .star-rating i {
+            color: #ff9900;
+            text-shadow: 0 0 8px rgba(255, 153, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="dark:bg-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- Skip to content link -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-3 focus:bg-blue-600 focus:text-white focus:rounded-md">
+        Skip to main content
+    </a>
+
+    <!-- Home button -->
+    <button 
+        onclick="window.location.href='../index.html'" 
+        class="fixed top-6 left-6 z-50 bg-gray-800 hover:bg-gray-700 text-white px-5 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-900 flex items-center gap-2 no-print"
+        aria-label="Return to home page"
+    >
+        <i class="fas fa-arrow-left"></i>
+        Home
+    </button>
+
+    <!-- Loading animation -->
+    <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-95 flex items-center justify-center z-50 transition-opacity duration-500">
+        <div class="relative">
+            <div class="w-24 h-24 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <i class="fas fa-star text-orange-400 text-3xl animate-pulse-rating"></i>
+            </div>
+        </div>
+        <span class="sr-only">Loading Amazon Sentiment Analyzer...</span>
+    </div>
+
+    <main id="main-content" class="container mx-auto px-4 py-20 max-w-6xl">
+        <!-- Hero section -->
+        <header class="text-center mb-16 animate-fade-in-up">
+            <div class="flex justify-center mb-6">
+                <div class="relative">
+                    <div class="w-24 h-24 bg-gradient-to-br from-orange-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-shopping-cart text-white text-4xl"></i>
+                    </div>
+                    <div class="absolute -top-2 -right-2 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-brain text-white text-lg"></i>
+                    </div>
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 amazon-gradient">
+                <i class="fab fa-amazon mr-3"></i>Amazon Review Sentiment Analyzer
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-4">
+                Web AI Application for Real-time Sentiment Analysis
+            </p>
+            <p class="text-gray-400 max-w-3xl mx-auto">
+                A sophisticated web application using Bidirectional LSTM to analyze product review 
+                sentiment with 95.32% testing accuracy. Classifies reviews as Positive or Negative instantly.
+            </p>
+        </header>
+
+        <!-- Main showcase -->
+        <section class="mb-16">
+            <div class="relative group">
+                <div class="swiper rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500">
+                    <div class="swiper-wrapper">
+                        <!-- Web Interface -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet3/app_interface.png" 
+                                    alt="Amazon Sentiment Analyzer web application interface"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Web Application Interface with Real-time Sentiment Analysis
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        <!-- Positive Example -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet3/positive_example.png" 
+                                    alt="Positive review sentiment analysis example"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Positive Review Example - High Confidence Prediction
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        <!-- Negative Example -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet3/negative_example.png" 
+                                    alt="Negative review sentiment analysis example"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Negative Review Example - Accurate Detection
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <!-- Navigation buttons -->
+                    <button class="swiper-button-next bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Next slide"></button>
+                    <button class="swiper-button-prev bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Previous slide"></button>
+                    <div class="swiper-pagination !bottom-4" aria-label="Slide navigation"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Metrics -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center amazon-gradient">📊 Model Performance Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-orange-500 transition-all">
+                    <div class="text-4xl font-bold text-green-400 mb-2">95.32%</div>
+                    <h3 class="text-lg font-semibold mb-2">Testing Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Real-world performance on unseen reviews</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-orange-500 transition-all">
+                    <div class="text-4xl font-bold text-blue-400 mb-2">95.45%</div>
+                    <h3 class="text-lg font-semibold mb-2">Validation Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Model generalization capability</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-orange-500 transition-all">
+                    <div class="text-4xl font-bold text-purple-400 mb-2">96.14%</div>
+                    <h3 class="text-lg font-semibold mb-2">Training Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Learning efficiency on training dataset</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-orange-500 transition-all">
+                    <div class="text-4xl font-bold text-orange-400 mb-2">Bi-LSTM</div>
+                    <h3 class="text-lg font-semibold mb-2">Architecture</h3>
+                    <p class="text-gray-400 text-sm">Bidirectional LSTM with 200 embedding</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Project Information Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <article class="bg-gray-800 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 amazon-gradient flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i>
+                    Project Details
+                </h2>
+                <dl class="space-y-4">
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Category:</dt>
+                        <dd class="text-gray-400">NLP Web AI Application</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Platform:</dt>
+                        <dd class="text-gray-400">Web Application (Flask)</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Dataset:</dt>
+                        <dd class="text-gray-400">400,000 Amazon Reviews</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Architecture:</dt>
+                        <dd class="text-gray-400">Bidirectional LSTM</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Sequence Length:</dt>
+                        <dd class="text-gray-400">200 tokens</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Embedding Size:</dt>
+                        <dd class="text-gray-400">200 dimensions</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">License:</dt>
+                        <dd class="text-gray-400">MIT Open Source</dd>
+                    </div>
+                </dl>
+            </article>
+
+            <article class="bg-gray-800 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 amazon-gradient flex items-center gap-2">
+                    <i class="fas fa-star"></i>
+                    Core Features
+                </h2>
+                <ul class="space-y-3">
+                    <li class="feature-item">📝 Real-time Amazon review sentiment prediction</li>
+                    <li class="feature-item">📊 Confidence visualization with progress bar</li>
+                    <li class="feature-item">🎨 Amazon-inspired web design (Bootstrap & FontAwesome)</li>
+                    <li class="feature-item">🧠 Bi-LSTM deep learning model for text classification</li>
+                    <li class="feature-item">⚡ Fast predictions and easy deployment</li>
+                    <li class="feature-item">📈 Performance visualization (Curves, Matrix)</li>
+                    <li class="feature-item">🔤 Tokenization and text preprocessing</li>
+                    <li class="feature-item">🚀 Flask backend with RESTful API</li>
+                </ul>
+            </article>
+        </section>
+
+        <!-- Classification Report -->
+        <section class="mb-16 bg-gray-800 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-8 text-center amazon-gradient">📊 Classification Report</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Sentiment</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Precision</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Recall</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">F1-Score</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Support</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-800">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="sentiment-badge inline-flex items-center px-3 py-1 bg-red-900/50 text-red-200">
+                                    <i class="fas fa-frown mr-2"></i>Negative
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-400 font-semibold">0.95</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-blue-400">0.95</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-purple-400">0.95</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">200,000</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="sentiment-badge inline-flex items-center px-3 py-1 bg-green-900/50 text-green-200">
+                                    <i class="fas fa-smile mr-2"></i>Positive
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-400 font-semibold">0.95</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-blue-400">0.95</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-purple-400">0.95</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">200,000</td>
+                        </tr>
+                        <tr class="bg-gray-900/50">
+                            <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-300">Accuracy</td>
+                            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center">
+                                <span class="text-2xl font-bold text-green-400">95.32%</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">400,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Example Reviews -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center amazon-gradient">📝 Example Review Analysis</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Positive Review -->
+                <div class="review-box p-6 rounded-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-smile text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-green-300">Positive Sentiment</h3>
+                                <div class="star-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-green-400">94%</div>
+                            <div class="text-sm text-gray-400">Confidence</div>
+                        </div>
+                    </div>
+                    <blockquote class="text-gray-300 italic border-l-2 border-green-500 pl-4 my-4">
+                        "This product exceeded my expectations! The quality is outstanding and it arrived earlier than promised. Will definitely buy again!"
+                    </blockquote>
+                    <div class="mt-4">
+                        <div class="flex justify-between text-sm text-gray-400 mb-1">
+                            <span>Confidence Level</span>
+                            <span>94%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="confidence-bar bg-green-500 h-2 rounded-full" style="width: 94%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Negative Review -->
+                <div class="review-box p-6 rounded-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-frown text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-red-300">Negative Sentiment</h3>
+                                <div class="star-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-red-400">96%</div>
+                            <div class="text-sm text-gray-400">Confidence</div>
+                        </div>
+                    </div>
+                    <blockquote class="text-gray-300 italic border-l-2 border-red-500 pl-4 my-4">
+                        "Very disappointed with this purchase. The item broke after just two days of use and customer service was unhelpful. Would not recommend."
+                    </blockquote>
+                    <div class="mt-4">
+                        <div class="flex justify-between text-sm text-gray-400 mb-1">
+                            <span>Confidence Level</span>
+                            <span>96%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="confidence-bar bg-red-500 h-2 rounded-full" style="width: 96%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Stack -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center amazon-gradient">⚙️ Technology Stack</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-orange-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-orange-300">Py</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Python 3.x</h3>
+                    <p class="text-gray-400 text-sm">Core programming language</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-green-300">TF</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">TensorFlow</h3>
+                    <p class="text-gray-400 text-sm">Deep learning framework</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-blue-300">LSTM</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Bi-LSTM</h3>
+                    <p class="text-gray-400 text-sm">Bidirectional LSTM</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-purple-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-purple-300">Flask</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Flask</h3>
+                    <p class="text-gray-400 text-sm">Web framework</p>
+                </article>
+            </div>
+            
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">NLP & Text Processing</h4>
+                    <ul class="space-y-2">
+                        <li class="tech-item">Tokenization & Text Vectorization</li>
+                        <li class="tech-item">Word Embeddings (200 dimensions)</li>
+                        <li class="tech-item">Sequence Padding (200 length)</li>
+                        <li class="tech-item">Text Preprocessing Pipeline</li>
+                        <li class="tech-item">Stop Words Removal</li>
+                        <li class="tech-item">Lemmatization & Stemming</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Model Architecture</h4>
+                    <ul class="space-y-2">
+                        <li class="tech-item">Bidirectional LSTM Layers</li>
+                        <li class="tech-item">Embedding Layer (200D)</li>
+                        <li class="tech-item">Dropout Regularization</li>
+                        <li class="tech-item">Dense Layers with ReLU</li>
+                        <li class="tech-item">Sigmoid Output Layer</li>
+                        <li class="tech-item">Binary Cross-Entropy Loss</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started -->
+        <section class="mb-16 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-6 text-center amazon-gradient">🚀 Quick Start Guide</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">1️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Clone Repository</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>git clone https://github.com/HoussemBouagal/sentiment-analysis-amazon.git
+cd sentiment-analysis-amazon</code></pre>
+                </article>
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">2️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Setup Environment</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>python -m venv venv
+# Linux/Mac:
+source venv/bin/activate
+# Windows:
+venv\Scripts\activate
+
+pip install -r requirements.txt</code></pre>
+                </article>
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">3️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Run Application</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>python app.py
+# The model will load automatically
+# Visit: http://127.0.0.1:5000</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <!-- Project Structure -->
+        <section class="mb-16 bg-gray-800 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-6 text-center amazon-gradient">🗂️ Project Structure</h2>
+            <div class="bg-gray-900 rounded-lg p-6 font-mono text-sm">
+                <div class="text-orange-400">sentiment-analysis-amazon/</div>
+                <div class="ml-4 mt-2">
+                    <div class="text-purple-400">├── app.py</div>
+                    <div class="ml-8 text-gray-400"># Main Flask application</div>
+                    <div class="text-purple-400">├── templates/</div>
+                    <div class="ml-8 text-gray-400">└── index.html</div>
+                    <div class="text-purple-400">├── static/</div>
+                    <div class="ml-8 text-gray-400">└── img/</div>
+                    <div class="text-purple-400">├── model/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── tokenizer.pkl</div>
+                        <div class="text-gray-400">└── amazon_sentiment_lstm.keras</div>
+                    </div>
+                    <div class="text-purple-400">├── assets/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── positive_example.png</div>
+                        <div class="text-gray-400">├── negative_example.png</div>
+                        <div class="text-gray-400">├── metrics_curves.png</div>
+                        <div class="text-gray-400">└── confusion_matrix.png</div>
+                    </div>
+                    <div class="text-green-400">├── requirements.txt</div>
+                    <div class="text-yellow-400">├── LICENSE</div>
+                    <div class="text-cyan-400">└── README.md</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GitHub Repository -->
+        <section class="mb-16 text-center">
+            <h2 class="text-3xl font-bold mb-6 amazon-gradient">📦 Project Repository</h2>
+            <div class="bg-gray-800 rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+                <p class="text-gray-300 mb-6">
+                    This project is fully open-source under MIT License. Explore the codebase, 
+                    contribute improvements, or use it for business intelligence and research.
+                </p>
+                <a href="https://github.com/HoussemBouagal/sentiment-analysis-amazon" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-orange-400 rounded-lg transition-all duration-300 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <i class="fab fa-github mr-3 text-xl"></i>
+                    View Full Repository on GitHub
+                </a>
+                <p class="text-gray-400 text-sm mt-4">
+                    Includes: Flask application, trained LSTM model, tokenizer, 400K reviews dataset
+                </p>
+            </div>
+        </section>
+
+        <!-- Important Note -->
+        <aside class="mb-16 p-6 bg-blue-900/20 border border-blue-700/30 rounded-xl">
+            <div class="flex items-start">
+                <i class="fas fa-lightbulb text-blue-400 text-xl mt-1 mr-3"></i>
+                <div>
+                    <h3 class="font-semibold text-lg text-blue-300 mb-2">Business Intelligence Application</h3>
+                    <p class="text-gray-300">
+                        This tool is designed for <strong>business intelligence, market research, and customer feedback analysis</strong>. 
+                        It helps companies understand customer sentiment at scale, identify product issues, and improve customer 
+                        satisfaction by analyzing thousands of reviews instantly. Can be integrated into customer service dashboards 
+                        or product analytics platforms.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-gray-400 py-8 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-lg font-semibold text-gray-300">
+                        <i class="fab fa-amazon text-orange-500 mr-2"></i>Amazon Review Sentiment Analyzer
+                    </p>
+                    <p class="text-sm">© 2025 Houssem Bouagal. Licensed under MIT.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-orange-400 transition-colors focus:outline-none focus:text-orange-400" aria-label="Privacy Policy">Privacy</a>
+                    <a href="#" class="hover:text-orange-400 transition-colors focus:outline-none focus:text-orange-400" aria-label="Terms of Service">Terms</a>
+                    <a href="mailto:mouhamedhoussem813@gmail.com" class="hover:text-orange-400 transition-colors focus:outline-none focus:text-orange-400" aria-label="Contact via Email">Contact</a>
+                    <a href="#main-content" class="hover:text-orange-400 transition-colors focus:outline-none focus:text-orange-400" aria-label="Back to top">↑ Top</a>
+                </div>
+            </div>
+            <div class="text-center mt-6 text-sm text-gray-500">
+                <p>Built with Flask, TensorFlow, Bi-LSTM, and modern NLP techniques</p>
+                <p class="mt-2">Accuracy: 95.32% | Model: Bidirectional LSTM | Dataset: 400K Amazon Reviews | Embedding: 200D</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            speed: 800,
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
+            },
+            a11y: {
+                prevSlideMessage: 'Previous slide',
+                nextSlideMessage: 'Next slide',
+                paginationBulletMessage: 'Go to slide {{index}}',
+            },
+        });
+
+        // Loader handling
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+
+        // Fallback for slow loading
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader && loader.style.display !== 'none') {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }
+        }, 3000);
+
+        // Animate confidence bars on scroll
+        const observerOptions = {
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.confidence-bar');
+                    bars.forEach(bar => {
+                        bar.style.transition = 'width 1.5s ease-in-out';
+                    });
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.review-box').forEach(box => {
+            observer.observe(box);
+        });
+    </script>
+</body>
+</html>

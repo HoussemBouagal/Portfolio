@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Spam Classifier Web Application using LSTM Deep Learning Model">
+    <meta name="keywords" content="spam detection, text classification, LSTM, deep learning, NLP, TensorFlow, Flask">
+    <title>Spam Classifier | AI-Powered Spam Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../img/spam-mail.ico" type="image/x-icon">
+
+    <style>
+        /* Spam classifier color scheme */
+        :root {
+            --spam-red: #dc2626;
+            --ham-green: #10b981;
+            --warning-yellow: #f59e0b;
+            --dark-bg: #111827;
+            --card-bg: #1e293b;
+            --text-primary: #f3f4f6;
+            --text-secondary: #d1d5db;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Gradient for spam/ham */
+        .spam-gradient {
+            background: linear-gradient(90deg, var(--spam-red) 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ham-gradient {
+            background: linear-gradient(90deg, var(--ham-green) 0%, #34d399 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--spam-red);
+            border-radius: 4px;
+        }
+
+        /* Message boxes */
+        .message-box {
+            border-left: 4px solid;
+            background: rgba(30, 41, 59, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .message-box.spam {
+            border-left-color: var(--spam-red);
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        .message-box.ham {
+            border-left-color: var(--ham-green);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .message-box:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Spam/Ham badges */
+        .classification-badge {
+            transition: all 0.3s ease;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .classification-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Feature items */
+        .feature-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-item:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--ham-green);
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseSpam {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-pulse-spam {
+            animation: pulseSpam 2s ease-in-out infinite;
+        }
+
+        /* Email pattern background */
+        .email-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Loading animation */
+        .spam-loader {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .spam-loader:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top-color: var(--spam-red);
+            border-bottom-color: var(--ham-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen email-pattern">
+    <!-- Skip to content link -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-3 focus:bg-red-600 focus:text-white focus:rounded-md">
+        Skip to main content
+    </a>
+
+    <!-- Home button -->
+    <button 
+        onclick="window.location.href='../index.html'" 
+        class="fixed top-6 left-6 z-50 bg-gray-800 hover:bg-gray-700 text-white px-5 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 flex items-center gap-2 no-print"
+        aria-label="Return to home page"
+    >
+        <i class="fas fa-arrow-left"></i>
+        Home
+    </button>
+
+    <!-- Loading animation -->
+    <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-95 flex items-center justify-center z-50 transition-opacity duration-500">
+        <div class="text-center">
+            <div class="spam-loader mb-6 mx-auto"></div>
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <div class="w-8 h-8 bg-red-600 rounded-full animate-pulse-spam"></div>
+                <div class="w-8 h-8 bg-green-500 rounded-full animate-pulse-spam" style="animation-delay: 0.2s"></div>
+            </div>
+            <p class="text-gray-400">Loading Spam Classifier System...</p>
+            <span class="sr-only">Loading Spam Detection System...</span>
+        </div>
+    </div>
+
+    <main id="main-content" class="container mx-auto px-4 py-20 max-w-6xl">
+        <!-- Hero section -->
+        <header class="text-center mb-16 animate-fade-in-up">
+            <div class="flex justify-center mb-6">
+                <div class="relative">
+                    <div class="w-24 h-24 bg-gradient-to-br from-red-600 to-green-500 rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-envelope text-white text-4xl"></i>
+                    </div>
+                    <div class="absolute -top-2 -right-2 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-shield-alt text-white text-lg"></i>
+                    </div>
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-red-500 to-green-500 bg-clip-text text-transparent">
+                📩 Spam Classifier
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-4">
+                AI-Powered Spam Detection System
+            </p>
+            <p class="text-gray-400 max-w-3xl mx-auto">
+                A professional web application using LSTM deep learning to classify text messages 
+                as SPAM or HAM with 98.83% testing accuracy. Protect your inbox from unwanted messages.
+            </p>
+        </header>
+
+        <!-- Main showcase -->
+        <section class="mb-16">
+            <div class="relative group">
+                <div class="swiper rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500">
+                    <div class="swiper-wrapper">
+                        <!-- Web Interface -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet7/app_interface.png" 
+                                    alt="Spam Classifier web application interface"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Web Application Interface with Real-time Spam Detection
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                             
+                        <!-- Spam Example -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet7/spam.png" 
+                                    alt="Spam message detection example"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    SPAM Detection Example - High Confidence
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        <!-- Ham Example -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet7/ham.png" 
+                                    alt="Legitimate message detection example"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    HAM Detection Example - Legitimate Message
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <!-- Navigation buttons -->
+                    <button class="swiper-button-next bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Next slide"></button>
+                    <button class="swiper-button-prev bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Previous slide"></button>
+                    <div class="swiper-pagination !bottom-4" aria-label="Slide navigation"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Metrics -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-red-500 to-green-500 bg-clip-text text-transparent">📊 Model Performance Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-red-600 transition-all">
+                    <div class="text-4xl font-bold text-green-400 mb-2">98.83%</div>
+                    <h3 class="text-lg font-semibold mb-2">Testing Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Real-world performance on unseen messages</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-green-600 transition-all">
+                    <div class="text-4xl font-bold text-blue-400 mb-2">98.99%</div>
+                    <h3 class="text-lg font-semibold mb-2">Validation Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Model generalization capability</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-yellow-600 transition-all">
+                    <div class="text-4xl font-bold text-purple-400 mb-2">99.44%</div>
+                    <h3 class="text-lg font-semibold mb-2">Training Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Learning efficiency on training dataset</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-blue-600 transition-all">
+                    <div class="text-4xl font-bold text-yellow-400 mb-2">36,622</div>
+                    <h3 class="text-lg font-semibold mb-2">Messages Analyzed</h3>
+                    <p class="text-gray-400 text-sm">Total messages in dataset</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Project Information Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <article class="bg-gray-800 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 bg-gradient-to-r from-red-500 to-green-500 bg-clip-text text-transparent flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i>
+                    Project Details
+                </h2>
+                <dl class="space-y-4">
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Category:</dt>
+                        <dd class="text-gray-400">NLP Security Web Application</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Platform:</dt>
+                        <dd class="text-gray-400">Web Application (Flask)</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Dataset:</dt>
+                        <dd class="text-gray-400">36,622 Text Messages</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Architecture:</dt>
+                        <dd class="text-gray-400">LSTM with Embedding Layer</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Sequence Length:</dt>
+                        <dd class="text-gray-400">800 tokens maximum</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Epochs:</dt>
+                        <dd class="text-gray-400">10 training epochs</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">License:</dt>
+                        <dd class="text-gray-400">MIT Open Source</dd>
+                    </div>
+                </dl>
+            </article>
+
+            <article class="bg-gray-800 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 bg-gradient-to-r from-red-500 to-green-500 bg-clip-text text-transparent flex items-center gap-2">
+                    <i class="fas fa-star"></i>
+                    Core Features
+                </h2>
+                <ul class="space-y-3">
+                    <li class="feature-item">✉️ Real-time SPAM/HAM classification</li>
+                    <li class="feature-item">⚡ Instant predictions with confidence scores</li>
+                    <li class="feature-item">🔒 High accuracy LSTM deep learning model</li>
+                    <li class="feature-item">🌐 Clean Flask-based web interface</li>
+                    <li class="feature-item">📡 REST API endpoint for integration</li>
+                    <li class="feature-item">📊 Performance visualization (Curves, Matrix)</li>
+                    <li class="feature-item">🔤 Advanced text preprocessing pipeline</li>
+                    <li class="feature-item">🚀 Easy deployment and setup</li>
+                </ul>
+            </article>
+        </section>
+
+        <!-- Classification Report -->
+        <section class="mb-16 bg-gray-800 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-red-500 to-green-500 bg-clip-text text-transparent">📊 Classification Report</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Classification</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Precision</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Recall</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">F1-Score</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Support</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-800">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="classification-badge inline-flex items-center px-3 py-1 bg-green-900/50 text-green-200">
+                                    <i class="fas fa-check-circle mr-2"></i>HAM
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-400 font-semibold">0.99</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-blue-400">0.99</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-purple-400">0.99</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">19,137</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="classification-badge inline-flex items-center px-3 py-1 bg-red-900/50 text-red-200">
+                                    <i class="fas fa-exclamation-triangle mr-2"></i>SPAM
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-400 font-semibold">0.98</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-blue-400">0.99</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-purple-400">0.99</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">17,485</td>
+                        </tr>
+                        <tr class="bg-gray-900/50">
+                            <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-300">Accuracy</td>
+                            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center">
+                                <span class="text-2xl font-bold text-green-400">98.83%</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">36,622</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Example Messages -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-red-500 to-green-500 bg-clip-text text-transparent">📝 Example Message Analysis</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Spam Message -->
+                <div class="message-box spam p-6 rounded-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-exclamation-triangle text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold spam-gradient">SPAM Detected</h3>
+                                <div class="text-sm text-gray-400">Unwanted/Advertisement</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-red-400">96%</div>
+                            <div class="text-sm text-gray-400">Confidence</div>
+                        </div>
+                    </div>
+                    <blockquote class="text-gray-300 italic border-l-2 border-red-500 pl-4 my-4">
+                        "Congratulations! You've won a FREE iPhone 14! Click here to claim your prize: http://bit.ly/free-iphone. Limited time offer!"
+                    </blockquote>
+                    <div class="mt-4">
+                        <div class="flex justify-between text-sm text-gray-400 mb-1">
+                            <span>Spam Indicators</span>
+                            <span>High</span>
+                        </div>
+                        <div class="flex gap-2 mb-3">
+                            <span class="px-2 py-1 bg-red-900/50 text-red-200 text-xs rounded">Urgency</span>
+                            <span class="px-2 py-1 bg-red-900/50 text-red-200 text-xs rounded">Free Offer</span>
+                            <span class="px-2 py-1 bg-red-900/50 text-red-200 text-xs rounded">Suspicious Link</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-400 mb-1">
+                            <span>Confidence Level</span>
+                            <span>96%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="metric-bar bg-red-500 h-2 rounded-full" style="width: 96%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ham Message -->
+                <div class="message-box ham p-6 rounded-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-check-circle text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold ham-gradient">HAM (Legitimate)</h3>
+                                <div class="text-sm text-gray-400">Normal Message</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-green-400">98%</div>
+                            <div class="text-sm text-gray-400">Confidence</div>
+                        </div>
+                    </div>
+                    <blockquote class="text-gray-300 italic border-l-2 border-green-500 pl-4 my-4">
+                        "Hi John, just checking in to confirm our meeting tomorrow at 3 PM. Please let me know if you need to reschedule. Best, Sarah"
+                    </blockquote>
+                    <div class="mt-4">
+                        <div class="flex justify-between text-sm text-gray-400 mb-1">
+                            <span>Spam Indicators</span>
+                            <span>Low</span>
+                        </div>
+                        <div class="flex gap-2 mb-3">
+                            <span class="px-2 py-1 bg-green-900/50 text-green-200 text-xs rounded">Personal</span>
+                            <span class="px-2 py-1 bg-green-900/50 text-green-200 text-xs rounded">Professional</span>
+                            <span class="px-2 py-1 bg-green-900/50 text-green-200 text-xs rounded">Normal Language</span>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-400 mb-1">
+                            <span>Confidence Level</span>
+                            <span>98%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="metric-bar bg-green-500 h-2 rounded-full" style="width: 98%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Stack -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center bg-gradient-to-r from-red-500 to-green-500 bg-clip-text text-transparent">⚙️ Technology Stack</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-red-300">Py</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Python 3.x</h3>
+                    <p class="text-gray-400 text-sm">Core programming language</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-green-300">TF</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">TensorFlow</h3>
+                    <p class="text-gray-400 text-sm">Deep learning framework</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-blue-300">LSTM</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">LSTM Network</h3>
+                    <p class="text-gray-400 text-sm">Sequence learning model</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-purple-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-purple-300">Flask</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Flask</h3>
+                    <p class="text-gray-400 text-sm">Web framework</p>
+                </article>
+            </div>
+            
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Text Processing Pipeline</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-code text-red-500 mt-1 mr-3"></i>
+                            <span>Tokenization & Vocabulary Building</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-layer-group text-red-500 mt-1 mr-3"></i>
+                            <span>Embedding Layer (Word Representations)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-filter text-red-500 mt-1 mr-3"></i>
+                            <span>Text Cleaning & Normalization</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-ruler text-red-500 mt-1 mr-3"></i>
+                            <span>Sequence Padding (800 tokens max)</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Model Architecture</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-brain text-green-500 mt-1 mr-3"></i>
+                            <span>LSTM Layer for Sequential Learning</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-umbrella text-green-500 mt-1 mr-3"></i>
+                            <span>Dropout Regularization (Prevents Overfitting)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-project-diagram text-green-500 mt-1 mr-3"></i>
+                            <span>Dense Layers with ReLU Activation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-bullseye text-green-500 mt-1 mr-3"></i>
+                            <span>Softmax Output for Binary Classification</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started -->
+        <section class="mb-16 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-red-500 to-green-500 bg-clip-text text-transparent">🚀 Quick Start Guide</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">1️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Clone Repository</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>git clone https://github.com/HoussemBouagal/spam-classifier.git
+cd spam-classifier</code></pre>
+                </article>
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">2️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Setup Environment</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>python -m venv venv
+# Linux/Mac:
+source venv/bin/activate
+# Windows:
+venv\Scripts\activate
+
+pip install -r requirements.txt</code></pre>
+                </article>
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">3️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Run Application</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>python app.py
+# Visit: http://127.0.0.1:5000
+# Paste any message to test!</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <!-- Project Structure -->
+        <section class="mb-16 bg-gray-800 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-red-500 to-green-500 bg-clip-text text-transparent">🗂️ Project Structure</h2>
+            <div class="bg-gray-900 rounded-lg p-6 font-mono text-sm">
+                <div class="text-red-400">spam-classifier/</div>
+                <div class="ml-4 mt-2">
+                    <div class="text-purple-400">├── app.py</div>
+                    <div class="ml-8 text-gray-400"># Flask backend server</div>
+                    <div class="text-purple-400">├── model/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── spam-classifier-model.keras</div>
+                        <div class="text-gray-400">├── tokenizer.pkl</div>
+                        <div class="text-gray-400">└── label_encoder.pkl</div>
+                    </div>
+                    <div class="text-purple-400">├── templates/</div>
+                    <div class="ml-8 text-gray-400">└── index.html</div>
+                    <div class="text-purple-400">├── static/</div>
+                    <div class="ml-8 text-gray-400">└── spam-mail.ico</div>
+                    <div class="text-purple-400">├── assets/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── app_interface.png</div>
+                        <div class="text-gray-400">├── metrics_curves.png</div>
+                        <div class="text-gray-400">├── confusion_matrix.png</div>
+                        <div class="text-gray-400">├── spam.png</div>
+                        <div class="text-gray-400">└── ham.png</div>
+                    </div>
+                    <div class="text-green-400">├── requirements.txt</div>
+                    <div class="text-yellow-400">├── LICENSE</div>
+                    <div class="text-cyan-400">└── README.md</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Applications -->
+        <section class="mb-16 p-6 bg-gradient-to-r from-red-900/20 to-green-900/20 rounded-xl border border-gray-800">
+            <div class="flex items-start">
+                <i class="fas fa-shield-alt text-blue-400 text-2xl mt-1 mr-4"></i>
+                <div>
+                    <h3 class="text-2xl font-bold text-blue-300 mb-3">Security & Privacy Applications</h3>
+                    <p class="text-gray-300 mb-4">
+                        This spam classifier can be integrated into various security systems to protect users 
+                        from phishing attempts, fraud, and unwanted communications:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-envelope text-red-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Email Protection</h4>
+                                <p class="text-gray-400 text-sm">Filter spam from email inboxes automatically</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-comment-dots text-green-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">SMS Filtering</h4>
+                                <p class="text-gray-400 text-sm">Block unwanted text messages on mobile devices</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-robot text-yellow-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Chat Applications</h4>
+                                <p class="text-gray-400 text-sm">Protect messaging platforms from spam bots</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-server text-purple-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">API Integration</h4>
+                                <p class="text-gray-400 text-sm">Add spam detection to any application via REST API</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GitHub Repository -->
+        <section class="mb-16 text-center">
+            <h2 class="text-3xl font-bold mb-6 bg-gradient-to-r from-red-500 to-green-500 bg-clip-text text-transparent">📦 Project Repository</h2>
+            <div class="bg-gray-800 rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+                <p class="text-gray-300 mb-6">
+                    This project is fully open-source under MIT License. Explore the complete implementation 
+                    including the LSTM model, Flask backend, and web interface for spam detection.
+                </p>
+                <a href="https://github.com/HoussemBouagal/spam-classifier" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-green-400 rounded-lg transition-all duration-300 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <i class="fab fa-github mr-3 text-xl"></i>
+                    View Full Repository on GitHub
+                </a>
+                <p class="text-gray-400 text-sm mt-4">
+                    Includes: LSTM deep learning model, Flask application, tokenizer, 36K messages dataset
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-gray-400 py-8 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-lg font-semibold text-gray-300">
+                        <i class="fas fa-shield-alt text-green-500 mr-2"></i>Spam Classifier
+                    </p>
+                    <p class="text-sm">© 2025 Houssem Bouagal. Licensed under MIT.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-green-400 transition-colors focus:outline-none focus:text-green-400" aria-label="Privacy Policy">Privacy</a>
+                    <a href="#" class="hover:text-green-400 transition-colors focus:outline-none focus:text-green-400" aria-label="Terms of Service">Terms</a>
+                    <a href="mailto:mouhamedhoussem813@gmail.com" class="hover:text-green-400 transition-colors focus:outline-none focus:text-green-400" aria-label="Contact via Email">Contact</a>
+                    <a href="#main-content" class="hover:text-green-400 transition-colors focus:outline-none focus:text-green-400" aria-label="Back to top">↑ Top</a>
+                </div>
+            </div>
+            <div class="text-center mt-6 text-sm text-gray-500">
+                <p>Built with Flask, TensorFlow, LSTM, and Advanced NLP Techniques</p>
+                <p class="mt-2">Accuracy: 98.83% | Model: LSTM | Dataset: 36,622 Messages | Sequence Length: 800 tokens</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            speed: 800,
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
+            },
+        });
+
+        // Loader handling
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+
+        // Fallback for slow loading
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader && loader.style.display !== 'none') {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }
+        }, 3000);
+
+        // Animate progress bars on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.metric-bar');
+                    bars.forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0';
+                        setTimeout(() => {
+                            bar.style.width = width;
+                            bar.style.transition = 'width 1.5s ease-in-out';
+                        }, 300);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.message-box').forEach(box => {
+            observer.observe(box);
+        });
+    </script>
+</body>
+</html>

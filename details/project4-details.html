@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Web AI Application for Bone Fracture Detection using deep learning and TensorFlow">
+    <meta name="keywords" content="fracture detection, X-ray analysis, medical AI, deep learning, TensorFlow, ResNet101, CBAM, orthopedics">
+    <title>Fracture Detection System | AI-Powered Web Application</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../img/trauma.ico" type="image/x-icon">
+
+    <style>
+        /* Enhanced ergonomic and accessibility styles */
+        :root {
+            --primary-blue: #3b82f6;
+            --primary-blue-dark: #1d4ed8;
+            --medical-green: #10b981;
+            --medical-red: #ef4444;
+            --warning-orange: #f59e0b;
+            --bone-white: #f8fafc;
+            --dark-bg: #111827;
+            --darker-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f3f4f6;
+            --text-secondary: #d1d5db;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Improved focus styles for better accessibility */
+        *:focus {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        *:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        *:focus-visible {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        /* Custom scrollbar for better ergonomics */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        /* Smooth transitions */
+        .transition-all {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Swiper customizations */
+        .swiper-slide img {
+            transition: transform 0.4s ease;
+            object-fit: contain;
+        }
+
+        .swiper-slide img:hover {
+            transform: scale(1.03);
+        }
+
+        /* Loading animations */
+        @keyframes pulse-bone {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes spin-xray {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-pulse-bone {
+            animation: pulse-bone 2s ease-in-out infinite;
+        }
+
+        .animate-spin-xray {
+            animation: spin-xray 3s linear infinite;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Medical feature styling */
+        .feature-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-item:before {
+            content: "🩺";
+            position: absolute;
+            left: 0;
+            font-size: 1.25rem;
+        }
+
+        /* Tech stack items */
+        .tech-item {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tech-item:before {
+            content: "⚡";
+            position: absolute;
+            left: 0;
+            font-size: 1.1rem;
+        }
+
+        /* Performance metrics */
+        .metric-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, #2d3748 100%);
+            border: 1px solid #374151;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            border-color: var(--medical-green);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Fracture status badges */
+        .status-badge {
+            transition: all 0.3s ease;
+            cursor: help;
+            position: relative;
+        }
+
+        .status-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* X-ray animation */
+        .xray-icon {
+            filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
+        }
+
+        /* Bone pattern background */
+        .bone-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Responsive typography */
+        @media (max-width: 768px) {
+            .text-responsive {
+                font-size: calc(1rem + 0.5vw);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+
+        /* Medical gradient text */
+        .medical-gradient {
+            background: linear-gradient(90deg, #3b82f6 0%, #10b981 50%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="dark:bg-gray-900 dark:text-gray-100 min-h-screen bone-pattern">
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-3 focus:bg-blue-600 focus:text-white focus:rounded-md focus:shadow-lg">
+        Skip to main content
+    </a>
+
+    <!-- Home button with ergonomic placement -->
+    <button 
+        onclick="window.location.href='../index.html'" 
+        class="fixed top-6 left-6 z-50 bg-blue-700 hover:bg-blue-800 text-white px-5 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 flex items-center gap-2 no-print"
+        aria-label="Return to home page"
+        title="Go back to portfolio homepage"
+    >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Home
+    </button>
+
+    <!-- Dark mode loader with accessible text -->
+    <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-95 flex items-center justify-center z-50 transition-opacity duration-500" role="status" aria-label="Loading application">
+        <div class="relative w-32 h-32">
+            <!-- X-ray scanner animation -->
+            <div class="absolute inset-0 border-4 border-blue-400 border-t-transparent rounded-full animate-spin-xray"></div>
+            
+            <!-- Bone icon in center -->
+            <div class="absolute inset-6 flex items-center justify-center xray-icon animate-pulse-bone">
+                <svg class="w-20 h-20 text-blue-300" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                </svg>
+            </div>
+            
+            <!-- Scanning lines effect -->
+            <div class="absolute inset-0 flex items-center justify-center">
+                <div class="w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent animate-pulse"></div>
+            </div>
+        </div>
+        <span class="sr-only">Loading Fracture Detection System...</span>
+    </div>
+
+    <main id="main-content" class="container mx-auto px-4 py-20 max-w-6xl">
+        <!-- Hero section with semantic hierarchy -->
+        <header class="text-center mb-16 animate-fade-in-up" role="banner">
+            <div class="flex justify-center mb-6">
+                <div class="relative">
+                    <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-green-400 rounded-full flex items-center justify-center animate-pulse-bone">
+                        <svg class="w-16 h-16 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20 6h-2V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8 10c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm4-8H8V4h8v4z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 medical-gradient">
+                🩻 Fracture Detection System
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-4">
+                Web AI Application for Bone X-ray Analysis
+            </p>
+            <p class="text-gray-400 max-w-3xl mx-auto">
+                A professional web application utilizing deep learning with ResNet101 + CBAM 
+                to detect bone fractures in X-ray images with 98.42% testing accuracy.
+            </p>
+        </header>
+
+        <!-- License and Download Notice -->
+        <div class="mb-8 p-6 bg-gradient-to-r from-blue-900/30 to-green-900/30 rounded-xl border border-blue-700/30">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <h3 class="font-bold text-lg text-blue-300 mb-2">📦 Model Download Required</h3>
+                    <p class="text-gray-300">
+                        The trained model is not included in the repository due to size constraints.
+                        Download it from Google Drive and place it in the <code class="bg-gray-800 px-2 py-1 rounded">model/</code> folder.
+                    </p>
+                </div>
+                <a href="https://drive.google.com/file/d/11dzRztVvQfnlqYvubLQ2OaVESjsz9q_D/view?usp=sharing" 
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 flex items-center gap-2 whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-green-500">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Download Model
+                </a>
+            </div>
+        </div>
+
+        <!-- Main project showcase -->
+        <section class="mb-16" aria-labelledby="project-showcase">
+            <h2 id="project-showcase" class="sr-only">Project Showcase</h2>
+            <div class="relative group">
+                <div class="swiper rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500">
+                    <div class="swiper-wrapper">
+                        <!-- Web Application Interface -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="projet4/app_interface.png" 
+                                    alt="Fracture Detection System web application interface showing upload and prediction panel"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Web Application Interface with X-ray Upload & Prediction
+                                </figcaption>
+                            </figure>
+                        </div>
+                                         
+                        <!-- Fractured Example -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="projet4/fractured.png" 
+                                    alt="X-ray image showing a bone fracture"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Fractured Bone X-ray - Positive Detection
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <!-- Not Fractured Example -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="projet4/not-fractured.png" 
+                                    alt="X-ray image showing healthy bone without fracture"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Healthy Bone X-ray - No Fracture Detected
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <!-- Enhanced navigation with aria-labels -->
+                    <button class="swiper-button-next bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Next slide"></button>
+                    <button class="swiper-button-prev bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Previous slide"></button>
+                    <div class="swiper-pagination !bottom-4" aria-label="Slide navigation"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Metrics Dashboard -->
+        <section class="mb-16" aria-labelledby="performance-metrics">
+            <h2 class="text-3xl font-bold mb-8 text-center medical-gradient">📊 Model Performance Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <article class="metric-card p-6 rounded-xl">
+                    <div class="text-4xl font-bold text-green-400 mb-2">98.42%</div>
+                    <h3 class="text-lg font-semibold mb-2">Testing Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Real-world performance on unseen X-rays</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl">
+                    <div class="text-4xl font-bold text-blue-400 mb-2">99.52%</div>
+                    <h3 class="text-lg font-semibold mb-2">Validation Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Model generalization capability</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl">
+                    <div class="text-4xl font-bold text-purple-400 mb-2">99.87%</div>
+                    <h3 class="text-lg font-semibold mb-2">Training Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Learning efficiency on training dataset</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl">
+                    <div class="text-4xl font-bold text-yellow-400 mb-2">0.9967</div>
+                    <h3 class="text-lg font-semibold mb-2">Macro AUC</h3>
+                    <p class="text-gray-400 text-sm">Area Under ROC Curve (Excellent)</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Project Information Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16" aria-labelledby="project-details">
+            <article class="bg-gray-800 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 medical-gradient flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    Project Details
+                </h2>
+                <dl class="space-y-4">
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Category:</dt>
+                        <dd class="text-gray-400">Medical Web AI Application</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Platform:</dt>
+                        <dd class="text-gray-400">Web Application (Flask)</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Dataset:</dt>
+                        <dd class="text-gray-400">Bone X-ray Images (2 classes)</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Architecture:</dt>
+                        <dd class="text-gray-400">ResNet101 + CBAM Attention</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Image Resolution:</dt>
+                        <dd class="text-gray-400">224×224 pixels RGB</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">License:</dt>
+                        <dd class="text-gray-400">MIT Open Source</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Total Epochs:</dt>
+                        <dd class="text-gray-400">10 epochs training</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Framework:</dt>
+                        <dd class="text-gray-400">Flask (Backend) + TensorFlow</dd>
+                    </div>
+                </dl>
+            </article>
+
+            <article class="bg-gray-800 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 medical-gradient flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Core Features
+                </h2>
+                <ul class="space-y-3">
+                    <li class="feature-item">🎯 High-Accuracy AI Predictions (98.42% test accuracy)</li>
+                    <li class="feature-item">📁 X-ray Image Support (JPG, PNG, JPEG formats)</li>
+                    <li class="feature-item">⚡ Real-time Processing & Instant Results</li>
+                    <li class="feature-item">🌐 Modern Web Interface with Flask</li>
+                    <li class="feature-item">📊 Confidence Percentage Display</li>
+                    <li class="feature-item">🖼️ Side-by-Side Image & Prediction View</li>
+                    <li class="feature-item">🔬 Attention Mechanism (CBAM) for Better Feature Extraction</li>
+                    <li class="feature-item">📈 Performance Visualization (Curves, Matrix, ROC)</li>
+                    <li class="feature-item">🚀 Easy Setup with Virtual Environment</li>
+                </ul>
+            </article>
+        </section>
+
+        <!-- Classification Report -->
+        <section class="mb-16 bg-gray-800 rounded-xl shadow-lg p-8" aria-labelledby="classification-report">
+            <h2 class="text-3xl font-bold mb-8 text-center medical-gradient">📊 Classification Report</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead>
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Class</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Precision</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Recall</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">F1-Score</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Support</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-800">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-900/50 text-red-200">
+                                    <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                                    Fractured
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-400 font-semibold">0.98</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-blue-400">0.98</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-purple-400">0.98</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">238</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-900/50 text-green-200">
+                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                    Not Fractured
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-green-400 font-semibold">0.99</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-blue-400">0.99</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-purple-400">0.99</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">268</td>
+                        </tr>
+                        <tr class="bg-gray-900/50">
+                            <td class="px-6 py-4 whitespace-nowrap font-semibold text-gray-300">Accuracy</td>
+                            <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center">
+                                <span class="text-2xl font-bold text-green-400">98.42%</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-gray-300">506</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Detection Types -->
+        <section class="mb-16 bg-gray-800 rounded-xl shadow-lg p-8" aria-labelledby="detection-types">
+            <h2 class="text-3xl font-bold mb-8 text-center medical-gradient">🔬 Detection Capabilities</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="status-badge p-6 bg-gradient-to-br from-red-900/30 to-red-800/20 rounded-xl border border-red-700/50">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.998-.833-2.732 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-red-300">Fractured</h3>
+                            <p class="text-gray-400">Bone break detected</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Detects various types of bone fractures including hairline, compound, 
+                        and stress fractures in X-ray images.
+                    </p>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-400">Precision: <span class="text-green-400 font-semibold">0.98</span></span>
+                        <span class="text-gray-400">Recall: <span class="text-blue-400 font-semibold">0.98</span></span>
+                    </div>
+                </div>
+                
+                <div class="status-badge p-6 bg-gradient-to-br from-green-900/30 to-green-800/20 rounded-xl border border-green-700/50">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-green-300">Not Fractured</h3>
+                            <p class="text-gray-400">Healthy bone structure</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        Identifies healthy bone structures without fractures, confirming 
+                        normal bone alignment and density in X-ray images.
+                    </p>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-400">Precision: <span class="text-green-400 font-semibold">0.99</span></span>
+                        <span class="text-gray-400">Recall: <span class="text-blue-400 font-semibold">0.99</span></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Stack -->
+        <section class="mb-16" aria-labelledby="tech-stack">
+            <h2 class="text-3xl font-bold mb-8 text-center medical-gradient">⚙️ Technology Stack</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-blue-300">Py</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Python 3.x</h3>
+                    <p class="text-gray-400 text-sm">Core programming language</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-red-300">TF</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">TensorFlow</h3>
+                    <p class="text-gray-400 text-sm">Deep learning framework</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-green-300">RN101</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">ResNet101</h3>
+                    <p class="text-gray-400 text-sm">CNN architecture + CBAM</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-purple-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-purple-300">Flask</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Flask</h3>
+                    <p class="text-gray-400 text-sm">Web framework</p>
+                </article>
+            </div>
+            
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Development Stack</h4>
+                    <ul class="space-y-2">
+                        <li class="tech-item">TensorFlow & Keras - Deep Learning</li>
+                        <li class="tech-item">Flask - Web Application Backend</li>
+                        <li class="tech-item">ResNet101 + CBAM - Attention Model</li>
+                        <li class="tech-item">PIL/Pillow - Image Processing</li>
+                        <li class="tech-item">NumPy & Pandas - Data Handling</li>
+                        <li class="tech-item">Werkzeug - File Upload Handling</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Model Features</h4>
+                    <ul class="space-y-2">
+                        <li class="tech-item">Convolutional Block Attention Module</li>
+                        <li class="tech-item">Transfer Learning from ResNet101</li>
+                        <li class="tech-item">Data Augmentation Techniques</li>
+                        <li class="tech-item">Global Average Pooling</li>
+                        <li class="tech-item">Dropout Regularization</li>
+                        <li class="tech-item">Binary Classification Output</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started Section -->
+        <section class="mb-16 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg p-8" aria-labelledby="getting-started">
+            <h2 class="text-3xl font-bold mb-6 text-center medical-gradient">🚀 Quick Start Guide</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">1️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Clone Repository</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>git clone https://github.com/HoussemBouagal/fracture-detection.git
+cd fracture-detection</code></pre>
+                </article>
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">2️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Setup Environment</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>python -m venv venv
+# Linux/Mac:
+source venv/bin/activate
+# Windows:
+venv\Scripts\activate
+
+pip install -r requirements.txt</code></pre>
+                </article>
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">3️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Download Model & Run</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code># Download model from Google Drive
+# Place in: fracture-detection/model/
+# Then run:
+python app.py
+
+# Visit: http://127.0.0.1:5000</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <!-- Project Structure -->
+        <section class="mb-16 bg-gray-800 rounded-xl shadow-lg p-8" aria-labelledby="project-structure">
+            <h2 class="text-3xl font-bold mb-6 text-center medical-gradient">🗂️ Project Structure</h2>
+            <div class="bg-gray-900 rounded-lg p-6 font-mono text-sm">
+                <div class="text-blue-400">fracture-detection/</div>
+                <div class="ml-4 mt-2">
+                    <div class="text-purple-400">├── test/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── fractured/</div>
+                        <div class="text-gray-400">└── not fractured/</div>
+                    </div>
+                    <div class="text-purple-400">├── model/</div>
+                    <div class="ml-8 text-gray-400">└── fraction-model.keras</div>
+                    <div class="text-purple-400">├── templates/</div>
+                    <div class="ml-8 text-gray-400">└── index.html</div>
+                    <div class="text-purple-400">├── static/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── uploads/</div>
+                        <div class="text-gray-400">├── img/</div>
+                        <div class="text-gray-400">└── trauma.ico</div>
+                    </div>
+                    <div class="text-purple-400">├── assets/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── app_interface.png</div>
+                        <div class="text-gray-400">├── metrics_curves.png</div>
+                        <div class="text-gray-400">├── confusion_matrix.png</div>
+                        <div class="text-gray-400">├── roc_curve.png</div>
+                        <div class="text-gray-400">├── fractured.png</div>
+                        <div class="text-gray-400">└── not fractured.png</div>
+                    </div>
+                    <div class="text-green-400">├── app.py</div>
+                    <div class="text-yellow-400">├── requirements.txt</div>
+                    <div class="text-orange-400">├── LICENSE</div>
+                    <div class="text-cyan-400">└── README.md</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GitHub Repository -->
+        <section class="mb-16 text-center" aria-labelledby="github-repo">
+            <h2 id="github-repo" class="text-3xl font-bold mb-6 medical-gradient">📦 Project Repository</h2>
+            <div class="bg-gray-800 rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+                <p class="text-gray-300 mb-6">
+                    This project is fully open-source under MIT License. Explore the codebase, 
+                    contribute improvements, or use it for educational and research purposes.
+                </p>
+                <a href="https://github.com/HoussemBouagal/fracture-detection" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-blue-400 rounded-lg transition-all duration-300 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                    </svg>
+                    View Full Repository on GitHub
+                </a>
+                <p class="text-gray-400 text-sm mt-4">
+                    Includes: Flask application, trained model instructions, dataset samples, documentation
+                </p>
+            </div>
+        </section>
+
+        <!-- Important Medical Disclaimer -->
+        <aside class="mb-16 p-6 bg-yellow-900/20 border border-yellow-700/30 rounded-xl" role="note" aria-label="Medical disclaimer">
+            <div class="flex items-start">
+                <svg class="w-6 h-6 text-yellow-400 mt-1 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.998-.833-2.732 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                </svg>
+                <div>
+                    <h3 class="font-semibold text-lg text-yellow-300 mb-2">Important Medical Disclaimer</h3>
+                    <p class="text-gray-300">
+                        This tool is designed for <strong>educational and research purposes only</strong>. It is <strong>NOT</strong> 
+                        a substitute for professional medical diagnosis, advice, or treatment by qualified healthcare professionals. 
+                        Always consult orthopedic specialists for medical concerns. The AI model has a 98.42% accuracy rate 
+                        and may produce false positives/negatives. Use at your own discretion.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-gray-400 py-8 border-t border-gray-800" role="contentinfo">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-lg font-semibold text-gray-300">Fracture Detection System</p>
+                    <p class="text-sm">© 2025 Houssem Bouagal. Licensed under MIT.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition-colors focus:outline-none focus:text-white" aria-label="Privacy Policy">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors focus:outline-none focus:text-white" aria-label="Terms of Service">Terms</a>
+                    <a href="mailto:mouhamedhoussem813@gmail.com" class="hover:text-white transition-colors focus:outline-none focus:text-white" aria-label="Contact via Email">Contact</a>
+                    <a href="#main-content" class="hover:text-white transition-colors focus:outline-none focus:text-white" aria-label="Back to top">↑ Top</a>
+                </div>
+            </div>
+            <div class="text-center mt-6 text-sm text-gray-500">
+                <p>Built with Flask, TensorFlow, ResNet101 + CBAM, and modern web technologies</p>
+                <p class="mt-2">Accuracy: 98.42% | Model: ResNet101+CBAM | Macro AUC: 0.9967 | Epochs: 10</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper with enhanced ergonomic settings
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+                waitForTransition: true,
+            },
+            effect: 'slide',
+            speed: 800,
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 1,
+            spaceBetween: 0,
+            
+            // Enhanced navigation
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
+                renderBullet: function (index, className) {
+                    return `<span class="${className} bg-white/50 hover:bg-white"></span>`;
+                },
+            },
+            
+            // Accessibility
+            a11y: {
+                prevSlideMessage: 'Previous slide',
+                nextSlideMessage: 'Next slide',
+                paginationBulletMessage: 'Go to slide {{index}}',
+                notificationClass: 'swiper-notification',
+            },
+            
+            // Keyboard navigation
+            keyboard: {
+                enabled: true,
+                onlyInViewport: true,
+                pageUpDown: true,
+            },
+            
+            // Touch interactions
+            touchRatio: 1,
+            touchAngle: 45,
+            simulateTouch: true,
+            shortSwipes: true,
+            longSwipes: true,
+            longSwipesRatio: 0.5,
+            longSwipesMs: 300,
+            followFinger: true,
+            
+            // Responsive breakpoints
+            breakpoints: {
+                768: {
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                },
+                1024: {
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                }
+            }
+        });
+
+        // Respect reduced motion preferences
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        function handleReduceMotionChange(e) {
+            if (e.matches) {
+                swiper.autoplay.stop();
+                swiper.params.speed = 400;
+                swiper.update();
+            } else {
+                swiper.autoplay.start();
+                swiper.params.speed = 800;
+                swiper.update();
+            }
+        }
+        mediaQuery.addEventListener('change', handleReduceMotionChange);
+        handleReduceMotionChange(mediaQuery);
+
+        // Enhanced loader with timeout fallback
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            const content = document.querySelector('main');
+            
+            // Ensure minimum display time for smooth UX
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+                
+                // Show content with fade-in
+                content.style.opacity = '1';
+                content.style.transition = 'opacity 0.5s ease';
+                
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1200);
+        });
+
+        // Fallback for slow loading
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader && loader.style.display !== 'none') {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }
+        }, 5000);
+
+        // Add print functionality
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                alert('For best printing results, use the browser print dialog.');
+            }
+        });
+
+        // Status badge interactions
+        document.querySelectorAll('.status-badge').forEach(badge => {
+            badge.addEventListener('focus', () => {
+                badge.style.transform = 'translateY(-2px)';
+                badge.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.4)';
+            });
+            
+            badge.addEventListener('blur', () => {
+                badge.style.transform = 'translateY(0)';
+                badge.style.boxShadow = 'none';
+            });
+        });
+
+        // Add bone pattern animation
+        const bonePattern = document.querySelector('.bone-pattern');
+        if (bonePattern) {
+            let scrollPosition = 0;
+            window.addEventListener('scroll', () => {
+                scrollPosition = window.scrollY;
+                bonePattern.style.backgroundPositionY = `${scrollPosition * 0.3}px`;
+            });
+        }
+    </script>
+</body>
+</html>

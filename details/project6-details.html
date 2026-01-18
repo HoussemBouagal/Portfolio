@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Netflix-style Movie Recommender System using Hybrid Deep Learning Model">
+    <meta name="keywords" content="movie recommendation, Netflix, hybrid model, collaborative filtering, deep learning, TensorFlow, Flask">
+    <title>Movie Recommender System | Netflix-Style Hybrid Model</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../img/clapperboard.ico" type="image/x-icon">
+
+    <style>
+        /* Netflix-inspired color scheme */
+        :root {
+            --netflix-red: #e50914;
+            --netflix-red-dark: #b81d24;
+            --netflix-black: #141414;
+            --netflix-gray: #808080;
+            --netflix-light-gray: #e5e5e5;
+            --card-bg: #1a1a1a;
+            --dark-bg: #0a0a0a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--netflix-light-gray);
+            line-height: 1.6;
+        }
+
+        /* Netflix gradient */
+        .netflix-gradient {
+            background: linear-gradient(90deg, var(--netflix-red) 0%, #b81d24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .netflix-bg-gradient {
+            background: linear-gradient(135deg, rgba(229, 9, 20, 0.1) 0%, rgba(20, 20, 20, 0.9) 100%);
+        }
+
+        /* Netflix-like cards */
+        .movie-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(229, 9, 20, 0.2);
+        }
+
+        .movie-card:hover .movie-overlay {
+            opacity: 1;
+        }
+
+        .movie-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(20, 20, 20, 0.9), transparent);
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Star rating */
+        .star-rating i {
+            color: #FFD700;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Feature items */
+        .feature-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-item:before {
+            content: "🎬";
+            position: absolute;
+            left: 0;
+            font-size: 1.25rem;
+        }
+
+        /* Progress bars */
+        .metric-bar {
+            transition: width 1s ease-in-out;
+        }
+
+        /* Genre badges */
+        .genre-badge {
+            background: rgba(229, 9, 20, 0.2);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .genre-badge:hover {
+            background: rgba(229, 9, 20, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseNetflix {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-pulse-netflix {
+            animation: pulseNetflix 2s ease-in-out infinite;
+        }
+
+        /* Netflix-style loading */
+        .netflix-loader {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .netflix-loader:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top-color: var(--netflix-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--netflix-red);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Skip to content link -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-3 focus:bg-red-600 focus:text-white focus:rounded-md">
+        Skip to main content
+    </a>
+
+    <!-- Home button -->
+    <button 
+        onclick="window.location.href='../index.html'" 
+        class="fixed top-6 left-6 z-50 bg-gray-900 hover:bg-gray-800 text-white px-5 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 flex items-center gap-2 no-print"
+        aria-label="Return to home page"
+    >
+        <i class="fas fa-arrow-left"></i>
+        Home
+    </button>
+
+    <!-- Netflix-style loading -->
+    <div id="loader" class="fixed inset-0 bg-black flex items-center justify-center z-50 transition-opacity duration-500">
+        <div class="text-center">
+            <div class="netflix-loader mb-6"></div>
+            <div class="text-4xl font-bold text-red-600 mb-2">N</div>
+            <p class="text-gray-400">Loading Movie Recommender System...</p>
+            <span class="sr-only">Loading Netflix-style Movie Recommender...</span>
+        </div>
+    </div>
+
+    <main id="main-content" class="container mx-auto px-4 py-20 max-w-6xl">
+        <!-- Hero section -->
+        <header class="text-center mb-16 animate-fade-in-up">
+            <div class="flex justify-center mb-6">
+                <div class="relative">
+                    <div class="w-24 h-24 bg-gradient-to-br from-red-600 to-black rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-film text-white text-4xl"></i>
+                    </div>
+                    <div class="absolute -top-2 -right-2 w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-brain text-white text-lg"></i>
+                    </div>
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 netflix-gradient">
+                🎬 Movie Recommender System
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-4">
+                Netflix-Style Hybrid Recommendation Engine
+            </p>
+            <p class="text-gray-400 max-w-3xl mx-auto">
+                A sophisticated hybrid recommender system combining Collaborative Filtering and 
+                Content-Based Filtering with deep learning to deliver personalized movie suggestions.
+            </p>
+        </header>
+
+        <!-- Main showcase -->
+        <section class="mb-16">
+            <div class="relative group">
+                <div class="swiper rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500">
+                    <div class="swiper-wrapper">
+                        <!-- Web Interface -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet6/form_ui.jpg" 
+                                    alt="Movie Recommender System web interface with input form"
+                                    class="w-full h-[500px] object-cover bg-black"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Netflix-style Input Interface with Genre Selection
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        <!-- Recommendations UI -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet6/recommendations_ui.jpg" 
+                                    alt="Movie recommendations display in Netflix style"
+                                    class="w-full h-[500px] object-cover bg-black"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Personalized Movie Recommendations with Ratings
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        
+                    <!-- Navigation buttons -->
+                    <button class="swiper-button-next bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Next slide"></button>
+                    <button class="swiper-button-prev bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Previous slide"></button>
+                    <div class="swiper-pagination !bottom-4" aria-label="Slide navigation"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Metrics -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center netflix-gradient">📊 Model Performance Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <article class="metric-card p-6 rounded-xl bg-gray-900 border border-gray-800 hover:border-red-600 transition-all">
+                    <div class="text-4xl font-bold text-green-400 mb-2">0.1456</div>
+                    <h3 class="text-lg font-semibold mb-2">Training MAE</h3>
+                    <p class="text-gray-400 text-sm">Mean Absolute Error on training data</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-900 border border-gray-800 hover:border-red-600 transition-all">
+                    <div class="text-4xl font-bold text-blue-400 mb-2">0.1708</div>
+                    <h3 class="text-lg font-semibold mb-2">Validation MAE</h3>
+                    <p class="text-gray-400 text-sm">Mean Absolute Error on validation data</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-900 border border-gray-800 hover:border-red-600 transition-all">
+                    <div class="text-4xl font-bold text-purple-400 mb-2">71.42%</div>
+                    <h3 class="text-lg font-semibold mb-2">Precision@10</h3>
+                    <p class="text-gray-400 text-sm">Precision for top 10 recommendations</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-900 border border-gray-800 hover:border-red-600 transition-all">
+                    <div class="text-4xl font-bold text-yellow-400 mb-2">62.18%</div>
+                    <h3 class="text-lg font-semibold mb-2">Recall@10</h3>
+                    <p class="text-gray-400 text-sm">Recall for top 10 recommendations</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Project Information Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <article class="bg-gray-900 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 netflix-gradient flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i>
+                    Project Details
+                </h2>
+                <dl class="space-y-4">
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Category:</dt>
+                        <dd class="text-gray-400">Recommender System Web App</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Platform:</dt>
+                        <dd class="text-gray-400">Web Application (Flask)</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Dataset:</dt>
+                        <dd class="text-gray-400">Movies, Ratings, Users</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Model Type:</dt>
+                        <dd class="text-gray-400">Hybrid (Collaborative + Content)</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Embedding Size:</dt>
+                        <dd class="text-gray-400">50 dimensions</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Training Epochs:</dt>
+                        <dd class="text-gray-400">20 epochs</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Interface Style:</dt>
+                        <dd class="text-gray-400">Netflix-inspired UI</dd>
+                    </div>
+                </dl>
+            </article>
+
+            <article class="bg-gray-900 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 netflix-gradient flex items-center gap-2">
+                    <i class="fas fa-star"></i>
+                    Core Features
+                </h2>
+                <ul class="space-y-3">
+                    <li class="feature-item">🎯 Hybrid Recommendation Model (Collaborative + Content)</li>
+                    <li class="feature-item">🎬 Netflix-style User Interface</li>
+                    <li class="feature-item">⭐ Star Rating Predictions (0-5 stars)</li>
+                    <li class="feature-item">🎭 Multi-genre Selection Support</li>
+                    <li class="feature-item">🧠 Deep Learning with Embeddings</li>
+                    <li class="feature-item">📊 Precision@10: 71.42% & Recall@10: 62.18%</li>
+                    <li class="feature-item">🔤 User & Movie Embeddings (50D)</li>
+                    <li class="feature-item">🚀 Real-time Movie Suggestions</li>
+                </ul>
+            </article>
+        </section>
+
+        <!-- Hybrid Model Architecture -->
+        <section class="mb-16 bg-gray-900 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-8 text-center netflix-gradient">🧠 Hybrid Model Architecture</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold text-red-400 mb-4">Collaborative Filtering</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <i class="fas fa-user-friends text-red-500 mt-1 mr-3"></i>
+                            <span>Learns user-movie interactions from ratings</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-brain text-red-500 mt-1 mr-3"></i>
+                            <span>50-dimensional embeddings for users and movies</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-chart-line text-red-500 mt-1 mr-3"></i>
+                            <span>Captures patterns in user preferences</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-users text-red-500 mt-1 mr-3"></i>
+                            <span>"Users who liked X also liked Y" approach</span>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-blue-400 mb-4">Content-Based Filtering</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <i class="fas fa-film text-blue-500 mt-1 mr-3"></i>
+                            <span>Analyzes movie features and genres</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-tags text-blue-500 mt-1 mr-3"></i>
+                            <span>Multi-label genre encoding (One-hot)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-search text-blue-500 mt-1 mr-3"></i>
+                            <span>"Movies similar to what you watched"</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-cogs text-blue-500 mt-1 mr-3"></i>
+                            <span>Genre-based similarity matching</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-8 p-6 bg-black/50 rounded-xl border border-gray-800">
+                <h4 class="text-lg font-bold text-gray-300 mb-3">Combined Hybrid Approach:</h4>
+                <p class="text-gray-400">
+                    The model combines both approaches to overcome limitations of each method. 
+                    Collaborative filtering handles user preferences while content-based filtering 
+                    ensures recommendations stay within preferred genres, resulting in more 
+                    accurate and diverse suggestions.
+                </p>
+            </div>
+        </section>
+
+        <!-- Example Movie Recommendations -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center netflix-gradient">🍿 Example Recommendations</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <!-- Movie Card 1 -->
+                <div class="movie-card">
+                    <div class="h-48 bg-gradient-to-br from-red-900/50 to-gray-900 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-film text-red-500 text-4xl"></i>
+                        </div>
+                        <div class="movie-overlay">
+                            <h4 class="font-bold text-white">The Shawshank Redemption</h4>
+                            <div class="star-rating text-sm mt-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="ml-2 text-yellow-400">4.8</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <div class="flex flex-wrap gap-1 mb-2">
+                            <span class="genre-badge text-xs px-2 py-1 rounded">Drama</span>
+                        </div>
+                        <div class="text-xs text-gray-400">Predicted: <span class="text-green-400 font-bold">4.7</span></div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 2 -->
+                <div class="movie-card">
+                    <div class="h-48 bg-gradient-to-br from-blue-900/50 to-gray-900 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-film text-blue-500 text-4xl"></i>
+                        </div>
+                        <div class="movie-overlay">
+                            <h4 class="font-bold text-white">Inception</h4>
+                            <div class="star-rating text-sm mt-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <span class="ml-2 text-yellow-400">4.3</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <div class="flex flex-wrap gap-1 mb-2">
+                            <span class="genre-badge text-xs px-2 py-1 rounded">Sci-Fi</span>
+                            <span class="genre-badge text-xs px-2 py-1 rounded">Action</span>
+                        </div>
+                        <div class="text-xs text-gray-400">Predicted: <span class="text-green-400 font-bold">4.2</span></div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 3 -->
+                <div class="movie-card">
+                    <div class="h-48 bg-gradient-to-br from-green-900/50 to-gray-900 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-film text-green-500 text-4xl"></i>
+                        </div>
+                        <div class="movie-overlay">
+                            <h4 class="font-bold text-white">The Godfather</h4>
+                            <div class="star-rating text-sm mt-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="ml-2 text-yellow-400">4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <div class="flex flex-wrap gap-1 mb-2">
+                            <span class="genre-badge text-xs px-2 py-1 rounded">Crime</span>
+                            <span class="genre-badge text-xs px-2 py-1 rounded">Drama</span>
+                        </div>
+                        <div class="text-xs text-gray-400">Predicted: <span class="text-green-400 font-bold">4.8</span></div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 4 -->
+                <div class="movie-card">
+                    <div class="h-48 bg-gradient-to-br from-purple-900/50 to-gray-900 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-film text-purple-500 text-4xl"></i>
+                        </div>
+                        <div class="movie-overlay">
+                            <h4 class="font-bold text-white">Parasite</h4>
+                            <div class="star-rating text-sm mt-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="ml-2 text-yellow-400">4.6</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <div class="flex flex-wrap gap-1 mb-2">
+                            <span class="genre-badge text-xs px-2 py-1 rounded">Thriller</span>
+                            <span class="genre-badge text-xs px-2 py-1 rounded">Comedy</span>
+                        </div>
+                        <div class="text-xs text-gray-400">Predicted: <span class="text-green-400 font-bold">4.5</span></div>
+                    </div>
+                </div>
+                
+                <!-- Movie Card 5 -->
+                <div class="movie-card">
+                    <div class="h-48 bg-gradient-to-br from-yellow-900/50 to-gray-900 relative">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-film text-yellow-500 text-4xl"></i>
+                        </div>
+                        <div class="movie-overlay">
+                            <h4 class="font-bold text-white">Interstellar</h4>
+                            <div class="star-rating text-sm mt-2">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <span class="ml-2 text-yellow-400">4.2</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <div class="flex flex-wrap gap-1 mb-2">
+                            <span class="genre-badge text-xs px-2 py-1 rounded">Adventure</span>
+                            <span class="genre-badge text-xs px-2 py-1 rounded">Drama</span>
+                        </div>
+                        <div class="text-xs text-gray-400">Predicted: <span class="text-green-400 font-bold">4.3</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Stack -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center netflix-gradient">⚙️ Technology Stack</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <article class="tech-card group bg-gray-900 rounded-xl p-6 text-center hover:bg-gray-800 transition-all">
+                    <div class="w-20 h-20 bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-red-300">Py</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Python 3.x</h3>
+                    <p class="text-gray-400 text-sm">Core programming language</p>
+                </article>
+                <article class="tech-card group bg-gray-900 rounded-xl p-6 text-center hover:bg-gray-800 transition-all">
+                    <div class="w-20 h-20 bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-blue-300">TF</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">TensorFlow</h3>
+                    <p class="text-gray-400 text-sm">Deep learning framework</p>
+                </article>
+                <article class="tech-card group bg-gray-900 rounded-xl p-6 text-center hover:bg-gray-800 transition-all">
+                    <div class="w-20 h-20 bg-purple-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-purple-300">Flask</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Flask</h3>
+                    <p class="text-gray-400 text-sm">Web framework</p>
+                </article>
+                <article class="tech-card group bg-gray-900 rounded-xl p-6 text-center hover:bg-gray-800 transition-all">
+                    <div class="w-20 h-20 bg-yellow-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-yellow-300">Hybrid</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Hybrid Model</h3>
+                    <p class="text-gray-400 text-sm">Collaborative + Content</p>
+                </article>
+            </div>
+            
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-900/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Data Processing</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-database text-red-500 mt-1 mr-3"></i>
+                            <span>Pandas & NumPy for data manipulation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-code text-red-500 mt-1 mr-3"></i>
+                            <span>Multi-label genre encoding (One-hot)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-users text-red-500 mt-1 mr-3"></i>
+                            <span>User & movie ID embeddings (50D)</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-chart-bar text-red-500 mt-1 mr-3"></i>
+                            <span>Rating normalization (0-5 scale)</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gray-900/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Model Architecture</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-layer-group text-red-500 mt-1 mr-3"></i>
+                            <span>Embedding layers for users/movies</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-link text-red-500 mt-1 mr-3"></i>
+                            <span>Concatenation of multiple inputs</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-project-diagram text-red-500 mt-1 mr-3"></i>
+                            <span>Dense layers with ReLU activation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-bullseye text-red-500 mt-1 mr-3"></i>
+                            <span>Linear output for rating prediction</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started -->
+        <section class="mb-16 bg-gradient-to-br from-gray-900 to-black rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-6 text-center netflix-gradient">🚀 Quick Start Guide</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <article class="bg-gray-900/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">1️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Clone Repository</h3>
+                    <pre class="bg-black rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>git clone https://github.com/HoussemBouagal/Movie-Recommendation-System.git
+cd Movie-Recommendation-System</code></pre>
+                </article>
+                <article class="bg-gray-900/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">2️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Install Dependencies</h3>
+                    <pre class="bg-black rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>pip install flask tensorflow pandas numpy scikit-learn matplotlib</code></pre>
+                </article>
+                <article class="bg-gray-900/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">3️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Run Application</h3>
+                    <pre class="bg-black rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>python app.py
+# Visit: http://127.0.0.1:5000/
+# Select genres and get recommendations!</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <!-- Project Structure -->
+        <section class="mb-16 bg-gray-900 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-6 text-center netflix-gradient">🗂️ Project Structure</h2>
+            <div class="bg-black rounded-lg p-6 font-mono text-sm">
+                <div class="text-red-400">Movie-Recommendation-System/</div>
+                <div class="ml-4 mt-2">
+                    <div class="text-purple-400">├── app.py</div>
+                    <div class="ml-8 text-gray-400"># Flask backend server</div>
+                    <div class="text-purple-400">├── model/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── hybrid_recommender_model.h5</div>
+                        <div class="text-gray-400">└── encodings.pkl</div>
+                    </div>
+                    <div class="text-purple-400">├── dataset/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── movies.dat</div>
+                        <div class="text-gray-400">├── ratings.dat</div>
+                        <div class="text-gray-400">└── users.dat</div>
+                    </div>
+                    <div class="text-purple-400">├── assets/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── mae_plot.png</div>
+                        <div class="text-gray-400">├── loss_plot.png</div>
+                        <div class="text-gray-400">├── form_ui.jpg</div>
+                        <div class="text-gray-400">└── recommendations_ui.jpg</div>
+                    </div>
+                    <div class="text-green-400">├── templates/</div>
+                    <div class="ml-8 text-gray-400">└── index.html</div>
+                    <div class="text-yellow-400">└── README.md</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Future Improvements -->
+        <section class="mb-16 p-6 bg-gradient-to-r from-red-900/20 to-black rounded-xl border border-red-800/30">
+            <h3 class="text-2xl font-bold mb-4 netflix-gradient">🚀 Future Enhancements</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-start">
+                    <i class="fas fa-check-circle text-green-400 mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold text-gray-300">Completed</h4>
+                        <p class="text-gray-400 text-sm">Multi-genre selection support</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-spinner text-yellow-400 mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold text-gray-300">In Progress</h4>
+                        <p class="text-gray-400 text-sm">TMDB API for movie posters</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-clock text-blue-400 mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold text-gray-300">Planned</h4>
+                        <p class="text-gray-400 text-sm">User authentication & profiles</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <i class="fas fa-lightbulb text-purple-400 mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="font-semibold text-gray-300">Ideas</h4>
+                        <p class="text-gray-400 text-sm">Real-time collaborative filtering updates</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GitHub Repository -->
+        <section class="mb-16 text-center">
+            <h2 class="text-3xl font-bold mb-6 netflix-gradient">📦 Project Repository</h2>
+            <div class="bg-gray-900 rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+                <p class="text-gray-300 mb-6">
+                    Explore the complete implementation of this hybrid recommender system, 
+                    including the deep learning model, Flask backend, and Netflix-style interface.
+                </p>
+                <a href="https://github.com/HoussemBouagal/Movie-Recommendation-System" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 text-red-400 rounded-lg transition-all duration-300 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-black">
+                    <i class="fab fa-github mr-3 text-xl"></i>
+                    View Full Repository on GitHub
+                </a>
+                <p class="text-gray-400 text-sm mt-4">
+                    Includes: Hybrid deep learning model, Flask application, dataset, Netflix-style UI
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black text-gray-400 py-8 border-t border-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-lg font-semibold text-gray-300">
+                        <span class="text-red-600 font-bold">N</span> Movie Recommender System
+                    </p>
+                    <p class="text-sm">© 2025 Houssem Bouagal. For learning and demonstration.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-red-400 transition-colors focus:outline-none focus:text-red-400" aria-label="Privacy Policy">Privacy</a>
+                    <a href="#" class="hover:text-red-400 transition-colors focus:outline-none focus:text-red-400" aria-label="Terms of Service">Terms</a>
+                    <a href="mailto:mouhamedhoussem813@gmail.com" class="hover:text-red-400 transition-colors focus:outline-none focus:text-red-400" aria-label="Contact via Email">Contact</a>
+                    <a href="#main-content" class="hover:text-red-400 transition-colors focus:outline-none focus:text-red-400" aria-label="Back to top">↑ Top</a>
+                </div>
+            </div>
+            <div class="text-center mt-6 text-sm text-gray-500">
+                <p>Built with Flask, TensorFlow, and Hybrid Deep Learning Model</p>
+                <p class="mt-2">MAE: 0.1456 | Precision@10: 71.42% | Model: Hybrid (Collaborative + Content)</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            speed: 800,
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
+            },
+        });
+
+        // Loader handling
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+
+        // Fallback for slow loading
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader && loader.style.display !== 'none') {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }
+        }, 3000);
+
+        // Movie card hover effects
+        document.querySelectorAll('.movie-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.zIndex = '50';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                setTimeout(() => {
+                    card.style.zIndex = '1';
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-Powered Image Enhancement Web Application using Deep Learning Models">
+    <meta name="keywords" content="image enhancement, super resolution, deep learning, ESPCN, U-Net, PyTorch, image upscaling">
+    <title>AI Image Enhancer | Deep Learning Image Enhancement System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="../img/increase.ico" type="image/x-icon">
+
+    <style>
+        /* Image enhancement color scheme */
+        :root {
+            --ai-blue: #3b82f6;
+            --ai-purple: #8b5cf6;
+            --ai-green: #10b981;
+            --ai-orange: #f59e0b;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f3f4f6;
+            --text-secondary: #d1d5db;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* AI gradient */
+        .ai-gradient {
+            background: linear-gradient(90deg, var(--ai-blue) 0%, var(--ai-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .ai-bg-gradient {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+        }
+
+        /* Image cards */
+        .image-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        /* Resolution badges */
+        .resolution-badge {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            font-family: monospace;
+        }
+
+        .resolution-badge:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Feature items */
+        .feature-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-item:before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+            font-size: 1.25rem;
+        }
+
+        /* Process steps */
+        .process-step {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 2rem;
+        }
+        
+        .process-step:before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            width: 2rem;
+            height: 2rem;
+            background: var(--ai-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.875rem;
+        }
+
+        /* Image comparison slider */
+        .comparison-slider {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .comparison-before, .comparison-after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .comparison-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: white;
+            cursor: ew-resize;
+            transform: translateX(-50%);
+        }
+
+        .comparison-handle:before {
+            content: "↔";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseImage {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-pulse-image {
+            animation: pulseImage 2s ease-in-out infinite;
+        }
+
+        /* Loading animation */
+        .image-loader {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .image-loader:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top-color: var(--ai-blue);
+            border-right-color: var(--ai-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Skip to content link -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-3 focus:bg-blue-600 focus:text-white focus:rounded-md">
+        Skip to main content
+    </a>
+
+    <!-- Home button -->
+    <button 
+        onclick="window.location.href='../index.html'" 
+        class="fixed top-6 left-6 z-50 bg-gray-800 hover:bg-gray-700 text-white px-5 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 flex items-center gap-2 no-print"
+        aria-label="Return to home page"
+    >
+        <i class="fas fa-arrow-left"></i>
+        Home
+    </button>
+
+    <!-- Loading animation -->
+    <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-95 flex items-center justify-center z-50 transition-opacity duration-500">
+        <div class="text-center">
+            <div class="image-loader mb-6 mx-auto"></div>
+            <div class="flex items-center justify-center gap-4 mb-4 animate-pulse-image">
+                <i class="fas fa-image text-blue-400 text-3xl"></i>
+                <i class="fas fa-arrow-right text-purple-400 text-2xl"></i>
+                <i class="fas fa-image text-green-400 text-3xl"></i>
+            </div>
+            <p class="text-gray-400">Loading AI Image Enhancement System...</p>
+            <span class="sr-only">Loading AI Image Enhancement System...</span>
+        </div>
+    </div>
+
+    <main id="main-content" class="container mx-auto px-4 py-20 max-w-6xl">
+        <!-- Hero section -->
+        <header class="text-center mb-16 animate-fade-in-up">
+            <div class="flex justify-center mb-6">
+                <div class="relative">
+                    <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                        <i class="fas fa-magic text-white text-4xl"></i>
+                    </div>
+                    <div class="absolute -top-2 -right-2 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                        <i class="fas fa-robot text-white text-lg"></i>
+                    </div>
+                </div>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 ai-gradient">
+                🤖🖼️ AI-Powered Image Enhancement
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-4">
+                Web Application for Super-Resolution & Image Enhancement
+            </p>
+            <p class="text-gray-400 max-w-3xl mx-auto">
+                A professional web application using deep learning models (ESPCN + Conditional U-Net) 
+                to enhance image quality through super-resolution and denoising with intelligent cropping and real-time comparison.
+            </p>
+        </header>
+
+        <!-- Main showcase -->
+        <section class="mb-16">
+            <div class="relative group">
+                <div class="swiper rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500">
+                    <div class="swiper-wrapper">
+                        <!-- Web Interface -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet8/UI.png" 
+                                    alt="Image Enhancement web interface with cropping tool"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Web Interface with Interactive Image Cropping
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        <!-- Enhanced Results -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet8/EnhancedResults.png" 
+                                    alt="Enhanced image results comparison"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Enhanced Image Results - Before & After Comparison
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        <!-- Processing View -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet8/Processing.png" 
+                                    alt="Image processing progress view"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Real-time Processing with Progress Visualization
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        <!-- Comparison View -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet8/Comparison.png" 
+                                    alt="Image comparison slider interface"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Interactive Comparison Slider - Original vs Enhanced
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        <!-- Zoom View -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet8/Zoom.png" 
+                                    alt="Zoom and detailed view interface"
+                                    class="w-full h-[500px] object-contain bg-gray-900"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Synchronized Zoom & Pan Across All Images
+                                </figcaption>
+                            </figure>
+                        </div>
+                        
+                        
+                    <!-- Navigation buttons -->
+                    <button class="swiper-button-next bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Next slide"></button>
+                    <button class="swiper-button-prev bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Previous slide"></button>
+                    <div class="swiper-pagination !bottom-4" aria-label="Slide navigation"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Metrics -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center ai-gradient">📊 Model Performance Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-blue-600 transition-all">
+                    <div class="text-4xl font-bold text-green-400 mb-2">28.85 dB</div>
+                    <h3 class="text-lg font-semibold mb-2">PSNR Score</h3>
+                    <p class="text-gray-400 text-sm">Peak Signal-to-Noise Ratio</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-purple-600 transition-all">
+                    <div class="text-4xl font-bold text-blue-400 mb-2">0.9261</div>
+                    <h3 class="text-lg font-semibold mb-2">SSIM Index</h3>
+                    <p class="text-gray-400 text-sm">Structural Similarity Index</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-green-600 transition-all">
+                    <div class="text-4xl font-bold text-purple-400 mb-2">4×</div>
+                    <h3 class="text-lg font-semibold mb-2">Upscaling Factor</h3>
+                    <p class="text-gray-400 text-sm">40×40 → 160×160</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl bg-gray-800 border border-gray-700 hover:border-yellow-600 transition-all">
+                    <div class="text-4xl font-bold text-yellow-400 mb-2">2 Models</div>
+                    <h3 class="text-lg font-semibold mb-2">Pipeline Architecture</h3>
+                    <p class="text-gray-400 text-sm">ESPCN + Conditional U-Net</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Two-Step Enhancement Pipeline -->
+        <section class="mb-16 bg-gray-800 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-8 text-center ai-gradient">🚀 Two-Step Enhancement Pipeline</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Step 1: ESPCN -->
+                <div class="process-step" data-step="1">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-expand-alt text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-blue-400">ESPCN Model</h3>
+                            <p class="text-gray-400">Efficient Sub-Pixel Convolutional Network</p>
+                        </div>
+                    </div>
+                    <div class="pl-20">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-center">
+                                <div class="resolution-badge inline-block px-4 py-2 rounded-lg mb-2">
+                                    <span class="font-bold">40×40</span>
+                                </div>
+                                <p class="text-sm text-gray-400">Input Resolution</p>
+                            </div>
+                            <i class="fas fa-arrow-right text-blue-400 text-2xl mx-4"></i>
+                            <div class="text-center">
+                                <div class="resolution-badge inline-block px-4 py-2 rounded-lg mb-2">
+                                    <span class="font-bold">80×80</span>
+                                </div>
+                                <p class="text-sm text-gray-400">Output Resolution</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 mb-4">
+                            The ESPCN model performs <strong>2× upscaling</strong> using sub-pixel convolution layers. 
+                            It's optimized for real-time performance and maintains computational efficiency while 
+                            significantly improving image resolution.
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-blue-900/50 text-blue-200 text-sm rounded-full">Sub-Pixel Conv</span>
+                            <span class="px-3 py-1 bg-blue-900/50 text-blue-200 text-sm rounded-full">Real-time</span>
+                            <span class="px-3 py-1 bg-blue-900/50 text-blue-200 text-sm rounded-full">2× Upscale</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Conditional U-Net -->
+                <div class="process-step" data-step="2">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-broom text-white text-2xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-purple-400">Conditional U-Net</h3>
+                            <p class="text-gray-400">Denoising & Refinement Network</p>
+                        </div>
+                    </div>
+                    <div class="pl-20">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-center">
+                                <div class="resolution-badge inline-block px-4 py-2 rounded-lg mb-2">
+                                    <span class="font-bold">80×80</span>
+                                </div>
+                                <p class="text-sm text-gray-400">Input Resolution</p>
+                            </div>
+                            <i class="fas fa-arrow-right text-purple-400 text-2xl mx-4"></i>
+                            <div class="text-center">
+                                <div class="resolution-badge inline-block px-4 py-2 rounded-lg mb-2">
+                                    <span class="font-bold">160×160</span>
+                                </div>
+                                <p class="text-sm text-gray-400">Final Resolution</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 mb-4">
+                            The Conditional U-Net model performs <strong>denoising and refinement</strong>, removing 
+                            artifacts and enhancing details. It uses skip connections to preserve important 
+                            features while improving overall image quality.
+                        </p>
+                        <div class="flex gap-2">
+                            <span class="px-3 py-1 bg-purple-900/50 text-purple-200 text-sm rounded-full">Skip Connections</span>
+                            <span class="px-3 py-1 bg-purple-900/50 text-purple-200 text-sm rounded-full">Denoising</span>
+                            <span class="px-3 py-1 bg-purple-900/50 text-purple-200 text-sm rounded-full">Detail Enhancement</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pipeline Summary -->
+            <div class="mt-8 p-6 bg-gradient-to-r from-blue-900/20 to-purple-900/20 rounded-xl border border-gray-700">
+                <h4 class="text-xl font-bold text-gray-300 mb-3">Pipeline Summary: 40×40 → 160×160 (4× Total Upscale)</h4>
+                <div class="flex items-center justify-center my-6">
+                    <div class="text-center mx-4">
+                        <div class="resolution-badge px-4 py-3 text-lg mb-2">40×40</div>
+                        <p class="text-sm text-gray-400">Original</p>
+                    </div>
+                    <i class="fas fa-arrow-right text-blue-400 text-2xl mx-4"></i>
+                    <div class="text-center mx-4">
+                        <div class="resolution-badge px-4 py-3 text-lg mb-2 bg-blue-900/30">80×80</div>
+                        <p class="text-sm text-gray-400">ESPCN Output</p>
+                    </div>
+                    <i class="fas fa-arrow-right text-purple-400 text-2xl mx-4"></i>
+                    <div class="text-center mx-4">
+                        <div class="resolution-badge px-4 py-3 text-lg mb-2 bg-purple-900/30">160×160</div>
+                        <p class="text-sm text-gray-400">Final Enhanced</p>
+                    </div>
+                </div>
+                <p class="text-gray-400 text-center">
+                    Combined pipeline achieves <span class="text-green-400 font-bold">4× upscaling</span> with 
+                    <span class="text-green-400 font-bold">28.85 dB PSNR</span> and 
+                    <span class="text-green-400 font-bold">0.9261 SSIM</span> quality metrics
+                </p>
+            </div>
+        </section>
+
+        <!-- Project Information Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <article class="bg-gray-800 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 ai-gradient flex items-center gap-2">
+                    <i class="fas fa-info-circle"></i>
+                    Project Details
+                </h2>
+                <dl class="space-y-4">
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Category:</dt>
+                        <dd class="text-gray-400">Computer Vision Web Application</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Platform:</dt>
+                        <dd class="text-gray-400">Web Application (Flask)</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Framework:</dt>
+                        <dd class="text-gray-400">PyTorch Deep Learning</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Models:</dt>
+                        <dd class="text-gray-400">ESPCN + Conditional U-Net</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Input Size:</dt>
+                        <dd class="text-gray-400">40×40 pixels</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">Output Size:</dt>
+                        <dd class="text-gray-400">160×160 pixels (4×)</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-48 flex-shrink-0 font-medium text-gray-300">License:</dt>
+                        <dd class="text-gray-400">MIT Open Source</dd>
+                    </div>
+                </dl>
+            </article>
+
+            <article class="bg-gray-800 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 ai-gradient flex items-center gap-2">
+                    <i class="fas fa-star"></i>
+                    Core Features
+                </h2>
+                <ul class="space-y-3">
+                    <li class="feature-item">📈 ESPCN for efficient 2× upscaling</li>
+                    <li class="feature-item">🧼 Conditional U-Net for denoising & refinement</li>
+                    <li class="feature-item">✂️ Interactive cropping with Cropper.js</li>
+                    <li class="feature-item">🔍 Synchronized zoom & pan across images</li>
+                    <li class="feature-item">⚖️ Real-time comparison slider</li>
+                    <li class="feature-item">⏳ Smooth progress simulation</li>
+                    <li class="feature-item">🖼️ Multiple format support (PNG, JPG, etc.)</li>
+                    <li class="feature-item">🚀 Flask backend with PyTorch inference</li>
+                </ul>
+            </article>
+        </section>
+
+        <!-- Interactive Comparison Demo -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center ai-gradient">⚖️ Interactive Image Comparison</h2>
+            <div class="bg-gray-800 rounded-xl shadow-lg p-6">
+                <div class="comparison-slider mb-6" id="demoComparison">
+                    <div class="comparison-before" style="background-image: linear-gradient(45deg, #3b82f6 25%, transparent 25%), linear-gradient(-45deg, #3b82f6 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #3b82f6 75%), linear-gradient(-45deg, transparent 75%, #3b82f6 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px;"></div>
+                    <div class="comparison-after" style="background-image: linear-gradient(45deg, #8b5cf6 25%, transparent 25%), linear-gradient(-45deg, #8b5cf6 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #8b5cf6 75%), linear-gradient(-45deg, transparent 75%, #8b5cf6 75%); background-size: 10px 10px; background-position: 0 0, 0 5px, 5px -5px, -5px 0px;"></div>
+                    <div class="comparison-handle"></div>
+                </div>
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                        <div class="resolution-badge inline-block px-4 py-2 mb-2">Low Resolution</div>
+                        <p class="text-sm text-gray-400">Original 40×40 image</p>
+                    </div>
+                    <div>
+                        <div class="resolution-badge inline-block px-4 py-2 mb-2 bg-purple-900/30">Enhanced 160×160</div>
+                        <p class="text-sm text-gray-400">AI-enhanced 4× upscale</p>
+                    </div>
+                </div>
+                <div class="mt-6 p-4 bg-gray-900/50 rounded-lg">
+                    <p class="text-gray-300 text-sm">
+                        <i class="fas fa-info-circle text-blue-400 mr-2"></i>
+                        Drag the center handle left/right to compare original vs enhanced versions. 
+                        The web app provides real-time comparison with synchronized zoom and pan controls.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Stack -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center ai-gradient">⚙️ Technology Stack</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-blue-300">Py</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Python 3.x</h3>
+                    <p class="text-gray-400 text-sm">Core programming language</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-red-300">🔥</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">PyTorch</h3>
+                    <p class="text-gray-400 text-sm">Deep learning framework</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-purple-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-purple-300">ESPCN</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">ESPCN Model</h3>
+                    <p class="text-gray-400 text-sm">Super-resolution network</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-green-300">U-Net</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Conditional U-Net</h3>
+                    <p class="text-gray-400 text-sm">Denoising network</p>
+                </article>
+            </div>
+            
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Frontend & Interface</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-crop-alt text-blue-500 mt-1 mr-3"></i>
+                            <span>Cropper.js for interactive image cropping</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-search-plus text-blue-500 mt-1 mr-3"></i>
+                            <span>Synchronized zoom and pan controls</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-sliders-h text-blue-500 mt-1 mr-3"></i>
+                            <span>Interactive comparison slider</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-spinner text-blue-500 mt-1 mr-3"></i>
+                            <span>Progress animation and loading states</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Backend & Processing</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start">
+                            <i class="fas fa-server text-purple-500 mt-1 mr-3"></i>
+                            <span>Flask web server with REST endpoints</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-brain text-purple-500 mt-1 mr-3"></i>
+                            <span>PyTorch model inference pipeline</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-image text-purple-500 mt-1 mr-3"></i>
+                            <span>PIL/Pillow for image processing</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-bolt text-purple-500 mt-1 mr-3"></i>
+                            <span>Efficient batch processing</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started -->
+        <section class="mb-16 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-6 text-center ai-gradient">🚀 Quick Start Guide</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">1️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Clone Repository</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>git clone https://github.com/HoussemBouagal/Image-Enhancement-App.git
+cd Image-Enhancement-App</code></pre>
+                </article>
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">2️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Install Dependencies</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+
+pip install -r requirements.txt</code></pre>
+                </article>
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">3️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Run Application</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>python app.py
+# Visit: http://127.0.0.1:5000
+# Upload and enhance your images!</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <!-- Project Structure -->
+        <section class="mb-16 bg-gray-800 rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl font-bold mb-6 text-center ai-gradient">🗂️ Project Structure</h2>
+            <div class="bg-gray-900 rounded-lg p-6 font-mono text-sm">
+                <div class="text-blue-400">Image-Enhancement-App/</div>
+                <div class="ml-4 mt-2">
+                    <div class="text-purple-400">├── app.py</div>
+                    <div class="ml-8 text-gray-400"># Flask backend server</div>
+                    <div class="text-purple-400">├── model_definitions.py</div>
+                    <div class="ml-8 text-gray-400"># Model architecture definitions</div>
+                    <div class="text-purple-400">├── models/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── espcn_final.pth</div>
+                        <div class="text-gray-400">└── unet_final.pth</div>
+                    </div>
+                    <div class="text-purple-400">├── templates/</div>
+                    <div class="ml-8 text-gray-400">└── index.html</div>
+                    <div class="text-purple-400">├── static/</div>
+                    <div class="ml-8">
+                        <div class="text-gray-400">├── increase.ico</div>
+                        <div class="text-gray-400">└── assets/</div>
+                        <div class="ml-8">
+                            <div class="text-gray-400">├── UI.jpg</div>
+                            <div class="text-gray-400">├── EnhancedResults.jpg</div>
+                            <div class="text-gray-400">├── Processing.jpg</div>
+                            <div class="text-gray-400">├── Comparison.jpg</div>
+                            <div class="text-gray-400">├── Zoom.jpg</div>
+                            <div class="text-gray-400">├── visualization.jpg</div>
+                            <div class="text-gray-400">└── training_curves.jpg</div>
+                        </div>
+                    </div>
+                    <div class="text-green-400">├── requirements.txt</div>
+                    <div class="text-yellow-400">├── License</div>
+                    <div class="text-cyan-400">└── README.md</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases -->
+        <section class="mb-16 p-6 bg-gradient-to-r from-blue-900/20 to-purple-900/20 rounded-xl border border-gray-800">
+            <div class="flex items-start">
+                <i class="fas fa-images text-blue-400 text-2xl mt-1 mr-4"></i>
+                <div>
+                    <h3 class="text-2xl font-bold text-blue-300 mb-3">Practical Applications</h3>
+                    <p class="text-gray-300 mb-4">
+                        This AI image enhancement system has numerous real-world applications across different industries:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-camera text-green-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Photography Enhancement</h4>
+                                <p class="text-gray-400 text-sm">Improve low-resolution photos and restore old images</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-medkit text-red-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Medical Imaging</h4>
+                                <p class="text-gray-400 text-sm">Enhance medical scans for better diagnosis</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-satellite-dish text-yellow-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Satellite Imagery</h4>
+                                <p class="text-gray-400 text-sm">Upscale satellite and aerial photographs</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-film text-purple-400 mt-1 mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-300">Video Restoration</h4>
+                                <p class="text-gray-400 text-sm">Enhance frames from low-quality video footage</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GitHub Repository -->
+        <section class="mb-16 text-center">
+            <h2 class="text-3xl font-bold mb-6 ai-gradient">📦 Project Repository</h2>
+            <div class="bg-gray-800 rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+                <p class="text-gray-300 mb-6">
+                    Explore the complete implementation of this AI image enhancement system, 
+                    including the dual-model pipeline, Flask web interface, and all interactive features.
+                </p>
+                <a href="https://github.com/HoussemBouagal/Image-Enhancement-App" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-blue-400 rounded-lg transition-all duration-300 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <i class="fab fa-github mr-3 text-xl"></i>
+                    View Full Repository on GitHub
+                </a>
+                <p class="text-gray-400 text-sm mt-4">
+                    Includes: ESPCN + U-Net models, Flask application, interactive web interface, trained weights
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-gray-400 py-8 border-t border-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-lg font-semibold text-gray-300">
+                        <i class="fas fa-magic text-blue-500 mr-2"></i>AI Image Enhancer
+                    </p>
+                    <p class="text-sm">© 2025 Houssem Bouagal. Licensed under MIT.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-blue-400 transition-colors focus:outline-none focus:text-blue-400" aria-label="Privacy Policy">Privacy</a>
+                    <a href="#" class="hover:text-blue-400 transition-colors focus:outline-none focus:text-blue-400" aria-label="Terms of Service">Terms</a>
+                    <a href="mailto:mouhamedhoussem813@gmail.com" class="hover:text-blue-400 transition-colors focus:outline-none focus:text-blue-400" aria-label="Contact via Email">Contact</a>
+                    <a href="#main-content" class="hover:text-blue-400 transition-colors focus:outline-none focus:text-blue-400" aria-label="Back to top">↑ Top</a>
+                </div>
+            </div>
+            <div class="text-center mt-6 text-sm text-gray-500">
+                <p>Built with Flask, PyTorch, ESPCN, and Conditional U-Net Models</p>
+                <p class="mt-2">PSNR: 28.85 dB | SSIM: 0.9261 | Upscaling: 4× (40×40 → 160×160)</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+            },
+            speed: 800,
+            grabCursor: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
+            },
+        });
+
+        // Loader handling
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+
+        // Fallback for slow loading
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader && loader.style.display !== 'none') {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }
+        }, 3000);
+
+        // Interactive comparison slider
+        const comparisonSlider = document.getElementById('demoComparison');
+        if (comparisonSlider) {
+            const handle = comparisonSlider.querySelector('.comparison-handle');
+            const before = comparisonSlider.querySelector('.comparison-before');
+            
+            let isDragging = false;
+            
+            handle.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+            
+            handle.addEventListener('touchstart', function(e) {
+                isDragging = true;
+                document.addEventListener('touchmove', onTouchMove);
+                document.addEventListener('touchend', onTouchEnd);
+            });
+            
+            function onMouseMove(e) {
+                if (!isDragging) return;
+                updateSlider(e.clientX);
+            }
+            
+            function onTouchMove(e) {
+                if (!isDragging) return;
+                updateSlider(e.touches[0].clientX);
+            }
+            
+            function updateSlider(x) {
+                const rect = comparisonSlider.getBoundingClientRect();
+                let percentage = ((x - rect.left) / rect.width) * 100;
+                percentage = Math.max(0, Math.min(100, percentage));
+                
+                before.style.width = percentage + '%';
+                handle.style.left = percentage + '%';
+            }
+            
+            function onMouseUp() {
+                isDragging = false;
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            }
+            
+            function onTouchEnd() {
+                isDragging = false;
+                document.removeEventListener('touchmove', onTouchMove);
+                document.removeEventListener('touchend', onTouchEnd);
+            }
+        }
+    </script>
+</body>
+</html>

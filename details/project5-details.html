@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professional Desktop AI Assistant for Skin Cancer Detection using deep learning and TensorFlow">
+    <meta name="keywords" content="skin cancer detection, AI, deep learning, TensorFlow, dermatology, medical AI">
+    <title>Skin Cancer Detection System | AI-Powered Desktop Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="../img/skin-cancer.ico" type="image/x-icon">
+
+    <style>
+        /* Enhanced ergonomic and accessibility styles */
+        :root {
+            --primary-blue: #2563eb;
+            --primary-blue-dark: #1d4ed8;
+            --secondary-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --danger-red: #ef4444;
+            --warning-yellow: #f59e0b;
+            --dark-bg: #111827;
+            --darker-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f3f4f6;
+            --text-secondary: #d1d5db;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Improved focus styles for better accessibility */
+        *:focus {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        *:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        *:focus-visible {
+            outline: 2px solid var(--primary-blue);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        /* Custom scrollbar for better ergonomics */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-blue);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        /* Smooth transitions */
+        .transition-all {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Swiper customizations */
+        .swiper-slide img {
+            transition: transform 0.4s ease;
+            object-fit: cover;
+        }
+
+        .swiper-slide img:hover {
+            transform: scale(1.03);
+        }
+
+        /* Loading animations */
+        @keyframes spin-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes spin-medium {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+        
+        @keyframes spin-fast {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-spin-slow {
+            animation: spin-slow 3s linear infinite;
+        }
+        
+        .animate-spin-medium {
+            animation: spin-medium 2s linear infinite;
+        }
+        
+        .animate-spin-fast {
+            animation: spin-fast 1s linear infinite;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Feature list styling */
+        .feature-item {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .feature-item:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+
+        /* Tech stack items */
+        .tech-item {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tech-item:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--primary-blue);
+            font-weight: bold;
+        }
+
+        /* Performance metrics */
+        .metric-card {
+            background: linear-gradient(135deg, var(--card-bg) 0%, #2d3748 100%);
+            border: 1px solid #374151;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Cancer type badges */
+        .cancer-badge {
+            transition: all 0.3s ease;
+            cursor: help;
+            position: relative;
+        }
+
+        .cancer-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Responsive typography */
+        @media (max-width: 768px) {
+            .text-responsive {
+                font-size: calc(1rem + 0.5vw);
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="dark:bg-gray-900 dark:text-gray-100 min-h-screen">
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-3 focus:bg-blue-600 focus:text-white focus:rounded-md focus:shadow-lg">
+        Skip to main content
+    </a>
+
+    <!-- Home button with ergonomic placement -->
+    <button 
+        onclick="window.location.href='../index.html'" 
+        class="fixed top-6 left-6 z-50 bg-blue-700 hover:bg-blue-800 text-white px-5 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 flex items-center gap-2 no-print"
+        aria-label="Return to home page"
+        title="Go back to portfolio homepage"
+    >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Home
+    </button>
+
+    <!-- Dark mode loader with accessible text -->
+    <div id="loader" class="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 transition-opacity duration-500" role="status" aria-label="Loading application">
+        <div class="relative w-28 h-28">
+            <!-- Large outer circle -->
+            <div class="absolute inset-0 border-4 border-blue-500 border-t-transparent rounded-full animate-spin-slow"></div>
+            
+            <!-- Medium circle -->
+            <div class="absolute inset-3 border-4 border-purple-500 border-b-transparent rounded-full animate-spin-medium animation-delay-200"></div>
+            
+            <!-- Small inner circle -->
+            <div class="absolute inset-6 border-4 border-pink-500 border-l-transparent rounded-full animate-spin-fast animation-delay-400"></div>
+            
+            <!-- Central dot -->
+            <div class="absolute inset-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full"></div>
+        </div>
+        <span class="sr-only">Loading Skin Cancer Detection System...</span>
+    </div>
+
+    <main id="main-content" class="container mx-auto px-4 py-20 max-w-6xl">
+        <!-- Hero section with semantic hierarchy -->
+        <header class="text-center mb-16 animate-fade-in-up" role="banner">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+                🧬 Skin Cancer Detection System
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-4">
+                Desktop AI Assistant for Dermatological Analysis
+            </p>
+            <p class="text-gray-400 max-w-3xl mx-auto">
+                A professional desktop application utilizing deep learning to detect and classify 
+                seven types of skin cancer from dermoscopic images with 85.12% testing accuracy.
+            </p>
+        </header>
+
+        <!-- Main project showcase -->
+        <section class="mb-16" aria-labelledby="project-showcase">
+            <h2 id="project-showcase" class="sr-only">Project Showcase</h2>
+            <div class="relative group">
+                <div class="swiper rounded-2xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500">
+                    <div class="swiper-wrapper">
+                        <!-- Application Interface -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet5/User GUI.jpg" 
+                                    alt="Skin Cancer Detection System desktop application interface showing AI analysis panel"
+                                    class="w-full h-[500px] object-contain bg-gray-800"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    Desktop Application Interface with AI Analysis Panel
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <!-- Sample detections -->
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet5/akiec.jpg" 
+                                    alt="Actinic keratoses (AKIEC) dermoscopic image detection example"
+                                    class="w-full h-[500px] object-contain bg-gray-800"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    AKIEC (Actinic Keratoses) - Predicted with 87% confidence
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet5/bcc.jpg" 
+                                    alt="Basal cell carcinoma (BCC) detection example"
+                                    class="w-full h-[500px] object-contain bg-gray-800"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    BCC (Basal Cell Carcinoma) - Early stage detection
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet5/bkl.jpg" 
+                                    alt="Benign keratosis-like lesions (BKL) detection"
+                                    class="w-full h-[500px] object-contain bg-gray-800"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    BKL (Benign Keratosis-like Lesions)
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet5/df.jpg" 
+                                    alt="Dermatofibroma (DF) lesion analysis"
+                                    class="w-full h-[500px] object-contain bg-gray-800"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    DF (Dermatofibroma) - Benign skin lesion
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet5/mel.jpg" 
+                                    alt="Melanoma (MEL) detection - most dangerous skin cancer"
+                                    class="w-full h-[500px] object-contain bg-gray-800"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    MEL (Melanoma) - High-risk detection
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet5/nv.jpg" 
+                                    alt="Melanocytic nevi (NV) common mole detection"
+                                    class="w-full h-[500px] object-contain bg-gray-800"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    NV (Melanocytic Nevi) - Common mole detection
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="swiper-slide">
+                            <figure>
+                                <img 
+                                    src="Projet5/vasc.jpg" 
+                                    alt="Vascular lesions (VASC) detection"
+                                    class="w-full h-[500px] object-contain bg-gray-800"
+                                    loading="lazy"
+                                >
+                                <figcaption class="text-center text-gray-400 text-sm mt-2">
+                                    VASC (Vascular Lesions) - Blood vessel abnormalities
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                    <!-- Enhanced navigation with aria-labels -->
+                    <button class="swiper-button-next bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Next slide"></button>
+                    <button class="swiper-button-prev bg-white/20 hover:bg-white/40 text-white backdrop-blur-sm rounded-full w-12 h-12 transition-all focus:outline-none focus:ring-2 focus:ring-white" 
+                            aria-label="Previous slide"></button>
+                    <div class="swiper-pagination !bottom-4" aria-label="Slide navigation"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Metrics Dashboard -->
+        <section class="mb-16" aria-labelledby="performance-metrics">
+            <h2 class="text-3xl font-bold mb-8 text-center text-blue-400">📊 Model Performance Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <article class="metric-card p-6 rounded-xl">
+                    <div class="text-4xl font-bold text-green-400 mb-2">85.12%</div>
+                    <h3 class="text-lg font-semibold mb-2">Testing Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Real-world performance on unseen data</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl">
+                    <div class="text-4xl font-bold text-blue-400 mb-2">86.30%</div>
+                    <h3 class="text-lg font-semibold mb-2">Validation Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Model generalization capability</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl">
+                    <div class="text-4xl font-bold text-purple-400 mb-2">95.74%</div>
+                    <h3 class="text-lg font-semibold mb-2">Training Accuracy</h3>
+                    <p class="text-gray-400 text-sm">Learning efficiency on training dataset</p>
+                </article>
+                <article class="metric-card p-6 rounded-xl">
+                    <div class="text-4xl font-bold text-yellow-400 mb-2">40</div>
+                    <h3 class="text-lg font-semibold mb-2">Total Epochs</h3>
+                    <p class="text-gray-400 text-sm">25 initial + 15 fine-tuning epochs</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Project Information Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16" aria-labelledby="project-details">
+            <article class="bg-gray-800 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 text-blue-400 flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Project Details
+                </h2>
+                <dl class="space-y-4">
+                    <div class="flex items-start">
+                        <dt class="w-40 flex-shrink-0 font-medium text-gray-300">Category:</dt>
+                        <dd class="text-gray-400">Medical AI Desktop Application</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-40 flex-shrink-0 font-medium text-gray-300">Platform:</dt>
+                        <dd class="text-gray-400">Windows/macOS/Linux Desktop</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-40 flex-shrink-0 font-medium text-gray-300">Dataset:</dt>
+                        <dd class="text-gray-400">HAM10000 (10,015 dermoscopic images)</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-40 flex-shrink-0 font-medium text-gray-300">Model Architecture:</dt>
+                        <dd class="text-gray-400">EfficientNetB1 with Transfer Learning</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-40 flex-shrink-0 font-medium text-gray-300">Image Resolution:</dt>
+                        <dd class="text-gray-400">240×240 pixels RGB</dd>
+                    </div>
+                    <div class="flex items-start">
+                        <dt class="w-40 flex-shrink-0 font-medium text-gray-300">License:</dt>
+                        <dd class="text-gray-400">MIT Open Source</dd>
+                    </div>
+                </dl>
+            </article>
+
+            <article class="bg-gray-800 rounded-xl shadow-lg p-8 hover:shadow-xl transition-shadow">
+                <h2 class="text-2xl font-bold mb-6 text-blue-400 flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Core Features
+                </h2>
+                <ul class="space-y-3">
+                    <li class="feature-item">🎯 High-Accuracy AI Predictions (85.12% test accuracy)</li>
+                    <li class="feature-item">📁 Multi-format Image Support (JPG, PNG, JPEG)</li>
+                    <li class="feature-item">⚡ Real-time Processing & Instant Results</li>
+                    <li class="feature-item">🖥️ Modern Desktop GUI with ttkbootstrap</li>
+                    <li class="feature-item">📊 Confidence Percentage Display</li>
+                    <li class="feature-item">💾 Offline Operation - No Internet Required</li>
+                    <li class="feature-item">🔬 Seven Skin Cancer Type Detection</li>
+                    <li class="feature-item">🔄 Image Preview & Zoom Functionality</li>
+                    <li class="feature-item">🎨 Professional Medical Interface Design</li>
+                </ul>
+            </article>
+        </section>
+
+        <!-- Cancer Types Detection -->
+        <section class="mb-16 bg-gray-800 rounded-xl shadow-lg p-8" aria-labelledby="cancer-types">
+            <h2 class="text-3xl font-bold mb-8 text-center text-blue-400">🔬 Detected Skin Lesion Types</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="cancer-badge p-4 bg-red-900/30 rounded-lg border border-red-700/50" 
+                     title="Actinic Keratoses: Precancerous scaly patches">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-red-500 rounded-full mr-3"></div>
+                        <span class="font-semibold text-gray-200">AKIEC</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Actinic Keratoses (Precancerous)</p>
+                </div>
+                <div class="cancer-badge p-4 bg-orange-900/30 rounded-lg border border-orange-700/50"
+                     title="Basal Cell Carcinoma: Most common skin cancer">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-orange-500 rounded-full mr-3"></div>
+                        <span class="font-semibold text-gray-200">BCC</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Basal Cell Carcinoma</p>
+                </div>
+                <div class="cancer-badge p-4 bg-yellow-900/30 rounded-lg border border-yellow-700/50"
+                     title="Benign Keratosis: Non-cancerous skin growth">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-yellow-500 rounded-full mr-3"></div>
+                        <span class="font-semibold text-gray-200">BKL</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Benign Keratosis</p>
+                </div>
+                <div class="cancer-badge p-4 bg-green-900/30 rounded-lg border border-green-700/50"
+                     title="Dermatofibroma: Benign fibrous nodule">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
+                        <span class="font-semibold text-gray-200">DF</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Dermatofibroma</p>
+                </div>
+                <div class="cancer-badge p-4 bg-blue-900/30 rounded-lg border border-blue-700/50"
+                     title="Melanoma: Most dangerous skin cancer">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-blue-500 rounded-full mr-3"></div>
+                        <span class="font-semibold text-gray-200">MEL</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Melanoma (High-risk)</p>
+                </div>
+                <div class="cancer-badge p-4 bg-purple-900/30 rounded-lg border border-purple-700/50"
+                     title="Melanocytic Nevi: Common moles">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-purple-500 rounded-full mr-3"></div>
+                        <span class="font-semibold text-gray-200">NV</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Melanocytic Nevi (Moles)</p>
+                </div>
+                <div class="cancer-badge p-4 bg-pink-900/30 rounded-lg border border-pink-700/50 md:col-span-2 lg:col-span-1"
+                     title="Vascular Lesions: Blood vessel abnormalities">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-pink-500 rounded-full mr-3"></div>
+                        <span class="font-semibold text-gray-200">VASC</span>
+                    </div>
+                    <p class="text-sm text-gray-400 mt-2">Vascular Lesions</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Stack -->
+        <section class="mb-16" aria-labelledby="tech-stack">
+            <h2 class="text-3xl font-bold mb-8 text-center text-blue-400">⚙️ Technology Stack</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-blue-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-blue-300">Py</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Python 3.x</h3>
+                    <p class="text-gray-400 text-sm">Core programming language</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-green-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-green-300">TF</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">TensorFlow</h3>
+                    <p class="text-gray-400 text-sm">Deep learning framework</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-yellow-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-yellow-300">EF</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">EfficientNetB1</h3>
+                    <p class="text-gray-400 text-sm">CNN architecture</p>
+                </article>
+                <article class="tech-card group bg-gray-800 rounded-xl p-6 text-center hover:bg-gray-750 transition-all">
+                    <div class="w-20 h-20 bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <span class="text-2xl font-bold text-red-300">CV</span>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">OpenCV</h3>
+                    <p class="text-gray-400 text-sm">Image processing</p>
+                </article>
+            </div>
+            
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Development Tools</h4>
+                    <ul class="space-y-2">
+                        <li class="tech-item">TensorFlow & Keras - Deep Learning</li>
+                        <li class="tech-item">NumPy & Pandas - Data Processing</li>
+                        <li class="tech-item">PIL/Pillow - Image Handling</li>
+                        <li class="tech-item">ttkbootstrap - Modern GUI</li>
+                        <li class="tech-item">Matplotlib - Visualization</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-800/50 rounded-xl p-6">
+                    <h4 class="font-semibold text-lg mb-4 text-gray-300">Key Capabilities</h4>
+                    <ul class="space-y-2">
+                        <li class="tech-item">Transfer Learning from EfficientNet</li>
+                        <li class="tech-item">Data Augmentation & Normalization</li>
+                        <li class="tech-item">Early Stopping & Model Checkpoints</li>
+                        <li class="tech-item">Confidence Score Calculation</li>
+                        <li class="tech-item">Cross-platform Compatibility</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Started Section -->
+        <section class="mb-16 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl shadow-lg p-8" aria-labelledby="getting-started">
+            <h2 class="text-3xl font-bold mb-6 text-center text-blue-400">🚀 Quick Start Guide</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">1️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Clone Repository</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>git clone https://github.com/HoussemBouagal/Skin-Cancer-Detection.git
+cd Skin-Cancer-Detection</code></pre>
+                </article>
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">2️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Install Dependencies</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>pip install -r requirements.txt
+# tensorflow
+# numpy
+# pillow
+# opencv-python
+# ttkbootstrap</code></pre>
+                </article>
+                <article class="bg-gray-800/50 rounded-xl p-6">
+                    <div class="text-3xl mb-4">3️⃣</div>
+                    <h3 class="font-semibold text-lg mb-3">Launch Application</h3>
+                    <pre class="bg-gray-900 rounded p-4 text-sm text-gray-300 overflow-x-auto"><code>python main.py
+# Wait for model loading
+# Upload skin lesion image
+# View AI prediction results</code></pre>
+                </article>
+            </div>
+        </section>
+
+        <!-- GitHub Repository -->
+        <section class="mb-16 text-center" aria-labelledby="github-repo">
+            <h2 id="github-repo" class="text-3xl font-bold mb-6 text-blue-400">📦 Project Repository</h2>
+            <div class="bg-gray-800 rounded-xl shadow-lg p-8 max-w-2xl mx-auto">
+                <p class="text-gray-300 mb-6">
+                    This project is fully open-source under MIT License. Explore the codebase, 
+                    contribute improvements, or use it for educational and research purposes.
+                </p>
+                <a href="https://github.com/HoussemBouagal/Skin-Cancer-Detection/tree/master" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="inline-flex items-center px-8 py-4 bg-gray-700 hover:bg-gray-600 text-blue-400 rounded-lg transition-all duration-300 text-lg font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                    </svg>
+                    View Full Repository on GitHub
+                </a>
+                <p class="text-gray-400 text-sm mt-4">
+                    Includes: Source code, trained model, dataset samples, documentation
+                </p>
+            </div>
+        </section>
+
+        <!-- Important Disclaimer -->
+        <aside class="mb-16 p-6 bg-yellow-900/20 border border-yellow-700/30 rounded-xl" role="note" aria-label="Medical disclaimer">
+            <div class="flex items-start">
+                <svg class="w-6 h-6 text-yellow-400 mt-1 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.998-.833-2.732 0L4.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                </svg>
+                <div>
+                    <h3 class="font-semibold text-lg text-yellow-300 mb-2">Important Medical Disclaimer</h3>
+                    <p class="text-gray-300">
+                        This tool is designed for educational and research purposes only. It is <strong>NOT</strong> 
+                        a substitute for professional medical diagnosis, advice, or treatment. Always consult 
+                        qualified healthcare professionals for medical concerns. The AI model has an 85.12% accuracy 
+                        rate and may produce false positives/negatives. Use at your own discretion.
+                    </p>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 text-gray-400 py-8 border-t border-gray-800" role="contentinfo">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-lg font-semibold text-gray-300">Skin Cancer Detection System</p>
+                    <p class="text-sm">© 2025 Houssem Bouagal. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-white transition-colors focus:outline-none focus:text-white" aria-label="Privacy Policy">Privacy</a>
+                    <a href="#" class="hover:text-white transition-colors focus:outline-none focus:text-white" aria-label="Terms of Service">Terms</a>
+                    <a href="mailto:contact@example.com" class="hover:text-white transition-colors focus:outline-none focus:text-white" aria-label="Contact via Email">Contact</a>
+                    <a href="#main-content" class="hover:text-white transition-colors focus:outline-none focus:text-white" aria-label="Back to top">↑ Top</a>
+                </div>
+            </div>
+            <div class="text-center mt-6 text-sm text-gray-500">
+                <p>Built with TensorFlow, EfficientNetB1, and modern Python technologies</p>
+                <p class="mt-2">Accuracy: 85.12% | Model: EfficientNetB1 | Dataset: HAM10000</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper with enhanced ergonomic settings
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 6000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+                waitForTransition: true,
+            },
+            effect: 'slide',
+            speed: 800,
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 1,
+            spaceBetween: 0,
+            
+            // Enhanced navigation
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                dynamicBullets: true,
+                renderBullet: function (index, className) {
+                    return `<span class="${className} bg-white/50 hover:bg-white"></span>`;
+                },
+            },
+            
+            // Accessibility
+            a11y: {
+                prevSlideMessage: 'Previous slide',
+                nextSlideMessage: 'Next slide',
+                paginationBulletMessage: 'Go to slide {{index}}',
+                notificationClass: 'swiper-notification',
+            },
+            
+            // Keyboard navigation
+            keyboard: {
+                enabled: true,
+                onlyInViewport: true,
+                pageUpDown: true,
+            },
+            
+            // Touch interactions
+            touchRatio: 1,
+            touchAngle: 45,
+            simulateTouch: true,
+            shortSwipes: true,
+            longSwipes: true,
+            longSwipesRatio: 0.5,
+            longSwipesMs: 300,
+            followFinger: true,
+            
+            // Responsive breakpoints
+            breakpoints: {
+                768: {
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                },
+                1024: {
+                    slidesPerView: 1,
+                    spaceBetween: 0,
+                }
+            }
+        });
+
+        // Respect reduced motion preferences
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        function handleReduceMotionChange(e) {
+            if (e.matches) {
+                swiper.autoplay.stop();
+                swiper.params.speed = 400;
+                swiper.update();
+            } else {
+                swiper.autoplay.start();
+                swiper.params.speed = 800;
+                swiper.update();
+            }
+        }
+        mediaQuery.addEventListener('change', handleReduceMotionChange);
+        handleReduceMotionChange(mediaQuery);
+
+        // Enhanced loader with timeout fallback
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('loader');
+            const content = document.querySelector('main');
+            
+            // Ensure minimum display time for smooth UX
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+                
+                // Show content with fade-in
+                content.style.opacity = '1';
+                content.style.transition = 'opacity 0.5s ease';
+                
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1200);
+        });
+
+        // Fallback for slow loading
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader && loader.style.display !== 'none') {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }
+        }, 5000);
+
+        // Add print functionality
+        window.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+                e.preventDefault();
+                alert('For best printing results, use the browser print dialog.');
+            }
+        });
+
+        // Cancer type badge tooltips (enhanced)
+        document.querySelectorAll('.cancer-badge').forEach(badge => {
+            badge.addEventListener('focus', () => {
+                badge.style.transform = 'translateY(-2px)';
+                badge.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.4)';
+            });
+            
+            badge.addEventListener('blur', () => {
+                badge.style.transform = 'translateY(0)';
+                badge.style.boxShadow = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
